@@ -12,7 +12,7 @@ Available algorithms:
 * device shutdown outcome prediction
 
 Topology sample
-![](https://github.com/Vadims06/topolograph/blob/master/graph%20description%20sample.png)
+![](https://github.com/Vadims06/topolograph/blob/master/graph%20sample.png)
 
 # New textfsm templates creation for different vendors
 Please create five separate textfsms for different LSA types.
