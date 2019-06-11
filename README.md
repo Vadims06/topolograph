@@ -11,6 +11,9 @@ Available algorithms:
 * painting and grouping network devices by some criteria ( i.e office name )
 * device shutdown outcome prediction
 
+Topology sample
+[]
+
 # New textfsm templates creation for different vendors
 Please create five separate textfsms for different LSA types.
 
