@@ -3,8 +3,8 @@ Topolograph.com is an online project which can visualize network topology based 
 
 Available algorithms:
 
-* link failure algorithm, it goes successively along the shortest path and removes the connection between devices. Then, searching for the shortest path is repeating. 
-* node failure algorithm, the principle of operation is the same, but it removes devices. 
+* **link failure algorithm**, it goes successively along the shortest path and removes the connection between devices. Then, searching for the shortest path is repeating. 
+* **node failure algorithm**, the principle of operation is the same, but it removes devices. 
 
 #### Other functionality
 * subnet inventory
