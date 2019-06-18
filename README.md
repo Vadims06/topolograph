@@ -1,4 +1,4 @@
-# topolograph
+# Topolograph
 Topolograph.com is an online project which can visualize network topology based on single OSPF LinkState DataBase scrapping from one network device ( thanks OSPF =). Then you can not only see (and check) the shortest path from source to destination, but also see the outcome from link or node failure along the path to the destination. The existing algorithms depict SPT, backup or even backup of backup paths and print out how many segments along the path are backuped and how many are not. Additionally, if you are planning device maintenance and would like to know how shutdowning some particular device will affect on routing in your topology - just choose this node in `Node shutdown Pred` and you get your answer: will be topology stay connected or not, how many subnets will become unavailable.
 
 Available algorithms:
@@ -18,6 +18,11 @@ Topology sample
 * Cisco
 * Juniper
 * others (see below)
+if you would like to see support of other vendors - just create an issue on this page or contact using Slack chat. You can create textfsm template for scrapping LSDB output of your vendor and create merge request, or we can do it by themselves - please send your outputs to us.
+
+# Online Resources. Contacts
+* Slack chat: https://topolograph.slack.com
+* Main site: https://topolograph.com
 
 # Contribution. New textfsm templates creation for different vendors
 In order to project supports different vendors you can help us by creating five separate textfsm files for different LSA types for one vendor.
