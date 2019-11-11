@@ -1,8 +1,11 @@
 # Topolograph
 Topolograph.com is an online project which can visualize network topology based on single OSPF LinkState DataBase scrapping from one network device ( thanks OSPF =). Then you can not only see (and check) the shortest path from source to destination, but also see the outcome from link or node failure along the path to the destination. The existing algorithms depict SPT, backup or even backup of backup paths and print out how many segments along the path are backuped and how many are not. Additionally, if you are planning device maintenance and would like to know how shutdowning some particular device will affect on routing in your topology - just choose this node in `Node shutdown Pred` and you get your answer: will be topology stay connected or not, how many subnets will become unavailable.
 
-Upload LSDB to the Topolograph
+### Upload LSDB to the Topolograph
 ![](https://github.com/Vadims06/topolograph/blob/master/upload_graph_demo.gif)
+
+### Network reaction on the link and network host failure
+![](https://github.com/Vadims06/topolograph/blob/master/spt_link_and_node_failure.gif)
 
 Available algorithms:
 
