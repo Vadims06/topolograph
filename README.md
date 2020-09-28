@@ -1,6 +1,6 @@
 # Topolograph
 Topolograph.com is a Python-based tool, which is aimed at working with the OSPF network offline! No any logins and passwords!
-The Topolograph can visualize network topology based on OSPF's LinkState DataBase scrapped from a single network device ( thanks OSPF =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from source to destination, get backup paths, emulate link outage along the path or change OSPF link cost on a fly! Additionally, you can simulate a device outage and see appropriate network reaction. Once you upload your OSPF to Topolograph - you save the state of your network. After any changes on a network (i.e. redistribution from BGP to OSPF via route-maps with prefix-lists) - upload the network once again and compare them between each other.
+The Topolograph can visualize network topology based on OSPF's LinkState DataBase scrapped from a single network device ( thanks OSPF =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from source to destination, get backup paths, emulate link outage along the path or change OSPF link cost on the fly! Additionally, you can simulate a device outage and see appropriate network reaction. Once you upload your OSPF to Topolograph - you save the state of your network. After any changes on a network (i.e. redistribution from BGP to OSPF via route-maps with prefix-lists) - upload the network once again and compare them between each other.
 
 ## Available option
 * Do not require any logins and passwords - accept LSDB from txt file
@@ -18,6 +18,10 @@ The Topolograph can visualize network topology based on OSPF's LinkState DataBas
 
 ### Network reaction on the link failure
 ![](https://github.com/Vadims06/topolograph/blob/master/build-spt.gif)
+
+### OSPF cost changes on the fly. OSPF cost planning.
+You get network reaction as soon as you set new edge cost.
+![](https://github.com/Vadims06/topolograph/blob/master/ospf-edge-change.gif)
 
 Once you upload LSDB - topology appears under GeneralView Tab. Here you are able to use the folowing features:
 
