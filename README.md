@@ -4,13 +4,15 @@ Topolograph.com is an online project which can visualize network topology based 
 ### Upload LSDB to the Topolograph
 ![](https://github.com/Vadims06/topolograph/blob/master/upload_graph_demo.gif)
 
-### Network reaction on the link and network host failure
-![](https://github.com/Vadims06/topolograph/blob/master/spt_link_and_node_failure.gif)
+### Network reaction on the link failure
+![](https://github.com/Vadims06/topolograph/blob/master/build-spt.gif)
 
-Available algorithms:
+Once you upload LSDB - topology appears under GeneralView Tab. Here you are able to use the folowing features:
 
-* **link failure algorithm**, it goes successively along the shortest path and removes the connection between devices. Then, searching for the shortest path is repeating. 
-* **node failure algorithm**, the principle of operation is the same, but it removes devices. 
+* **Build the shortest path**, right click on a node and set it as a source or destination.
+* **get network reaction on a link failure**, just press on a colored SPT edge and you will simulate link outage. The network reaction will be showed with using different color.
+* **OSPF edge cost planning** right click on an edge and you can change edge's OSPF cost you see new path of your SPT.
+* **Find termination node of a network** start typing a network in Focus/Source tab and you get a dropdown list with all nodes with this network. Once you choose it - you will be focused on the node.
 
 #### Other functionality
 * subnet inventory
