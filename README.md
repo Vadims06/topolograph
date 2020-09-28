@@ -1,5 +1,17 @@
 # Topolograph
-Topolograph.com is an online project which can visualize network topology based on single OSPF LinkState DataBase scrapping from one network device ( thanks OSPF =). Then you can not only see (and check) the shortest path from source to destination, but also see the outcome from link or node failure along the path to the destination. The existing algorithms depict SPT, backup or even backup of backup paths and print out how many segments along the path are backuped and how many are not. Additionally, if you are planning device maintenance and would like to know how shutdowning some particular device will affect on routing in your topology - just choose this node in `Node shutdown Pred` and you get your answer: will be topology stay connected or not, how many subnets will become unavailable.
+Topolograph.com is a Python-based tool, which is aimed at working with the OSPF network offline! No any logins and passwords!
+The Topolograph can visualize network topology based on OSPF's LinkState DataBase scrapped from a single network device ( thanks OSPF =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from source to destination, get backup paths, emulate link outage along the path or change OSPF link cost on a fly! Additionally, you can simulate a device outage and see appropriate network reaction. Once you upload your OSPF to Topolograph - you save the state of your network. After any changes on a network (i.e. redistribution from BGP to OSPF via route-maps with prefix-lists) - upload the network once again and compare them between each other.
+
+## Available option
+* Do not require any logins and passwords - accept LSDB from txt file
+* Docker version is available. Launch local copy of Topolograph site on your PC
+* Once you get your network graph - build the shortests paths
+* Simulate a link outage and discover backup paths or backup of backup paths...
+* Simulate a router shutdown. Look at traffic flow around the failed router
+* Browse your network with `Focus on the Node` option
+* Compare the network state at different times
+* Discover backuped/not-backuped networks in Analytics/Network heatmap
+* Discover unsymmetric paths
 
 ### Upload LSDB to the Topolograph
 ![](https://github.com/Vadims06/topolograph/blob/master/upload_graph_demo.gif)
@@ -14,17 +26,11 @@ Once you upload LSDB - topology appears under GeneralView Tab. Here you are able
 * **OSPF edge cost planning** right click on an edge and you can change edge's OSPF cost you see new path of your SPT.
 * **Find termination node of a network** start typing a network in Focus/Source tab and you get a dropdown list with all nodes with this network. Once you choose it - you will be focused on the node.
 
-#### Other functionality
-* subnet inventory
-* painting and grouping network devices by some criteria ( i.e office name )
-* device shutdown outcome prediction
-
-Topology sample
-![](https://github.com/Vadims06/topolograph/blob/master/graph%20sample.png)
 
 ## Vendor support
 * Cisco
-* Juniper
+* Juniper (accept only txt file, napalm's methods are not supported yet)
+* Quagga
 * others (see below)
 if you would like to see support of other vendors - just create an issue on this page or contact using Slack chat. You can create textfsm template for scrapping LSDB output of your vendor and create merge request, or we can do it by themselves - please send your outputs to us.
 
