@@ -42,6 +42,9 @@ if you would like to see support of other vendors - just create an issue on this
 * Slack chat: https://topolograph.slack.com
 * Main site: https://topolograph.com
 
+## Known issues
+Sometimes there are double-colored lines over the same edge or edge selection is not working - just clear browser cache using CTRL + F5.
+
 # Contribution. New textfsm templates creation for different vendors
 In order to project supports different vendors you can help us by creating five separate textfsm files for different LSA types for one vendor.
 
