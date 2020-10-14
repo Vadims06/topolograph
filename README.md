@@ -14,6 +14,7 @@ The Topolograph can visualize network topology based on OSPF's LinkState DataBas
 * Discover unsymmetric paths
 
 ### Upload LSDB to the Topolograph
+This demo shows how to save OSPF LSDB from your devices and upload it to Topolograph. Picture of topology was static, right now it dynamic!
 ![](https://github.com/Vadims06/topolograph/blob/master/upload_graph_demo.gif)
 
 ### Network reaction on the link failure
