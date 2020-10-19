@@ -34,7 +34,7 @@ Once you upload LSDB - topology appears under GeneralView Tab. Here you are able
 
 ## Vendor support
 * Cisco
-* Juniper (accept only txt file, napalm's methods are not supported yet)
+* Juniper
 * Quagga
 * others (see below)
 if you would like to see support of other vendors - just create an issue on this page or contact using Slack chat. You can create textfsm template for scrapping LSDB output of your vendor and create merge request, or we can do it by themselves - please send your outputs to us.
