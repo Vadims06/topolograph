@@ -53,6 +53,7 @@ if you would like to see support of other vendors - just create an issue on this
 # Online Resources. Contacts
 * Slack chat: https://topolograph.slack.com
 * Main site: https://topolograph.com
+* Docker version of site: https://github.com/Vadims06/topolograph-docker
 
 ## Known issues
 Sometimes there are double-colored lines over the same edge or edge selection is not working - just clear browser cache using CTRL + F5.
