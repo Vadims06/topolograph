@@ -18,6 +18,9 @@ The Topolograph can visualize network topology based on OSPF's LinkState DataBas
 | Cisco   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
 | Quagga  | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
 | Juniper | show ospf database router extensive \| no-more | show ospf database network extensive \| no-more | show ospf database external extensive \| no-more | YES            |
+### Expected file's extension
+- .txt
+- .log
 ### Upload LSDB to the Topolograph
 This demo shows how to save OSPF LSDB from your devices and upload it to Topolograph. Picture of topology was static, right now it dynamic!
 ![](https://github.com/Vadims06/topolograph/blob/master/upload_graph_demo.gif)
