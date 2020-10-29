@@ -26,6 +26,9 @@ This demo shows how to save OSPF LSDB from your devices and upload it to Topolog
 ![](https://github.com/Vadims06/topolograph/blob/master/upload_graph_demo.gif)
 
 ### Network reaction on the link failure
+Pressing on edge we simulate the link outage and can see backup paths
+![pressing on edge we simulate the link outage and can see backup paths](https://github.com/Vadims06/topolograph/blob/master/backup_SPT.png)
+and we can see backup of backup paths...
 ![](https://github.com/Vadims06/topolograph/blob/master/build-spt.gif)
 
 ### OSPF cost changes on the fly. OSPF cost planning.
