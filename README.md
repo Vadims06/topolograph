@@ -24,27 +24,40 @@ LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is option
 ### Expected file's extension
 - .txt
 - .log
-### Upload LSDB to the Topolograph
-This demo shows how to save OSPF LSDB from your devices and upload it to Topolograph. Picture of topology was static, right now it dynamic!
+# Upload LSDB to the Topolograph
+This demo shows how to save OSPF LSDB from your devices and upload it to Topolograph. 
+1. Redirect an output from your terminal to a file. 
+2. Execute commands from the table above. 
+3. Upload the file to Topolograph.  
+P.S. Picture of topology was static, right now it dynamic! =)
 ![](https://github.com/Vadims06/topolograph/blob/master/upload_graph_demo.gif)
 
-### Network reaction on the link failure
-Pressing on edge we simulate the link outage and can see backup paths
-![pressing on edge we simulate the link outage and can see backup paths](https://github.com/Vadims06/topolograph/blob/master/backup_SPT.png)
-and we can see backup of backup paths...
+## Building the shortest paths
+Choose the node  
+Set it as a source or destination from right-clicked menu or from dropdown menu above  
+Beside colored edges on the graph, the shortest path's cost and nodes list is printed above the topology  
+
 ![](https://github.com/Vadims06/topolograph/blob/master/build-spt.gif)
+## Network reaction on the link failure. Backup paths
+Pressing on edge we simulate the link outage and can see backup paths  
+![pressing on edge we simulate the link outage and can see backup paths](https://github.com/Vadims06/topolograph/blob/master/backup_SPT.png)
+and we can see backup of backup paths as well  
+
 
 ### OSPF cost changes on the fly. OSPF cost planning.
-You get network reaction as soon as you set new edge cost.
-![](https://github.com/Vadims06/topolograph/blob/master/ospf-edge-change.gif)
+It feasible to change OSPF cost on any edge and get network reaction on the fly!  
+Build the shortest path under General View and set new OSPF cost in new pop-up-ed form - new path will be repainted  
+This pop-uped form is available under NetworkReactionOnFailure and shows network traffic pattern changes!  
+![](https://github.com/Vadims06/topolograph/blob/master/ospf-cost-change-on-the-fly.gif)
 
-Once you upload LSDB - topology appears under GeneralView Tab. Here you are able to use the folowing features:
+Sum it up, available features under GeneralView Tab:  
 
 * **Build the shortest path**, right click on a node and set it as a source or destination.
 * **Find backup paths**, just press on a colored SPT edge and you will simulate link outage. The network reaction will be showed with using different colors.
 * **OSPF edge cost planning** right click on an edge and you can change edge's OSPF cost you see new path of your SPT.
-* **Find termination node of a network** start typing a network in Focus/Source tab and you get a dropdown list with all nodes with this network. Once you choose it - you will be focused on the node.
+* **Find termination node of a network** start typing a network in Focus/Source tab and you get a dropdown list with all nodes with this network. Once you choose it - you will be focused on the node.  
 
+NetworkReactionOnFailure is covered in ![how-to](https://topolograph.com/how-to)
 
 ## Vendor support
 * Cisco
