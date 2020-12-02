@@ -48,6 +48,7 @@ and we can see backup of backup paths as well
 It feasible to change OSPF cost on any edge and get network reaction on the fly!  
 Build the shortest path under General View and set new OSPF cost in new pop-up-ed form - new path will be repainted  
 This pop-uped form is available under NetworkReactionOnFailure and shows network traffic pattern changes!  
+On the demo below we changed OSPF cost from 1 to 22 and OSPF rebuilt the shortest path via bottom link.  
 ![](https://github.com/Vadims06/topolograph/blob/master/ospf-cost-change-on-the-fly.gif)
 
 Sum it up, available features under GeneralView Tab:  
