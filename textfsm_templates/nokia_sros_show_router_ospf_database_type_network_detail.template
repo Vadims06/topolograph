@@ -1,0 +1,21 @@
+Value AREA (\d+\.\d+\.\d+\.\d+|\d+)
+Value NETMASK (\d+\.\d+\.\d+\.\d+|\d+)
+Value ADV_ROUTER_ID (\d+\.\d+\.\d+\.\d+)
+Value Filldown DR_IP_Add (\d+\.\d+\.\d+\.\d+)
+Value List NEIGHBORING_ROUTER_ID (\d+\.\d+\.\d+\.\d+)
+
+Start
+  ^Rtr Base OSPFv2 Instance \d+ Link State Database \(type: Network\) \(detail\) -> Sep
+
+Sep
+  ^= -> Lsa
+
+Lsa
+  ^Network LSA for Area -> Record
+  ^= -> EOF
+  ^Area Id\s+: ${AREA}\s+Adv Router Id\s+: ${ADV_ROUTER_ID}
+  ^Link State Id\s+: ${DR_IP_Add}
+  ^Network Mask\s+: ${NETMASK}
+  ^Router Id \(\d+\)\s+: ${NEIGHBORING_ROUTER_ID} -> Continue
+  ^Router Id.*Router Id \(\d+\)\s+: ${NEIGHBORING_ROUTER_ID} 
+
