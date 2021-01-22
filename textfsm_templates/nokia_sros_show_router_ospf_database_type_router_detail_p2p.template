@@ -1,0 +1,20 @@
+Value Filldown ROUTER_ID (\d+\.\d+\.\d+\.\d+)
+Value Filldown PROCESS_ID (\d+)
+Value Filldown AREA (\d+\.\d+\.\d+\.\d+|\d+)
+Value Filldown ADV_ROUTER_ID (\d+\.\d+\.\d+\.\d+)
+Value Required STUB (Point To Point)
+Value Required NEIGHBORING_ROUTER_ID (\d+\.\d+\.\d+\.\d+)
+Value Required METRIC (\d+)
+
+Start
+  ^Area Id\s+: ${AREA}\s+Adv Router Id\s+: ${ADV_ROUTER_ID}
+  ^Link Type \(\d+\)\s+: ${STUB}
+  ^Nbr Rtr Id \(\d+\)\s+: ${NEIGHBORING_ROUTER_ID} 
+  ^No of TOS \(\d+\)\s+: 0\s+Metric-0 \(\d+\)\s+: ${METRIC} -> Record
+  ^- -> Tag
+  
+Tag
+  ^Router LSA for Area -> Next.Clearall
+  ^- -> Start
+  
+EOF
