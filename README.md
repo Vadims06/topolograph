@@ -77,7 +77,7 @@ if you would like to see support of other vendors - just create an issue on this
 If you just upload LSDB and press Delete -> topology will be deleted and added again. Just press Upload LSDB Tab again and then deleting of topology works fine.
 
 # Contribution. New textfsm templates creation for different vendors
-In order to project supports different vendors you can help us by creating five separate textfsm files for different LSA types for one vendor. Check ![Wiki](https://github.com/Vadims06/topolograph.wiki.git) for this.
+In order to project supports different vendors you can help us by creating five separate textfsm files for different LSA types for one vendor. Check ![Wiki](https://github.com/Vadims06/topolograph/wiki/How-to-add-new-vendor-support) for this.
 
 ## Used RFC
 RFC 2328
