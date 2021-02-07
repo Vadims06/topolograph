@@ -19,9 +19,11 @@ The Topolograph can visualize network topology based on OSPF's LinkState DataBas
 | Quagga  | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
 | Juniper | show ospf database router extensive \| no-more | show ospf database network extensive \| no-more | show ospf database external extensive \| no-more | YES            |
 | Bird    | show ospf state all                            | show ospf state all                             | show ospf state all                              | No            |
-| Nokia   | show router ospf database type router detail   | show router ospf database type network detail   | show router ospf database type external detail   | No            |  
+| Nokia   | show router ospf database type router detail   | show router ospf database type network detail   | show router ospf database type external detail   | No            |
+
   
-LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional.
+LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional.  
+So the output from all commands should be placed in a single file and then be uploaded to Topolograph.
 ### Expected file's extension
 - .txt
 - .log
