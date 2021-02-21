@@ -60,15 +60,15 @@ Sum it up, available features under GeneralView Tab:
 * **OSPF edge cost planning** right click on an edge and you can change edge's OSPF cost you see new path of your SPT.
 * **Find termination node of a network** start typing a network in Focus/Source tab and you get a dropdown list with all nodes with this network. Once you choose it - you will be focused on the node.  
 
-NetworkReactionOnFailure is covered in ![how-to](https://topolograph.com/how-to)
+NetworkReactionOnFailure is covered in [how-to](https://topolograph.com/how-to)
 
 ## Reports
-When different costs are configured on different links - asymmetric paths could be in the network. The incoming path from W to F is going via C-D, but the outgoing path is via B-A. Paths can go via different ISPs and come with different delays and, probably, losses. The report is aimed at discovering such cases in order to eliminate it.
+When different costs are configured on different links - asymmetric paths could be in the network. The incoming path from W to F is going via C-D, but the outgoing path is via B-A. Paths can go via different ISPs and come with different delays and, probably, losses. The report is aimed at discovering such cases in order to eliminate it.  
 ![](https://github.com/Vadims06/topolograph/blob/master/asymmetric_horizontal.png)
 
 ## Private
 Keep your network inside your organization.
-Run your local copy of Topolograph inside your on-premises network using the docker image.
+Run your local copy of Topolograph inside your on-premises network using the docker image.  
 ![](https://github.com/Vadims06/topolograph/blob/master/topolograph_docker.png)
 
 ## Vendor support
@@ -89,7 +89,7 @@ if you would like to see support of other vendors - just create an issue on this
 If you just upload LSDB and press Delete -> topology will be deleted and added again. Just press Upload LSDB Tab again and then deleting of topology works fine.
 
 # Contribution. New textfsm templates creation for different vendors
-In order to project supports different vendors you can help us by creating five separate textfsm files for different LSA types for one vendor. Check ![Wiki](https://github.com/Vadims06/topolograph/wiki/How-to-add-new-vendor-support) for this.
+In order to project supports different vendors you can help us by creating five separate textfsm files for different LSA types for one vendor. Check [Wiki](https://github.com/Vadims06/topolograph/wiki/How-to-add-new-vendor-support) for this.
 
 ## Used RFC
 RFC 2328
