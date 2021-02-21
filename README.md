@@ -31,9 +31,7 @@ So the output from all commands should be placed in a single file and then be up
 This demo shows how to save OSPF LSDB from your devices and upload it to Topolograph. 
 1. Redirect an output from your terminal to a file. 
 2. Execute commands from the table above. 
-3. Upload the file to Topolograph.  
-P.S. Picture of topology was static, right now it dynamic! =)
-![](https://github.com/Vadims06/topolograph/blob/master/upload_graph_demo.gif)
+3. Upload the file to Topolograph.
 
 ## Building the shortest paths
 Choose the node  
