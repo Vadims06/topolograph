@@ -38,7 +38,7 @@ Choose the node
 Set it as a source or destination from right-clicked menu or from dropdown menu above  
 Beside colored edges on the graph, the shortest path's cost and nodes list is printed above the topology  
 
-![](https://github.com/Vadims06/topolograph/blob/master/build-spt.gif)
+![](https://github.com/Vadims06/topolograph/blob/master/short_demo_text_file_and_short_paths.gif)
 ## Network reaction on the link failure. Backup paths
 Pressing on edge we simulate the link outage and can see backup paths  
 ![pressing on edge we simulate the link outage and can see backup paths](https://github.com/Vadims06/topolograph/blob/master/short_demo_text_file_and_short_paths.png)
