@@ -63,8 +63,13 @@ Sum it up, available features under GeneralView Tab:
 NetworkReactionOnFailure is covered in [how-to](https://topolograph.com/how-to)
 
 ## Reports
+### Asymmetric paths
 When different costs are configured on different links - asymmetric paths could be in the network. The incoming path from W to F is going via C-D, but the outgoing path is via B-A. Paths can go via different ISPs and come with different delays and, probably, losses. The report is aimed at discovering such cases in order to eliminate it.  
 ![](https://github.com/Vadims06/topolograph/blob/master/asymmetric_horizontal_2x.png)
+
+### Network heatmap
+The topolograph knows what networks are advertised by nodes. When the network is terminated on both routers, using VRRP, both nodes advertise the network. The node is marked by red if it has a lot of unbackuped networks, and vise versa.
+![](https://github.com/Vadims06/topolograph/blob/master/heatmap.png)
 
 ## Private
 Keep your network inside your organization.
