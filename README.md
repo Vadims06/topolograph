@@ -41,7 +41,7 @@ Beside colored edges on the graph, the shortest path's cost and nodes list is pr
 ![](https://github.com/Vadims06/topolograph/blob/master/short_demo_text_file_and_short_paths.gif)
 ## Network reaction on the link failure. Backup paths
 Pressing on edge we simulate the link outage and can see backup paths  
-![pressing on edge we simulate the link outage and can see backup paths](https://github.com/Vadims06/topolograph/blob/master/short_demo_text_file_and_short_paths.png)
+![pressing on edge we simulate the link outage and can see backup paths](https://github.com/Vadims06/topolograph/blob/master/backup_SPT.png)
 and we can see backup of backup paths as well  
 
 
