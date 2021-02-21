@@ -64,7 +64,7 @@ NetworkReactionOnFailure is covered in [how-to](https://topolograph.com/how-to)
 
 ## Reports
 When different costs are configured on different links - asymmetric paths could be in the network. The incoming path from W to F is going via C-D, but the outgoing path is via B-A. Paths can go via different ISPs and come with different delays and, probably, losses. The report is aimed at discovering such cases in order to eliminate it.  
-![](https://github.com/Vadims06/topolograph/blob/master/asymmetric_horizontal.png)
+![](https://github.com/Vadims06/topolograph/blob/master/asymmetric_horizontal_2x.png)
 
 ## Private
 Keep your network inside your organization.
