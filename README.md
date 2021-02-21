@@ -1,6 +1,7 @@
 # Topolograph
-Topolograph.com is a Python-based tool, which is aimed at working with the OSPF network offline! No any logins and passwords!
-The Topolograph can visualize network topology based on OSPF's LinkState DataBase scrapped from a single network device ( thanks OSPF =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from source to destination, get backup paths, emulate link outage along the path or change OSPF link cost on the fly! Additionally, you can simulate a device outage and see appropriate network reaction. Once you upload your OSPF to Topolograph - you save the state of your network. After any changes on a network (i.e. redistribution from BGP to OSPF via route-maps with prefix-lists) - upload the network once again and compare them between each other.
+Topolograph.com is a Python-based tool, which is aimed at visualizing OSPF topology and working with the OSPF network offline! No any logins and passwords!
+The Topolograph visualizes OSPF network topology based on OSPF's LinkState DataBase scrapped from a single network device ( thanks OSPF =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from a source to a destination, get backup paths, emulate link outage along the path or change OSPF link cost on the fly! Additionally, you can simulate a device outage and see appropriate network reaction. Build reports about the network.  
+Once you upload your OSPF to Topolograph - you save the state of your network. After any changes on a network (i.e. redistribution from BGP to OSPF via route-maps with prefix-lists) - upload the network once again and compare them between each other.
 
 ## Available option
 * Do not require any logins and passwords - accept LSDB from txt file
@@ -11,7 +12,7 @@ The Topolograph can visualize network topology based on OSPF's LinkState DataBas
 * Browse your network with `Focus on the Node` option
 * Compare the network state at different times
 * Discover backuped/not-backuped networks in Analytics/Network heatmap
-* Discover unsymmetric paths
+* Discover asymmetric paths
 
 | Vendor  | LSA1                                           | LSA2                                            | LSA5                                             | NAPALM support |
 |---------|------------------------------------------------|-------------------------------------------------|--------------------------------------------------|----------------|
@@ -46,7 +47,7 @@ and we can see backup of backup paths as well
 
 
 ### OSPF cost changes on the fly. OSPF cost planning.
-It feasible to change OSPF cost on any edge and get network reaction on the fly!  
+It's feasible to change OSPF cost on any edge and get network reaction on the fly!  
 Build the shortest path under General View and set new OSPF cost in new pop-up-ed form - new path will be repainted  
 This pop-uped form is available under NetworkReactionOnFailure and shows network traffic pattern changes!  
 On the demo below we changed OSPF cost from 1 to 22 and OSPF rebuilt the shortest path via bottom link.  
@@ -61,11 +62,21 @@ Sum it up, available features under GeneralView Tab:
 
 NetworkReactionOnFailure is covered in ![how-to](https://topolograph.com/how-to)
 
+## Reports
+When different costs are configured on different links - asymmetric paths could be in the network. The incoming path from W to F is going via C-D, but the outgoing path is via B-A. Paths can go via different ISPs and come with different delays and, probably, losses. The report is aimed at discovering such cases in order to eliminate it.
+![](https://github.com/Vadims06/topolograph/blob/master/asymmetric_horizontal.png)
+
+## Private
+Keep your network inside your organization.
+Run your local copy of Topolograph inside your on-premises network using the docker image.
+![](https://github.com/Vadims06/topolograph/blob/master/topolograph_docker.png)
+
 ## Vendor support
 * Cisco
 * Juniper
 * Quagga
 * Bird
+* Nokia
 * others (see below)
 if you would like to see support of other vendors - just create an issue on this page or contact using Slack chat. You can create textfsm template for scrapping LSDB output of your vendor and create merge request, or we can do it by themselves - please send your outputs to us.
 
