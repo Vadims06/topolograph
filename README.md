@@ -20,7 +20,9 @@ Once you upload your OSPF to Topolograph - you save the state of your network. A
 | Quagga  | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
 | Juniper | show ospf database router extensive \| no-more | show ospf database network extensive \| no-more | show ospf database external extensive \| no-more | YES            |
 | Bird    | show ospf state all                            | show ospf state all                             | show ospf state all                              | No            |
-| Nokia   | show router ospf database type router detail   | show router ospf database type network detail   | show router ospf database type external detail   | No            |
+| Nokia   | show router ospf database type router detail   | show router ospf database type network detail   | show router ospf database type external detail   | Yes           |
+| Mikrotik| /routing ospf lsa print detail file=lsa.txt    | /routing ospf lsa print detail file=lsa.txt     | /routing ospf lsa print detail file=lsa.txt      | No            |
+| Huawei  | display ospf lsdb router                       | display ospf lsdb network                       | display ospf lsdb ase                            | No            |
 
   
 LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional.  
