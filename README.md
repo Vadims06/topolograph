@@ -90,6 +90,28 @@ Run your local copy of Topolograph inside your on-premises network using the doc
 * others (see below)
 if you would like to see support of other vendors - just create an issue on this page or contact using Slack chat. You can create textfsm template for scrapping LSDB output of your vendor and create merge request, or we can do it by themselves - please send your outputs to us.
 
+## Coming soon
+API support. Scrab your LSDB using your favourite tools like Ansible, netmiko, Nornir, etc and upload your OSPF network graph to Topolograph via a POST request. The response returns you short statistic about the network and diff comparison with previously uploaded graphs. So, you could programmatically get network diff dramatically fast.
+P.S. any support with connexion is highly appreciated. ![Email](admin at topolograph.com) me please if you have spare time to think over connexion+HTTPS.
+```
+{'diff': {'compared_with_graph_time': '08Jun2021_20h15m26s_13_hosts',
+          'graphs_diff': {'all_edges_stats_ll': [{'dst_node': '123.123.110.110',
+                                                  'link_cost': 10,
+                                                  'link_status': 'old',
+                                                  'src_node': '123.123.100.100'],
+                          'new_nodes': [],
+                          'old_nodes': []},
+          'networks_diff': {'new_subnets_attr_dd_ll': [{'rid': '123.30.30.30',
+                                                        'subnet': '30.30.30.30/32'}],
+                            'old_subnets_attr_dd_ll': []}},
+ 'graph_time': '08Jun2021_20h15m51s_13_hosts',
+ 'hosts': {'count': 13},
+ 'networks': {'backuped': 17,
+              'count': 39,
+              'notbackuped': 22,
+ 'timestamp': '2021-06-08T20:15:51.724000'}
+```
+
 # Online Resources. Contacts
 * Slack chat: https://topolograph.slack.com
 * Main site: https://topolograph.com
