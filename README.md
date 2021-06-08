@@ -84,6 +84,9 @@ Run your local copy of Topolograph inside your on-premises network using the doc
 * Quagga
 * Bird
 * Nokia
+* Mikrotik
+* Huawei
+* Paloalto
 * others (see below)
 if you would like to see support of other vendors - just create an issue on this page or contact using Slack chat. You can create textfsm template for scrapping LSDB output of your vendor and create merge request, or we can do it by themselves - please send your outputs to us.
 
