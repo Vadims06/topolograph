@@ -62,7 +62,14 @@ Sum it up, available features under GeneralView Tab:
 * **OSPF edge cost planning** right click on an edge and you can change edge's OSPF cost you see new path of your SPT.
 * **Find termination node of a network** start typing a network in Focus/Source tab and you get a dropdown list with all nodes with this network. Once you choose it - you will be focused on the node.  
 
-NetworkReactionOnFailure is covered in [how-to](https://topolograph.com/how-to)
+### NetworkReactionOnFailure is covered in [how-to](https://topolograph.com/how-to)
+It's possible to simulate a link or router shutdown/outage. The topology will be re-pained with expected changed traffic flow avoiding failed link or router.
+![](https://github.com/Vadims06/topolograph/blob/master/network_reaction_rem_edge1.png)
+* Blue lines show traffic increasing over the link
+* Grey lines show traffic decreasing over the link
+
+Try to shutdown backup router and see the graph reaction. If this is a true backup router - there shoudn't be network rebuilding too much
+![](https://github.com/Vadims06/topolograph/blob/master/network_reaction_shut_node.png)
 
 ## Reports
 ### Asymmetric paths
