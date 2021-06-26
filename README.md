@@ -143,8 +143,32 @@ with open('cisco_lsdb_output.txt') as f:
 ## Known issues
 If you just upload LSDB and press Delete -> topology will be deleted and added again. Just press Upload LSDB Tab again and then deleting of topology works fine.
 
-# Contribution. New textfsm templates creation for different vendors
+# Contribution. 
+## adding new vendor
 In order to project supports different vendors you can help us by creating five separate textfsm files for different LSA types for one vendor. Check [Wiki](https://github.com/Vadims06/topolograph/wiki/How-to-add-new-vendor-support) for this.
+
+## adding NAPALM support
+For adding scrapping OSPF by NAPALM - please create three additional methods and ping me to add it to topolograph. The example based on Cisco IOS NAPALM
+```
+    def get_ospf_router_lsa_raw_output(self):
+        command_router = 'show ip ospf database router'
+
+        show_ospf_lsdb_router_lsa_output = self._send_command(command_router).strip()
+        return show_ospf_lsdb_router_lsa_output
+
+    def get_ospf_network_lsa_raw_output(self):
+        command_network = 'show ip ospf database network'
+
+        show_ospf_lsdb_network_lsa_output = self._send_command(command_network).strip()
+        return show_ospf_lsdb_network_lsa_output
+
+
+    def get_ospf_external_lsa_raw_output(self):
+        command_external = 'show ip ospf database external'
+
+        show_ospf_lsdb_external_lsa_output = self._send_command(command_external).strip()
+        return show_ospf_lsdb_external_lsa_output
+```
 
 ## Used RFC
 RFC 2328
