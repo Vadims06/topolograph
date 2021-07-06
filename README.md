@@ -80,6 +80,11 @@ When different costs are configured on different links - asymmetric paths could 
 The topolograph knows what networks are advertised by nodes. When the network is terminated on both routers, using VRRP, both nodes advertise the network. The node is marked by red if it has a lot of unbackuped networks, and vise versa.
 ![](https://github.com/Vadims06/topolograph/blob/master/heatmap.png)
 
+### ECMP backup paths
+* We suggest that if we have multiple links bounded to ECMP and if the main link in ECMP goes down, the backup path should go via the second link in ECMP.  passed report  
+![passed report](https://github.com/Vadims06/topolograph/blob/471b545720378598d550b448ff6c7e82fa7c677c/ospf_ecmp_backup_path_via_ecmp.png "passed report")
+* If backup path goes not via ECMP and chooses completely different path - the report will be treated as failed.  failed report  
+![passed report](https://github.com/Vadims06/topolograph/blob/471b545720378598d550b448ff6c7e82fa7c677c/ospf_ecmp_backup_path_not_via_ecmp.png "failed report")
 ## Private
 Keep your network inside your organization.
 Run your local copy of Topolograph inside your on-premises network using the docker image.  
