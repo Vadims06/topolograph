@@ -14,6 +14,7 @@ Once you upload your OSPF to Topolograph - you save the state of your network. A
 * Discover backuped/not-backuped networks in Analytics/Network heatmap
 * Discover asymmetric paths
 
+# Supported vendors
 | Vendor  | LSA1                                           | LSA2                                            | LSA5                                             | NAPALM support |
 |---------|------------------------------------------------|-------------------------------------------------|--------------------------------------------------|----------------|
 | Cisco   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
@@ -23,23 +24,27 @@ Once you upload your OSPF to Topolograph - you save the state of your network. A
 | Nokia   | show router ospf database type router detail   | show router ospf database type network detail   | show router ospf database type external detail   | Yes           |
 | Mikrotik| /routing ospf lsa print detail file=lsa.txt    | /routing ospf lsa print detail file=lsa.txt     | /routing ospf lsa print detail file=lsa.txt      | No            |
 | Huawei  | display ospf lsdb router                       | display ospf lsdb network                       | display ospf lsdb ase                            | No            |
+| Paloalto  | show routing protocol ospf dumplsdb         | show routing protocol ospf dumplsdb                | show routing protocol ospf dumplsdb            | No            |
+| HP  | show ip ospf link-state detail           | show ip ospf link-state detail      | show ip ospf external-link-state          | No            |
+| Ubiquiti  | show ip ospf database router          | show ip ospf database network      | show ip ospf database external          | No            |
 
-  
-LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional.  
-So the output from all commands should be placed in a single file and then be uploaded to Topolograph.
+LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.
+
+### How to start
+- run commands specifically to your vendor (from Supported vendors table) on single device ( if you have multiple areas - do it on ABR)
+- save all commands output in a single file with .txt or .log extension
+- upload the file to Topolograph
+
 ### Expected file's extension
 - .txt
 - .log
-# Upload LSDB to the Topolograph
-This demo shows how to save OSPF LSDB from your devices and upload it to Topolograph. 
-1. Redirect an output from your terminal to a file. 
-2. Execute commands from the table above. 
-3. Upload the file to Topolograph.
 
-## Building the shortest paths
-Choose the node  
-Set it as a source or destination from right-clicked menu or from dropdown menu above  
-Beside colored edges on the graph, the shortest path's cost and nodes list is printed above the topology  
+# Demo
+## Upload OSPF LSDB to the Topolograph and Building the shortest paths
+This demo shows how to get OSPF topology visual and interact with it.
+1. Upload the file to Topolograph from exicuted commands previously.
+2. Build the shortest paths
+3. Emulate a link outage and see backup paths
 
 ![](https://github.com/Vadims06/topolograph/blob/master/short_demo_text_file_and_short_paths.gif)
 ## Network reaction on the link failure. Backup paths
@@ -85,22 +90,11 @@ The topolograph knows what networks are advertised by nodes. When the network is
 ![passed report](https://github.com/Vadims06/topolograph/blob/471b545720378598d550b448ff6c7e82fa7c677c/ospf_ecmp_backup_path_via_ecmp.png "passed report")
 * If backup path goes not via ECMP and chooses completely different path - the report will be treated as failed.  failed report  
 ![passed report](https://github.com/Vadims06/topolograph/blob/471b545720378598d550b448ff6c7e82fa7c677c/ospf_ecmp_backup_path_not_via_ecmp.png "failed report")
+
 ## Private
 Keep your network inside your organization.
 Run your local copy of Topolograph inside your on-premises network using the docker image.  
 ![](https://github.com/Vadims06/topolograph/blob/master/topolograph_docker.png)
-
-## Vendor support
-* Cisco
-* Juniper
-* Quagga
-* Bird
-* Nokia
-* Mikrotik
-* Huawei
-* Paloalto
-* others (see below)
-if you would like to see support of other vendors - just create an issue on this page or contact using Slack chat. You can create textfsm template for scrapping LSDB output of your vendor and create merge request, or we can do it by themselves - please send your outputs to us.
 
 ## API
 Started from v2.19. Scrab your LSDB using your favourite tools like Ansible, netmiko, Nornir, etc and upload your OSPF network graph to Topolograph via a POST request. The response returns:
@@ -144,6 +138,7 @@ with open('cisco_lsdb_output.txt') as f:
 * Slack chat: https://topolograph.slack.com
 * Main site: https://topolograph.com
 * Docker version of site: https://github.com/Vadims06/topolograph-docker
+* Online doc: https://topolograph.com/how-to
 
 ## Known issues
 If you just upload LSDB and press Delete -> topology will be deleted and added again. Just press Upload LSDB Tab again and then deleting of topology works fine.
