@@ -1,6 +1,6 @@
 # Topolograph
 
-## v2.21 (21.08.2021)
+## v2.22 (21.08.2021)
 
 ### Enhancements
 * HP (limited) support is added. 
