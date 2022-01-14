@@ -134,7 +134,33 @@ with open('cisco_lsdb_output.txt') as f:
                           json={'lsdb_output': lsdb_output, 'vendor_device': 'Cisco'})
   pp(r_post.json())
 ```
-
+### API. Test network reaction on a failure
+We have the following topology  
+![image](https://user-images.githubusercontent.com/20796986/144145217-454c1442-ba6c-4337-a6f2-8dde5d337f1e.png)  
+#### Test case
+Emulate powering off nodes 10.1.1.2 and 10.1.1.4.
+#### What we would like to test
+* Link over utilisation will occurs?
+* Network reachability will be broken? Some nodes will be isolated?  
+Test request:
+```
+import requests
+from pprint import pprint as pp
+r_post = requests.post('http://<topolograph-host>/api/network_reaction/node_failure/', auth=('   ', '    '), 
+                          json={"graph_time": "25Nov2021_08h20m45s_7_hosts", "failed_nodes_list": ["10.1.1.2", "10.1.1.4"]})
+pp(r_post.json())
+```
+Reply
+```
+{'affectedLinks': {'sptPathsDecreasedInPercent': {},
+                   'sptPathsIncreasedInPercent': {'from': '10.1.1.1',
+                                                  'to': '10.1.1.3',
+                                                  'value': 60}},
+ 'disjointedNodes': [['10.1.123.23', '10.1.123.24'],
+                     ['192.168.100.100'],
+                     ['10.1.1.1', '10.1.1.3']],
+ 'isGraphStillConnected': False}
+ ```
 # Online Resources. Contacts
 * Slack chat: https://topolograph.slack.com
 * Main site: https://topolograph.com
