@@ -1,7 +1,7 @@
 # Topolograph
-Topolograph.com is a Python-based tool, which is aimed at visualizing OSPF topology and working with the OSPF network offline! No any logins and passwords!
-The Topolograph visualizes OSPF network topology based on OSPF's LinkState DataBase scrapped from a single network device ( thanks OSPF =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from a source to a destination, get backup paths, emulate link outage along the path or change OSPF link cost on the fly! Additionally, you can simulate a device outage and see appropriate network reaction. Build reports about the network.  
-Once you upload your OSPF to Topolograph - you save the state of your network. After any changes on a network (i.e. redistribution from BGP to OSPF via route-maps with prefix-lists) - upload the network once again and compare them between each other.  
+Topolograph.com is a Python-based tool, which is aimed at visualizing OSPF/ISIS topology and working with the OSPF/ISIS network offline! No any logins and passwords!
+The Topolograph visualizes OSPF/ISIS network topology based on OSPF's LinkState DataBase scrapped from a single network device ( thanks OSPF/ISIS =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from a source to a destination, get backup paths, emulate link outage along the path or change OSPF/ISIS link cost on the fly! Additionally, you can simulate a device outage and see appropriate network reaction. Build reports about the network.  
+Once you upload your OSPF/ISIS to Topolograph - you save the state of your network. After any changes on a network (i.e. redistribution from BGP to OSPF via route-maps with prefix-lists) - upload the network once again and compare them between each other.  
 ![](https://github.com/Vadims06/topolograph/blob/5bd6912d90260da6c412cae7b78e5b1024e61131/functional-topolograph-role.png)  
 [OSPF Watcher repo](https://github.com/Vadims06/ospfwatcher)
 ## Available option
@@ -15,7 +15,7 @@ Once you upload your OSPF to Topolograph - you save the state of your network. A
 * Discover backuped/not-backuped networks in Analytics/Network heatmap
 * Discover asymmetric paths
 
-# Supported vendors
+# Supported vendors for OSPF visualisation
 | Vendor  | LSA1                                           | LSA2                                            | LSA5                                             | NAPALM support |
 |---------|------------------------------------------------|-------------------------------------------------|--------------------------------------------------|----------------|
 | Cisco   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
@@ -28,8 +28,17 @@ Once you upload your OSPF to Topolograph - you save the state of your network. A
 | Paloalto  | show routing protocol ospf dumplsdb         | show routing protocol ospf dumplsdb                | show routing protocol ospf dumplsdb            | No            |
 | HP  | show ip ospf link-state detail           | show ip ospf link-state detail      | show ip ospf external-link-state          | No            |
 | Ubiquiti  | show ip ospf database router          | show ip ospf database network      | show ip ospf database external          | No            |
+  
+LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.  
 
-LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.
+# Supported vendors for ISIS visualisation
+| Vendor  | Command                                     | Stub network included                       | External (redistributed) network          | 
+|---------|---------------------------------------------|---------------------------------------------|--------------------------------------------------|
+| Cisco   | show isis database detail                   | YES                     | No, (need tested LSDB for adding it)                   |
+| Juniper  | show isis database extensive               | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
+| Nokia   | show router isis database detail            | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
+| Huawei   | display isis lsdb verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
+  
 
 ### How to start
 - run commands specifically to your vendor (from Supported vendors table) on single device ( if you have multiple areas - do it on ABR)
