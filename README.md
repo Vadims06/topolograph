@@ -26,8 +26,9 @@ Once you upload your OSPF/ISIS to Topolograph - you save the state of your netwo
 | Mikrotik| /routing ospf lsa print detail file=lsa.txt    | /routing ospf lsa print detail file=lsa.txt     | /routing ospf lsa print detail file=lsa.txt      | No            |
 | Huawei  | display ospf lsdb router                       | display ospf lsdb network                       | display ospf lsdb ase                            | No            |
 | Paloalto  | show routing protocol ospf dumplsdb         | show routing protocol ospf dumplsdb                | show routing protocol ospf dumplsdb            | No            |
-| HP  | show ip ospf link-state detail           | show ip ospf link-state detail      | show ip ospf external-link-state          | No            |
 | Ubiquiti  | show ip ospf database router          | show ip ospf database network      | show ip ospf database external          | No            |
+| Allied Telesis  | show ip ospf database router  | show ip ospf database network	      | show ip ospf database external	          | No            |
+
   
 LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.  
 
