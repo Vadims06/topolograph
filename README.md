@@ -144,6 +144,9 @@ with open('cisco_lsdb_output.txt') as f:
                           json={'lsdb_output': lsdb_output, 'vendor_device': 'Cisco'})
   pp(r_post.json())
 ```
+#### Default credentials
+Default credentials are available via environment variables in case of using docker-based version. How to set it described in this [case](https://github.com/Vadims06/topolograph/issues/26).
+
 ### API. Test network reaction on a failure
 We have the following topology  
 ![image](https://user-images.githubusercontent.com/20796986/144145217-454c1442-ba6c-4337-a6f2-8dde5d337f1e.png)  
