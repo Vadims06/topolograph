@@ -141,9 +141,10 @@ from pprint import pprint as pp
 with open('cisco_lsdb_output.txt') as f:
   lsdb_output = f.read()
   r_post = requests.post('https://topolograph.com/api/graph', auth=('youraccount@domain.com', 'your-pass'), 
-                          json={'lsdb_output': lsdb_output, 'vendor_device': 'Cisco'})
+                          json={'lsdb_output': lsdb_output, 'vendor_device': 'Cisco', 'igp_protocol': 'ospf'})
   pp(r_post.json())
-```
+```  
+`igp_protocol` may include `ospf` or `isis`  
 #### Default credentials
 Default credentials are available via environment variables in case of using docker-based version. How to set it described in this [case](https://github.com/Vadims06/topolograph/issues/26).
 
