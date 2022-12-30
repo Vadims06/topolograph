@@ -40,3 +40,5 @@ r_post.json()
 ![](https://github.com/Vadims06/topolograph/blob/aaabbef7bcbf5666024702aa1419599e9b9cd617/docs/release-notes/v2.28/api__shortest_path_between_networks.png)  
 The visual path  
 ![](https://github.com/Vadims06/topolograph/blob/921fcf316f63f3ff6fafc1f6c899031952ad0bc4/docs/release-notes/v2.28/shortest_path_between_networks.png)  
+
+Full API schema is [here](https://topolograph.com/api/ui/)  
