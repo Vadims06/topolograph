@@ -10,7 +10,3 @@
 VRF names can be imported via CSV file
 
 ![](https://github.com/Vadims06/topolograph/blob/cbf02ed75f519c765014b87391672c9d82a0af6b/docs/release-notes/v2.29/vrf_schema.png)
-
-* Fix issue 31 Support for importing Cisco NX-OS DB
-1. `Metrics:` -> `Metric:`
-2. `network/subnet Number:` -> `Network/Subnet Number:`
