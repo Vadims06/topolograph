@@ -39,6 +39,7 @@ LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is option
 | Juniper  | show isis database extensive               | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
 | Nokia   | show router isis database detail            | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
 | Huawei   | display isis lsdb verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
+| ZTE     | show isis database verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
   
 
 ### How to start
