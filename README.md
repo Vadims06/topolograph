@@ -14,6 +14,7 @@ Once you upload your OSPF/ISIS to Topolograph - you save the state of your netwo
 * Compare the network state at different times
 * Discover backuped/not-backuped networks in Analytics/Network heatmap
 * Discover asymmetric paths
+* Build arbitrary topologies based on YAML
 
 # Supported vendors for OSPF visualisation
 | Vendor  | LSA1                                           | LSA2                                            | LSA5                                             | NAPALM support |
