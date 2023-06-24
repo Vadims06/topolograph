@@ -1,16 +1,16 @@
 # Topolograph
-Topolograph.com is a Python-based tool, which is aimed at visualizing OSPF/ISIS topology and working with the OSPF/ISIS network offline! No any logins and passwords!
-The Topolograph visualizes OSPF/ISIS network topology based on OSPF's LinkState DataBase scrapped from a single network device ( thanks OSPF/ISIS =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from a source to a destination, get backup paths, emulate link outage along the path or change OSPF/ISIS link cost on the fly! Additionally, you can simulate a device outage and see appropriate network reaction. Build reports about the network.  
+Topolograph.com is a Web Python-based tool, which is aimed at visualizing OSPF/ISIS topology and working with the OSPF/ISIS network offline! No any logins and passwords!
+The Topolograph visualizes OSPF/ISIS network topology based on LinkState DataBase scrapped from a single network device ( thanks OSPF/ISIS =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from a source to a destination, get backup paths, emulate link outage along the path or change OSPF/ISIS link cost on the fly! Additionally, you can simulate a device outage and see appropriate network reaction. Build reports about the network.  
 Once you upload your OSPF/ISIS to Topolograph - you save the state of your network. After any changes on a network (i.e. redistribution from BGP to OSPF via route-maps with prefix-lists) - upload the network once again and compare them between each other.  
 ![](https://github.com/Vadims06/topolograph/blob/5bd6912d90260da6c412cae7b78e5b1024e61131/functional-topolograph-role.png)  
 [OSPF Watcher repo](https://github.com/Vadims06/ospfwatcher)
 ## Available option
-* Do not require any logins and passwords - accept LSDB from txt file
+* Do not require any logins and passwords - accept LSDB from txt file or via Rest API
 * Docker version is available. Launch local copy of Topolograph site on your PC
 * Once you get your network graph - build the shortests paths
 * Simulate a link outage and discover backup paths or backup of backup paths...
 * Simulate a router shutdown. Look at traffic flow around the failed router
-* Browse your network with `Focus on the Node` option
+* Check network reacion to IGP cost change on a link
 * Compare the network state at different times
 * Discover backuped/not-backuped networks in Analytics/Network heatmap
 * Discover asymmetric paths
@@ -28,6 +28,8 @@ Once you upload your OSPF/ISIS to Topolograph - you save the state of your netwo
 | Paloalto  | show routing protocol ospf dumplsdb         | show routing protocol ospf dumplsdb                | show routing protocol ospf dumplsdb            | No            |
 | Ubiquiti  | show ip ospf database router          | show ip ospf database network      | show ip ospf database external          | No            |
 | Allied Telesis  | show ip ospf database router  | show ip ospf database network	      | show ip ospf database external	          | No            |
+| Extreme  | show ospf lsdb detail lstype router  | show ospf lsdb detail lstype network	      | show ospf lsdb detail lstype as-external	          | No            |
+| Ericsson  | show ospf database router detail  | show ospf database network detail	      | show ospf database external detail	          | No            |
 
   
 LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.  
@@ -234,6 +236,60 @@ Reply
                      ['10.1.1.1', '10.1.1.3']],
  'isGraphStillConnected': False}
  ```
+# Yaml based topology
+Topolograph visualizes topologies based on OSPF/IS-IS LSDB files, but starting from v2.32 it accepts YAML to build a graph. It can be used for building arbitrary topologies (not exactly IGP domains), but moreover it can keep the topology updated via Rest API. It's the first version of Network Diagram as a Service (NDAS)!  
+OSPF/IS-IS LSDB <-> YAML is interchangeable now in both ways, so it allows to make a design of IGP domain from the scratch or based on uploaded a LSDB, add new links/edges between nodes or change igp's cost and then check network reaction based on our changes.
+### Basic YAML based topology.
+Build a graph with defined `nodes` and `edges`. 
+![https://user-images.githubusercontent.com/20796986/144145217-454c1442-ba6c-4337-a6f2-8dde5d337f1e.png](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/basic_yaml_diagram.PNG)  
+
+### Node attributes
+* `node's name` is mandatory. Should be in IP-address format. To change it to any other value - use `label`
+* Tags of node are optional. Any key (type string): value (str, int, float, dictionary, list) pairs.
+![image](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/node_attributes_yaml_file_and_api_request.png)   
+There is a graph with 6 nodes. Select all primary nodes (`ha_role`: `primary`) in the first DC (`dc1`)
+```
+import requests
+from pprint import pprint as pp
+query_params = {'location': 'dc1', 'ha_role': 'primary'}                                  
+r_get = requests.get(f'http://{TOPOLOGRAPH_HOST}:{TOPOLOGRAPH_PORT}/api/diagram/{graph_time}/nodes', auth=('   ', '    '), params=query_params, timeout=(5, 30))
+```
+Reply
+```
+pp(r_get.json())
+[{'ha_role': 'primary',
+  'id': 1,
+  'label': '10.10.10.2',
+  'location': 'dc1',
+  'name': '10.10.10.2',
+  'size': 15}]
+```
+### Edge attributes
+* `src`, `dst` is mandatory. 
+* `cost` is optional. Default is 1. Equal to OSPF/IS-IS cost.
+* `directed` is optional. Default is false.
+* Tags of edge are optional. Any key (type string): value (str, int, float, dictionary, list) pairs.
+![image](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/edge_attributes_yaml_file_and_api_request.PNG)   
+Select all edges over verizon ISP between `10.10.10.2` and `10.10.10.4`  
+```
+query_params = {'src_node': '10.10.10.2', 'dst_node': '10.10.10.4', 'isp': 'verizon'}
+r_get = requests.get(f'http://{TOPOLOGRAPH_HOST}:{TOPOLOGRAPH_PORT}/api/diagram/{graph_time}/edges', auth=('   ', '    '), params=query_params, timeout=(5, 30))
+```
+Reply
+```
+pp(r_get.json())                                                                          
+[{'bw': 1000,
+  'cost': 1,
+  'dst': '10.10.10.4',
+  'id': 3,
+  'isp': 'verizon',
+  'media': 'fiber',
+```
+### Network reaction on adding new link between devices.
+Let's add a new link with `cost` 1 between R3 (10.10.10.3) and R4 (10.10.10.4) device and see how network will react on it.
+![image](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/yaml_diagram_network_reaction_on_adding_r3_r4.PNG)
+Obviously, we see traffic increase on direct link R3<->R4 and traffic decrease to R2 (10.10.10.2) and R5 (10.10.10.5).
+
 # Online Resources. Contacts
 * Slack chat: https://topolograph.slack.com
 * Main site: https://topolograph.com
