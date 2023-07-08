@@ -20,6 +20,7 @@ Once you upload your OSPF/ISIS to Topolograph - you save the state of your netwo
 | Vendor  | LSA1                                           | LSA2                                            | LSA5                                             | NAPALM support |
 |---------|------------------------------------------------|-------------------------------------------------|--------------------------------------------------|----------------|
 | Cisco   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
+| Cisco NX-OS| show ip ospf database router detail         | show ip ospf database network detail            | show ip ospf database external detail            | No            |
 | Quagga  | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
 | Juniper | show ospf database router extensive \| no-more | show ospf database network extensive \| no-more | show ospf database external extensive \| no-more | YES            |
 | Bird    | show ospf state all                            | show ospf state all                             | show ospf state all                              | No            |
