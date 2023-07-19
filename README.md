@@ -10,11 +10,12 @@ Once you upload your OSPF/ISIS to Topolograph - you save the state of your netwo
 * Once you get your network graph - build the shortests paths
 * Simulate a link outage and discover backup paths or backup of backup paths...
 * Simulate a router shutdown. Look at traffic flow around the failed router
-* Check network reacion to IGP cost change on a link
+* Find the most loaded nodes and edges, fault tolerant nodes.
+* Check network reaction to IGP cost change on a link
 * Compare the network state at different times
 * Discover backuped/not-backuped networks in Analytics/Network heatmap
 * Discover asymmetric paths
-* Build arbitrary topologies based on YAML
+* Build arbitrary topologies based on YAML. Yaml file topology visualisation.
 
 # Supported vendors for OSPF visualisation
 | Vendor  | LSA1                                           | LSA2                                            | LSA5                                             | NAPALM support |
@@ -50,6 +51,8 @@ LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is option
 - run commands specifically to your vendor (from Supported vendors table) on single device ( if you have multiple areas - do it on ABR)
 - save all commands output in a single file with .txt or .log extension
 - upload the file to Topolograph
+
+- or do it programmatically via Rest API. Multi devices LSDBs are supported via API only (v2.34). 
 
 ### Expected file's extension
 - .txt
