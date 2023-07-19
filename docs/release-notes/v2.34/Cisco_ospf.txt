@@ -1,0 +1,82 @@
+SW201#sh ip ospf database router 
+
+            OSPF Router with ID (10.2.2.1) (Process ID 1)
+
+		Router Link States (Area 0)
+
+  LS age: 1008
+  Options: (No TOS-capability, DC)
+  LS Type: Router Links
+  Link State ID: 10.2.2.1
+  Advertising Router: 10.2.2.1
+  LS Seq Number: 8000005E
+  Checksum: 0xFBB
+  Length: 72
+  Number of Links: 4
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 192.2.100.0
+     (Link Data) Network Mask: 255.255.255.0
+      Number of MTID metrics: 0
+       TOS 0 Metrics: 1
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 10.2.2.1
+     (Link Data) Network Mask: 255.255.255.255
+      Number of MTID metrics: 0
+       TOS 0 Metrics: 1
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 192.2.201.0
+     (Link Data) Network Mask: 255.255.255.0
+      Number of MTID metrics: 0
+       TOS 0 Metrics: 1
+
+    Link connected to: a Transit Network
+     (Link ID) Designated Router address: 10.2.101.10
+     (Link Data) Router Interface address: 10.2.101.1
+      Number of MTID metrics: 0
+       TOS 0 Metrics: 10
+
+
+  LS age: 637
+  Options: (No TOS-capability, DC)
+  LS Type: Router Links
+  Link State ID: 10.2.2.10
+  Advertising Router: 10.2.2.10
+  LS Seq Number: 80001875
+  Checksum: 0x69E2
+  Length: 48
+  Area Border Router
+  Number of Links: 2
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 10.2.2.10
+     (Link Data) Network Mask: 255.255.255.255
+      Number of MTID metrics: 0
+       TOS 0 Metrics: 1
+
+    Link connected to: a Transit Network
+     (Link ID) Designated Router address: 10.2.101.10
+     (Link Data) Router Interface address: 10.2.101.10
+      Number of MTID metrics: 0
+       TOS 0 Metrics: 10
+
+
+SW201#sh ip ospf database network 
+
+            OSPF Router with ID (10.2.2.1) (Process ID 1)
+
+		Net Link States (Area 0)
+
+  LS age: 640
+  Options: (No TOS-capability, DC)
+  LS Type: Network Links
+  Link State ID: 10.2.101.10 (address of Designated Router)
+  Advertising Router: 10.2.2.10
+  LS Seq Number: 80000058
+  Checksum: 0x5DCA
+  Length: 32
+  Network Mask: /24
+	Attached Router: 10.2.2.10
+	Attached Router: 10.2.2.1

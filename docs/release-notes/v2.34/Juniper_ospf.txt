@@ -1,0 +1,46 @@
+root@vMX> show ospf database router extensive
+
+    OSPF database, Area 0.0.0.1
+ Type       ID               Adv Rtr           Seq      Age  Opt  Cksum  Len
+Router   10.2.2.10   10.2.2.10   0x8000026f   919  0x22 0x35b  108
+  bits 0x0, link count 7
+  id 10.2.2.10, data 255.255.255.255, Type Stub (3)
+    Topology count: 0, Default metric: 1
+  id 10.1.1.153, data 172.16.10.215, Type PointToPoint (1)
+    Topology count: 0, Default metric: 1
+  id 172.16.10.0, data 255.255.255.0, Type Stub (3)
+    Topology count: 0, Default metric: 1
+  id 10.1.1.156, data 172.16.27.215, Type PointToPoint (1)
+    Topology count: 0, Default metric: 1
+  id 172.16.27.0, data 255.255.255.0, Type Stub (3)
+    Topology count: 0, Default metric: 1
+  id 10.1.1.147, data 172.16.11.215, Type PointToPoint (1)
+    Topology count: 0, Default metric: 1
+Router   10.1.1.147   10.1.1.147   0x8000015f  1340  0x22 0x78f5 108
+  bits 0x0, link count 7
+  id 10.2.2.10, data 172.16.11.217, Type PointToPoint (1)
+    Topology count: 0, Default metric: 1
+  id 172.16.11.0, data 255.255.255.0, Type Stub (3)
+    Topology count: 0, Default metric: 1
+  Aging timer 00:37:40
+  Installed 00:22:19 ago, expires in 00:37:40, sent 00:22:17 ago
+  Last changed 1w0d 07:57:32 ago, Change count: 2
+Router   10.1.1.153   10.1.1.153   0x800001af  2408  0x22 0x8cbc  84
+  bits 0x0, link count 5
+  id 10.2.2.10, data 172.16.10.213, Type PointToPoint (1)
+    Topology count: 0, Default metric: 1
+  Topology default (ID 0)
+    Type: PointToPoint, Node ID: 10.1.1.156
+      Metric: 1, Bidirectional
+    Type: PointToPoint, Node ID: 10.1.1.145
+      Metric: 1, Bidirectional
+  Aging timer 00:19:51
+  Installed 00:40:03 ago, expires in 00:19:52, sent 00:40:01 ago
+  Last changed 1w0d 07:25:44 ago, Change count: 5
+Router   10.1.1.156   10.1.1.156   0x800001a9  2292  0x22 0xb177  84
+  bits 0x0, link count 5
+  id 10.2.2.10, data 172.16.27.212, Type PointToPoint (1)
+    Topology count: 0, Default metric: 1
+  Aging timer 00:21:48
+  Installed 00:38:07 ago, expires in 00:21:48, sent 00:38:05 ago
+  Last changed 1w0d 07:25:39 ago, Change count: 3
