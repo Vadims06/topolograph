@@ -15,9 +15,9 @@ Once you upload your OSPF/ISIS to Topolograph - you save the state of your netwo
 * Compare the network state at different times
 * Discover backuped/not-backuped networks in Analytics/Network heatmap
 * Discover asymmetric paths
-* Build arbitrary topologies based on YAML. Yaml file topology visualisation.
+* Build arbitrary topologies based on YAML. Yaml file topology visualization.
 
-# Supported vendors for OSPF visualisation
+# Supported vendors for OSPF visualization
 | Vendor  | LSA1                                           | LSA2                                            | LSA5                                             | NAPALM support |
 |---------|------------------------------------------------|-------------------------------------------------|--------------------------------------------------|----------------|
 | Cisco   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
@@ -37,7 +37,13 @@ Once you upload your OSPF/ISIS to Topolograph - you save the state of your netwo
   
 LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.  
 
-# Supported vendors for ISIS visualisation
+# Supported vendors for OSPFv3 visualization
+| Vendor  | Command                                     | Stub network included                       | External (redistributed) network          | 
+|---------|---------------------------------------------|---------------------------------------------|--------------------------------------------------|
+| Arista  | show ipv6 ospf database detail              | YES                     | YES                   |
+
+
+# Supported vendors for ISIS visualization
 | Vendor  | Command                                     | Stub network included                       | External (redistributed) network          | 
 |---------|---------------------------------------------|---------------------------------------------|--------------------------------------------------|
 | Cisco   | show isis database detail                   | YES                     | No, (need tested LSDB for adding it)                   |
