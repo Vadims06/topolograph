@@ -23,6 +23,7 @@ Once you upload your OSPF/ISIS to Topolograph - you save the state of your netwo
 | Cisco   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
 | Cisco NX-OS| show ip ospf database router detail         | show ip ospf database network detail            | show ip ospf database external detail            | No            |
 | Quagga  | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
+| Ruckus  | show ip ospf database link-state router        | show ip ospf database link-state network        | show ip ospf database external-link-state        | No            |
 | Juniper | show ospf database router extensive \| no-more | show ospf database network extensive \| no-more | show ospf database external extensive \| no-more | YES            |
 | Bird    | show ospf state all                            | show ospf state all                             | show ospf state all                              | No            |
 | Nokia   | show router ospf database type router detail   | show router ospf database type network detail   | show router ospf database type external detail   | Yes           |
