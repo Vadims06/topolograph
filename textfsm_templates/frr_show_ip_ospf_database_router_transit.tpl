@@ -7,7 +7,7 @@ Value Required DR_IP_Addr (\d+\.\d+\.\d+\.\d+)
 Value Required METRIC (\d+)
 
 Start
-  ^.*\(${ROUTER_ID}\) \(.* ${PROCESS_ID}\)
+  ^.*OSPF Router with ID \(${ROUTER_ID}\)
   ^.*\(Area ${AREA}\)
   ^.*Advertising Router:\s+${ADV_ROUTER_ID}
   ^.*Link connected to: a ${STUB}
