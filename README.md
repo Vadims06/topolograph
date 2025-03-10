@@ -34,12 +34,14 @@ Watcher agent for real-time monitoring of changes happened in OSPF/IS-IS domain
 | Mikrotik       | /routing ospf lsa print detail file=lsa.txt    | /routing ospf lsa print detail file=lsa.txt     | /routing ospf lsa print detail file=lsa.txt      | No             |
 | Huawei         | display ospf lsdb router                       | display ospf lsdb network                       | display ospf lsdb ase                            | No             |
 | Paloalto       | show routing protocol ospf dumplsdb            | show routing protocol ospf dumplsdb             | show routing protocol ospf dumplsdb              | No             |
-| Ubiquiti       | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | No             |
+| Ubiquiti[^1]   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | No             |
 | Allied Telesis | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | No             |
 | Extreme        | show ospf lsdb detail lstype router            | show ospf lsdb detail lstype network            | show ospf lsdb detail lstype as-external         | No             |
 | Ericsson       | show ospf database router detail               | show ospf database network detail               | show ospf database external detail               | No             |
 | Fortinet       | get router info ospf database router lsa       | get router info ospf database network lsa       | get router info ospf database external lsa       | No             |
+| FRRouting      | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | No             |
 
+[^1]:This command applies to the EdgeRouter line and older Unifi USG Gateways. New Unifi Gateway products use the [FRRouting Project](https://frrouting.org).
   
 LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.  
 
