@@ -12,9 +12,9 @@ Start
   ^.*\(Area ${AREA}\)
   ^.*Advertising Router:\s+${ADV_ROUTER_ID}
   ^.*Link connected to: a ${STUB} 
-  ^.*Network/subnet number: ${SUBNET}
+  ^.*Network/[sS]ubnet [nN]umber: ${SUBNET}
   ^.*Network Mask: ${SUBNET_MASK}
-  ^.*TOS 0 Metrics:\s+${METRIC} -> Record
+  ^.*TOS\s+0\s+Metric[s]?:\s+${METRIC} -> Record
   ^.*LS age: \d+ -> Tag
 
 
