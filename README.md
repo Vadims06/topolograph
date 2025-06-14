@@ -79,7 +79,11 @@ This demo shows how to get OSPF topology visual and interact with it.
 2. Build the shortest paths
 3. Emulate a link outage and see backup paths
 
-![](https://github.com/Vadims06/topolograph/blob/master/short_demo_text_file_and_short_paths.gif)
+![](https://github.com/Vadims06/topolograph/blob/master/short_demo_text_file_and_short_paths.gif)   
+
+### Demo on YouTube
+* OSPF Watcher. Real time Monitoring with instant notification. https://youtu.be/2IHbxmDVMA0
+
 ## Network reaction on the link failure. Backup paths
 Pressing on edge we simulate the link outage and can see backup paths  
 ![pressing on edge we simulate the link outage and can see backup paths](https://github.com/Vadims06/topolograph/blob/master/backup_SPT.png)
