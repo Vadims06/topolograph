@@ -314,7 +314,7 @@ Let's add a new link with `cost` 1 between R3 (10.10.10.3) and R4 (10.10.10.4) d
 Obviously, we see traffic increase on direct link R3<->R4 and traffic decrease to R2 (10.10.10.2) and R5 (10.10.10.5).
 
 # Online Resources. Contacts
-* Slack chat: https://topolograph.slack.com
+* Telegram group: [https://t.me/topolograph](https://t.me/topolograph)
 * Main site: https://topolograph.com
 * Docker version of site: https://github.com/Vadims06/topolograph-docker
 * Online doc: https://topolograph.com/how-to
