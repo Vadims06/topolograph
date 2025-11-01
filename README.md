@@ -62,17 +62,19 @@ LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is option
   
 
 ### How to start
-- run commands specifically to your vendor (from Supported vendors table) on single device ( if you have multiple areas - do it on ABR)
-- save all commands output in a single file with .txt or .log extension
-- upload the file to Topolograph
-
-- or do it programmatically via Rest API. Multi devices LSDBs are supported via API only (v2.34). 
+- run commands specifically to your vendor (from Supported vendors table) on a single device ( if you have multiple areas - do it on ABR) save all commands output in a single file with .txt or .log extension and upload the file to Topolograph
+- upload programmatically via Rest API. Multi devices LSDBs are supported via API only (v2.34). 
 
 ### Expected file's extension
 - .txt
 - .log
 
 # Demo
+**YouTube**
+* OSPF Watcher. Real time Monitoring with instant notification. https://youtu.be/2IHbxmDVMA0
+* IS-IS Watcher. Track the whole IS-IS domain from a single router https://youtu.be/7ZQFSe1szk8
+* OSPF/IS-IS AI Agent: MCP for Network Protocols, https://youtu.be/92YBRXqZWUo   
+
 ## Upload OSPF LSDB to the Topolograph and Building the shortest paths
 This demo shows how to get OSPF topology visual and interact with it.
 1. Upload the file to Topolograph from exicuted commands previously.
@@ -80,9 +82,6 @@ This demo shows how to get OSPF topology visual and interact with it.
 3. Emulate a link outage and see backup paths
 
 ![](https://github.com/Vadims06/topolograph/blob/master/short_demo_text_file_and_short_paths.gif)   
-
-### Demo on YouTube
-* OSPF Watcher. Real time Monitoring with instant notification. https://youtu.be/2IHbxmDVMA0
 
 ## Network reaction on the link failure. Backup paths
 Pressing on edge we simulate the link outage and can see backup paths  
@@ -112,6 +111,17 @@ It's possible to simulate a link or router shutdown/outage. The topology will be
 
 Try to shutdown backup router and see the graph reaction. If this is a true backup router - there shoudn't be network rebuilding too much
 ![](https://github.com/Vadims06/topolograph/blob/master/network_reaction_shut_node.png)
+
+## LLM friendly
+Topolograph AI agent for network assistance with OSPF/IS-IS capabilities. Works with Topolograph MCP.  
+Interact naturally with OSPF/IS-IS protocols, for instance you can ask:
+* Which graphs are currently connected?
+* What nodes are in the latest OSPF area 0 graph?
+* Which networks are assigned to a specific host?
+* What is the route between two IP addresses?
+* What happened to the links after topology changes?
+
+![](https://github.com/Vadims06/network-ai-assistant/blob/738acd2725568d3baf8a0d8077716ee6db0a722d/docs/network_ai_assistant_all_nodes_in_ospf.png)   
 
 ## Reports
 ### Asymmetric paths
@@ -316,6 +326,7 @@ Obviously, we see traffic increase on direct link R3<->R4 and traffic decrease t
 # Online Resources. Contacts
 * Telegram group: [https://t.me/topolograph](https://t.me/topolograph)
 * Main site: https://topolograph.com
+* Topolograph MCP: https://github.com/Vadims06/topolograph-mcp-server – MCP interface for Topolograph
 * Docker version of site: https://github.com/Vadims06/topolograph-docker
 * Online doc: https://topolograph.com/how-to
 
