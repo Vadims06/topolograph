@@ -1,25 +1,38 @@
 # Topolograph
-Topolograph.com is a Web Python-based tool, which is aimed at visualizing OSPF/ISIS topology and working with the OSPF/ISIS network offline! No any logins and passwords!
-The Topolograph visualizes OSPF/ISIS network topology based on LinkState DataBase scrapped from a single network device ( thanks OSPF/ISIS =). You can upload a txt file or boot up docker's version of Topolograph on your PC and the Topolograph takes OSPF via NAPALM's methods by itself. Then you can build the shortest path from a source to a destination, get backup paths, emulate link outage along the path or change OSPF/ISIS link cost on the fly! Additionally, you can simulate a device outage and see appropriate network reaction. Build reports about the network.  
-Once you upload your OSPF/ISIS to Topolograph - you save the state of your network. After any changes on a network (i.e. redistribution from BGP to OSPF via route-maps with prefix-lists) - upload the network once again and compare them between each other.  
-![](https://github.com/Vadims06/topolograph/blob/5bd6912d90260da6c412cae7b78e5b1024e61131/functional-topolograph-role.png)  
 
-### Real-Time monitoring
-Watcher agent for real-time monitoring of changes happened in OSPF/IS-IS domain
-* [OSPF Watcher](https://github.com/Vadims06/ospfwatcher) repo
-* [IS-IS Watcher](https://github.com/Vadims06/isiswatcher) repo
-## Available option
-* Do not require any logins and passwords - accept LSDB from txt file or via Rest API
-* Docker version is available. Launch local copy of Topolograph site on your PC
-* Once you get your network graph - build the shortests paths
-* Simulate a link outage and discover backup paths or backup of backup paths...
-* Simulate a router shutdown. Look at traffic flow around the failed router
-* Find the most loaded nodes and edges, fault tolerant nodes.
-* Check network reaction to IGP cost change on a link
-* Compare the network state at different times
-* Discover backuped/not-backuped networks in Analytics/Network heatmap
-* Discover asymmetric paths
-* Build arbitrary topologies based on YAML. Yaml file topology visualization.
+Topolograph is a web-based Python tool designed to visualize OSPF and IS-IS network topologies and analyze them offline — with no logins or passwords required.
+
+Topolograph builds OSPF/IS-IS network topology based on Link-State Database (LSDB) data collected from a single network device (thanks to the distributed nature of OSPF and IS-IS 🙂).
+You can upload LSDB output as a text file, or establish a GRE or BGP-LS session using OSPF Watcher or IS-IS Watcher, and visualize the topology in a local, Dockerized Topolograph UI.
+
+Once uploaded, the topology represents a snapshot of your network state.
+After making changes — for example, redistributing routes from BGP into OSPF using route-maps and prefix-lists — you can upload the updated topology and compare it with the previous one to clearly see what has changed.
+
+![](https://github.com/Vadims06/topolograph/blob/5bd6912d90260da6c412cae7b78e5b1024e61131/functional-topolograph-role.png)
+
+## Key Features
+
+- No logins or passwords required — accept LSDB data from text files or via REST API
+- Docker version available — run a local instance of Topolograph on your PC
+- Visualize OSPF and IS-IS network topologies
+- Build shortest paths between any nodes
+- Discover backup paths, including secondary backup paths
+- Simulate link failures and analyze network reaction
+- Simulate router failures and observe traffic flow around failed nodes
+- Analyze network behavior when IGP link costs change
+- Identify the most loaded nodes and links, as well as fault-tolerant elements
+- Compare network states across different points in time
+- Detect asymmetric routing paths
+- Discover backed-up and non-backed-up networks using the Analytics / Network Heatmap
+- Build and visualize arbitrary topologies using YAML-based definitions
+
+## Real-Time Monitoring
+
+Topolograph supports real-time monitoring of changes in OSPF and IS-IS domains using Watcher agents:
+
+- [OSPF Watcher](https://github.com/Vadims06/ospfwatcher)
+- [IS-IS Watcher](https://github.com/Vadims06/isiswatcher)
+
 
 # Supported vendors for OSPF visualization
 | Vendor         | LSA1                                           | LSA2                                            | LSA5                                             | NAPALM support |
@@ -60,10 +73,13 @@ LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is option
 | Huawei   | display isis lsdb verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
 | ZTE     | show isis database verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
   
+# Visualization via BGP-LS
+* Please check README of [IS-IS Watcher](https://github.com/Vadims06/isiswatcher) how to setup BGP-LS session.  
 
 ### How to start
 - run commands specifically to your vendor (from Supported vendors table) on a single device ( if you have multiple areas - do it on ABR) save all commands output in a single file with .txt or .log extension and upload the file to Topolograph
-- upload programmatically via Rest API. Multi devices LSDBs are supported via API only (v2.34). 
+- upload programmatically via Rest API. Multi devices LSDBs are supported via API only (v2.34).
+- get topology via [OSPF Watcher](https://github.com/Vadims06/ospfwatcher) or [IS-IS Watcher](https://github.com/Vadims06/isiswatcher)  
 
 ### Expected file's extension
 - .txt
@@ -73,7 +89,8 @@ LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is option
 **YouTube**
 * OSPF Watcher. Real time Monitoring with instant notification. https://youtu.be/2IHbxmDVMA0
 * IS-IS Watcher. Track the whole IS-IS domain from a single router https://youtu.be/7ZQFSe1szk8
-* OSPF/IS-IS AI Agent: MCP for Network Protocols, https://youtu.be/92YBRXqZWUo   
+* OSPF/IS-IS AI Agent: MCP for Network Protocols, https://youtu.be/92YBRXqZWUo
+* BGP-LS in Action: Monitoring IS-IS networks via IS-IS Watcher and Topolograph, https://youtu.be/gL0iqXgPJlE
 
 ## Upload OSPF LSDB to the Topolograph and Building the shortest paths
 This demo shows how to get OSPF topology visual and interact with it.
