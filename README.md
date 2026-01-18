@@ -35,24 +35,24 @@ Topolograph supports real-time monitoring of changes in OSPF and IS-IS domains u
 
 
 # Supported vendors for OSPF visualization
-| Vendor         | LSA1                                           | LSA2                                            | LSA5                                             | NAPALM support |
-| -------------- | ---------------------------------------------- | ----------------------------------------------- | ------------------------------------------------ | -------------- |
-| Cisco          | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
-| Cisco NX-OS    | show ip ospf database router detail            | show ip ospf database network detail            | show ip ospf database external detail            | No             |
-| Quagga         | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES            |
-| Ruckus         | show ip ospf database link-state router        | show ip ospf database link-state network        | show ip ospf database external-link-state        | No             |
-| Juniper        | show ospf database router extensive \| no-more | show ospf database network extensive \| no-more | show ospf database external extensive \| no-more | YES            |
-| Bird           | show ospf state all                            | show ospf state all                             | show ospf state all                              | No             |
-| Nokia          | show router ospf database type router detail   | show router ospf database type network detail   | show router ospf database type external detail   | Yes            |
-| Mikrotik       | /routing ospf lsa print detail file=lsa.txt    | /routing ospf lsa print detail file=lsa.txt     | /routing ospf lsa print detail file=lsa.txt      | No             |
-| Huawei         | display ospf lsdb router                       | display ospf lsdb network                       | display ospf lsdb ase                            | No             |
-| Paloalto       | show routing protocol ospf dumplsdb            | show routing protocol ospf dumplsdb             | show routing protocol ospf dumplsdb              | No             |
-| Ubiquiti[^1]   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | No             |
-| Allied Telesis | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | No             |
-| Extreme        | show ospf lsdb detail lstype router            | show ospf lsdb detail lstype network            | show ospf lsdb detail lstype as-external         | No             |
-| Ericsson       | show ospf database router detail               | show ospf database network detail               | show ospf database external detail               | No             |
-| Fortinet       | get router info ospf database router lsa       | get router info ospf database network lsa       | get router info ospf database external lsa       | No             |
-| FRRouting      | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | No             |
+| Vendor         | LSA1                                           | LSA2                                            | LSA5                                             | SDK nornir driver support |
+| -------------- | ---------------------------------------------- | ----------------------------------------------- | ------------------------------------------------ | ------------------------- |
+| Cisco          | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
+| Cisco NX-OS    | show ip ospf database router detail            | show ip ospf database network detail            | show ip ospf database external detail            | YES                       |
+| Quagga         | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
+| Ruckus         | show ip ospf database link-state router        | show ip ospf database link-state network        | show ip ospf database external-link-state        | YES                       |
+| Juniper        | show ospf database router extensive \| no-more | show ospf database network extensive \| no-more | show ospf database external extensive \| no-more | YES                       |
+| Bird           | show ospf state all                            | show ospf state all                             | show ospf state all                              | YES                       |
+| Nokia          | show router ospf database type router detail   | show router ospf database type network detail   | show router ospf database type external detail   | YES                       |
+| Mikrotik       | /routing ospf lsa print detail file=lsa.txt    | /routing ospf lsa print detail file=lsa.txt     | /routing ospf lsa print detail file=lsa.txt      | YES                       |
+| Huawei         | display ospf lsdb router                       | display ospf lsdb network                       | display ospf lsdb ase                            | YES                       |
+| Paloalto       | show routing protocol ospf dumplsdb            | show routing protocol ospf dumplsdb             | show routing protocol ospf dumplsdb              | YES                       |
+| Ubiquiti[^1]   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
+| Allied Telesis | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
+| Extreme        | show ospf lsdb detail lstype router            | show ospf lsdb detail lstype network            | show ospf lsdb detail lstype as-external         | YES                       |
+| Ericsson       | show ospf database router detail               | show ospf database network detail               | show ospf database external detail               | YES                       |
+| Fortinet       | get router info ospf database router lsa       | get router info ospf database network lsa       | get router info ospf database external lsa       | YES                       |
+| FRRouting      | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
 
 [^1]:This command applies to the EdgeRouter line and older Unifi USG Gateways. New Unifi Gateway products use the [FRRouting Project](https://frrouting.org).
   
@@ -165,6 +165,16 @@ Run your local copy of Topolograph inside your on-premises network using the doc
 Full schema description is [here](https://topolograph.com/api/ui/)   
 ### Default credentials
 Default credentials are available via environment variables in case of using docker-based version. How to set it described in this [case](https://github.com/Vadims06/topolograph/issues/26).
+
+### Python SDK
+For a more Pythonic interface to the Topolograph API, use the [Topolograph Python SDK](https://github.com/Vadims06/topolograph-sdk):
+
+```bash
+pip install topolograph-sdk
+```
+
+The SDK provides an object-oriented interface that simplifies working with Topolograph. All examples below show both REST API and SDK usage.
+
 ### Details
 Started from v2.19. Scrab your LSDB using your favourite tools like Ansible, netmiko, Nornir, etc and upload your OSPF network graph to Topolograph via a POST request. The response returns:
 * diff comparison with previously uploaded graphs
@@ -192,7 +202,8 @@ Started from v2.19. Scrab your LSDB using your favourite tools like Ansible, net
  'timestamp': '2021-06-08T20:15:51.724000'}
 ```
 ### API graph upload
-Upload you OSPF network via python. Supposed that you saved commands output into cisco_lsdb_output.txt.
+
+**REST API:**
 ```
 import requests
 from pprint import pprint as pp
@@ -202,7 +213,56 @@ with open('cisco_lsdb_output.txt') as f:
                           json={'lsdb_output': lsdb_output, 'vendor_device': 'Cisco', 'igp_protocol': 'ospf'})
   pp(r_post.json())
 ```  
-`igp_protocol` may include `ospf` or `isis`  
+`igp_protocol` may include `ospf` or `isis`
+
+**SDK:**
+```python
+from topolograph import Topolograph
+
+# Initialize client
+topo = Topolograph(
+    url="topolograph-url",
+    token="your-api-token"
+)
+
+# Upload LSDB file
+with open('cisco_lsdb_output.txt') as f:
+    lsdb_output = f.read()
+
+graph = topo.graphs.upload(
+    lsdb_data=lsdb_output,
+    vendor="Cisco",
+    protocol="ospf"
+)
+
+print(f"Graph uploaded: {graph.graph_time}")
+print(f"Hosts: {graph.hosts['count']}")
+print(f"Networks: {graph.networks_data.get('count', 0)}")
+```
+
+**SDK with FRR lab (collecting real data):**
+```python
+from topolograph import Topolograph, TopologyCollector
+
+# Initialize client
+topo = Topolograph(
+    url="topolograph-url",
+    token="your-api-token"
+)
+
+# Collect LSDB from FRR routers
+collector = TopologyCollector("inventory.yaml")  # Contains FRR router credentials
+result = collector.collect()
+
+# Upload collected data
+graph = topo.uploader.upload_raw(
+    lsdb_text=result.raw_lsdb_text,
+    vendor="FRR",
+    protocol="isis"
+)
+
+print(f"Graph uploaded: {graph.graph_time}")
+```  
 
 ### Get the shortest path
 It allows to get the shortest path between two OSPF RID, or it also accepts IP address or IP Subnet as source/destination and returns the following: 
@@ -210,7 +270,9 @@ It allows to get the shortest path between two OSPF RID, or it also accepts IP a
 * the shortest path 
 * unbackuped parts of the shortest path (if these links go down, we will lose a connectivity between the source and destination).
 
-`src_node` and `dst_node` accepts OSPF RID as a value.  
+`src_node` and `dst_node` accepts OSPF RID as a value.
+
+**REST API:**
 ```
 r_post = requests.post('https://topolograph.com/api/path', auth=('', ''), 
 json={'graph_time': '27Dec2022_22h46m01s_7_hosts_ospfwatcher', 'src_node': '192.168.100.100', 'dst_node': '10.1.123.23'})  
@@ -224,10 +286,33 @@ r_post.json()
 ```
 A `'192.168.100.100' - '10.1.1.4'` link is shown as nonbackuped  
 The visual path  
-![](https://github.com/Vadims06/topolograph/blob/aaabbef7bcbf5666024702aa1419599e9b9cd617/docs/release-notes/v2.28/shortest_path_graph.png)  
+![](https://github.com/Vadims06/topolograph/blob/aaabbef7bcbf5666024702aa1419599e9b9cd617/docs/release-notes/v2.28/shortest_path_graph.png)
+
+**SDK:**
+```python
+from topolograph import Topolograph
+
+topo = Topolograph(url="topolograph-url", token="your-token")
+
+# Get graph
+graph = topo.graphs.get_by_time("27Dec2022_22h46m01s_7_hosts_ospfwatcher")
+
+# Get shortest path
+path = graph.paths.shortest("192.168.100.100", "10.1.123.23")
+
+print(f"Path cost: {path.cost}")
+for path_nodes in path.paths:
+    print(f"Path: {' -> '.join(path_nodes)}")
+
+# Unbackuped parts
+for unbackup_path in path.unbackup_paths:
+    print(f"Unbackuped segment: {' -> '.join(unbackup_path)}")
+```  
 
 ### Get backup path
 `removedEdgesAsNodePairsFromSptPath_ll_in_ll` accepts a list of edges which will be treated as down links
+
+**REST API:**
 ```
 r_post = requests.post('https://topolograph.com/api/path', auth=('', ''), 
 json={'graph_time': '27Dec2022_22h46m01s_7_hosts_ospfwatcher', 'src_node': '192.168.100.100', 'dst_node': '10.1.123.23', 
@@ -240,11 +325,32 @@ r_post.json()
 'unbackup_paths_nodes_name_as_ll_in_ll': [['192.168.100.100', '10.1.1.4']]}
 ```
 The visual path  
-![](https://github.com/Vadims06/topolograph/blob/aaabbef7bcbf5666024702aa1419599e9b9cd617/docs/release-notes/v2.28/backup_path_graph.png)   
+![](https://github.com/Vadims06/topolograph/blob/aaabbef7bcbf5666024702aa1419599e9b9cd617/docs/release-notes/v2.28/backup_path_graph.png)
+
+**SDK:**
+```python
+from topolograph import Topolograph
+
+topo = Topolograph(url="topolograph-url", token="your-token")
+graph = topo.graphs.get_by_time("27Dec2022_22h46m01s_7_hosts_ospfwatcher")
+
+# Get backup path (simulating link failure)
+path = graph.paths.shortest(
+    "192.168.100.100",
+    "10.1.123.23",
+    removed_edges=[("10.1.1.4", "10.1.1.2")]
+)
+
+print(f"Backup path cost: {path.cost}")
+for path_nodes in path.paths:
+    print(f"Backup path: {' -> '.join(path_nodes)}")
+```   
 
 ### get the shortest path for networks
 There is a separate method for getting the shortest path, which accepts IP addresses/IP network as an input.  
-Let's build a path between `192.1.113.99` IP and `192.1.213.0/24` network.  
+Let's build a path between `192.1.113.99` IP and `192.1.213.0/24` network.
+
+**REST API:**
 ```
 r_post = requests.post('https://topolograph.com/api/path/network', auth=('', ''), 
 json={'graph_time': '27Dec2022_22h46m01s_7_hosts_ospfwatcher', 'src_ip_or_network': '192.1.113.99', 'dst_ip_or_network': '192.1.213.0/24'})    
@@ -257,7 +363,22 @@ r_post.json()
 'unbackup_paths_nodes_name_as_ll_in_ll': []}
 ``` 
 The visual path  
-![](https://github.com/Vadims06/topolograph/blob/921fcf316f63f3ff6fafc1f6c899031952ad0bc4/docs/release-notes/v2.28/shortest_path_between_networks.png)  
+![](https://github.com/Vadims06/topolograph/blob/921fcf316f63f3ff6fafc1f6c899031952ad0bc4/docs/release-notes/v2.28/shortest_path_between_networks.png)
+
+**SDK:**
+```python
+from topolograph import Topolograph
+
+topo = Topolograph(url="topolograph-url", token="your-token")
+graph = topo.graphs.get_by_time("27Dec2022_22h46m01s_7_hosts_ospfwatcher")
+
+# Get shortest path between networks/IPs
+path = graph.paths.shortest_network("192.1.113.99", "192.1.213.0/24")
+
+print(f"Path cost: {path.cost}")
+for path_nodes in path.paths:
+    print(f"Path: {' -> '.join(path_nodes)}")
+```  
 
 ### Network reaction on a failure
 We have the following topology  
@@ -266,8 +387,9 @@ We have the following topology
 Emulate powering off nodes 10.1.1.2 and 10.1.1.4.
 #### What we would like to test
 * Link over utilisation will occurs?
-* Network reachability will be broken? Some nodes will be isolated?  
-Test request:
+* Network reachability will be broken? Some nodes will be isolated?
+
+**REST API:**
 ```
 import requests
 from pprint import pprint as pp
@@ -286,18 +408,80 @@ Reply
                      ['10.1.1.1', '10.1.1.3']],
  'isGraphStillConnected': False}
  ```
+
+**SDK:**
+```python
+from topolograph import Topolograph
+
+topo = Topolograph(url="topolograph-url", token="your-token")
+graph = topo.graphs.get_by_time("25Nov2021_08h20m45s_7_hosts")
+
+# Simulate node failures
+reaction = graph.events.get_network_reaction_on_node_failure(
+    failed_nodes=["10.1.1.2", "10.1.1.4"]
+)
+
+print(f"Graph still connected: {reaction['isGraphStillConnected']}")
+print(f"Disjointed node groups: {reaction['disjointedNodes']}")
+print(f"Affected links: {reaction['affectedLinks']}")
+```
 # Yaml based topology
 Topolograph visualizes topologies based on OSPF/IS-IS LSDB files, but starting from v2.32 it accepts YAML to build a graph. It can be used for building arbitrary topologies (not exactly IGP domains), but moreover it can keep the topology updated via Rest API. It's the first version of Network Diagram as a Service (NDAS)!  
 OSPF/IS-IS LSDB <-> YAML is interchangeable now in both ways, so it allows to make a design of IGP domain from the scratch or based on uploaded a LSDB, add new links/edges between nodes or change igp's cost and then check network reaction based on our changes.
+
 ### Basic YAML based topology.
 Build a graph with defined `nodes` and `edges`. 
 ![https://user-images.githubusercontent.com/20796986/144145217-454c1442-ba6c-4337-a6f2-8dde5d337f1e.png](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/basic_yaml_diagram.PNG)  
+
+**REST API:**
+```
+import requests
+yaml_diagram = """
+nodes:
+  10.10.10.1:
+    label: Router1
+  10.10.10.2:
+    label: Router2
+edges:
+  - src: 10.10.10.1
+    dst: 10.10.10.2
+    cost: 10
+"""
+r_post = requests.post('http://<topolograph-host>/api/diagram', 
+                       auth=('', ''), 
+                       json={'yaml_diagram_str': yaml_diagram})
+```
+
+**SDK:**
+```python
+from topolograph import Topolograph
+
+topo = Topolograph(url="topolograph-url", token="your-token")
+
+yaml_diagram = """
+nodes:
+  10.10.10.1:
+    label: Router1
+  10.10.10.2:
+    label: Router2
+edges:
+  - src: 10.10.10.1
+    dst: 10.10.10.2
+    cost: 10
+"""
+
+# Upload YAML diagram
+graph = topo.graphs.upload_diagram(yaml_diagram)
+print(f"Diagram uploaded: {graph.graph_time}")
+```
 
 ### Node attributes
 * `node's name` is mandatory. Should be in IP-address format. To change it to any other value - use `label`
 * Tags of node are optional. Any key (type string): value (str, int, float, dictionary, list) pairs.
 ![image](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/node_attributes_yaml_file_and_api_request.png)   
 There is a graph with 6 nodes. Select all primary nodes (`ha_role`: `primary`) in the first DC (`dc1`)
+
+**REST API:**
 ```
 import requests
 from pprint import pprint as pp
@@ -314,13 +498,38 @@ pp(r_get.json())
   'name': '10.10.10.2',
   'size': 15}]
 ```
+
+**SDK:**
+```python
+from topolograph import Topolograph
+
+topo = Topolograph(url="topolograph-url", token="your-token")
+graph = topo.graphs.get_by_time("18Jan2026_15h53m13s_3_hosts_yaml")
+
+# Query nodes by attributes
+nodes = graph.nodes.get(location='dc1', ha_role='primary')
+for node in nodes:
+    print(f"Node: {node.name}, Location: {node.attributes.get('location')}")
+
+# Update node attributes
+node = graph.nodes.get_by_id(0)
+updated_node = graph.nodes.patch(node.id, {'name': 'renamed_router', 'location': 'dc2'})
+print(f"Updated node: {updated_node.name}")
+
+# Or use instance method
+node = graph.nodes.get_by_id(0)
+updated_node = node.patch(name='new_name', location='dc2')
+```
+
 ### Edge attributes
 * `src`, `dst` is mandatory. 
 * `cost` is optional. Default is 1. Equal to OSPF/IS-IS cost.
 * `directed` is optional. Default is false.
 * Tags of edge are optional. Any key (type string): value (str, int, float, dictionary, list) pairs.
 ![image](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/edge_attributes_yaml_file_and_api_request.PNG)   
-Select all edges over verizon ISP between `10.10.10.2` and `10.10.10.4`  
+Select all edges over verizon ISP between `10.10.10.2` and `10.10.10.4`
+
+**REST API:**
 ```
 query_params = {'src_node': '10.10.10.2', 'dst_node': '10.10.10.4', 'isp': 'verizon'}
 r_get = requests.get(f'http://{TOPOLOGRAPH_HOST}:{TOPOLOGRAPH_PORT}/api/diagram/{graph_time}/edges', auth=('   ', '    '), params=query_params, timeout=(5, 30))
@@ -344,6 +553,7 @@ Obviously, we see traffic increase on direct link R3<->R4 and traffic decrease t
 * Telegram group: [https://t.me/topolograph](https://t.me/topolograph)
 * Main site: https://topolograph.com
 * Topolograph MCP: https://github.com/Vadims06/topolograph-mcp-server – MCP interface for Topolograph
+* Topolograph SDK: https://github.com/Vadims06/topolograph-sdk – Python SDK with nornir driver for automated LSDB collection
 * Docker version of site: https://github.com/Vadims06/topolograph-docker
 * Online doc: https://topolograph.com/how-to
 
@@ -356,28 +566,27 @@ Email me admin at topolograph.com and can open the access to the repository.
 ## adding new vendor
 In order to project supports different vendors you can help us by creating five separate textfsm files for different LSA types for one vendor. Check [Wiki](https://github.com/Vadims06/topolograph/wiki/How-to-add-new-vendor-support) for this.
 
-## adding NAPALM support
-For adding scrapping OSPF by NAPALM - please create three additional methods and ping me to add it to topolograph. The example based on Cisco IOS NAPALM
+## Adding new vendor support via SDK
+The [Topolograph SDK](https://github.com/Vadims06/topolograph-sdk) uses a nornir driver to collect LSDB data from network devices. To add support for a new vendor, add the vendor's commands to the command registry in `topolograph/collector/commands.py`:
+
+```python
+COMMAND_REGISTRY = {
+    "ospf": {
+        "your_vendor": [
+            "show ip ospf database router",      # LSA1 command
+            "show ip ospf database network",     # LSA2 command
+            "show ip ospf database external"     # LSA5 command (optional)
+        ]
+    },
+    "isis": {
+        "your_vendor": [
+            "show isis database detail"          # IS-IS LSDB command
+        ]
+    }
+}
 ```
-    def get_ospf_router_lsa_raw_output(self):
-        command_router = 'show ip ospf database router'
 
-        show_ospf_lsdb_router_lsa_output = self._send_command(command_router).strip()
-        return show_ospf_lsdb_router_lsa_output
-
-    def get_ospf_network_lsa_raw_output(self):
-        command_network = 'show ip ospf database network'
-
-        show_ospf_lsdb_network_lsa_output = self._send_command(command_network).strip()
-        return show_ospf_lsdb_network_lsa_output
-
-
-    def get_ospf_external_lsa_raw_output(self):
-        command_external = 'show ip ospf database external'
-
-        show_ospf_lsdb_external_lsa_output = self._send_command(command_external).strip()
-        return show_ospf_lsdb_external_lsa_output
-```
+After adding the vendor, submit a pull request to the [topolograph-sdk repository](https://github.com/Vadims06/topolograph-sdk). The SDK will automatically use these commands when collecting LSDB data from devices with the specified vendor in the inventory file.
 
 ## Used RFC
 RFC 2328
