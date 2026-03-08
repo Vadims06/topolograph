@@ -55,8 +55,36 @@ Topolograph supports real-time monitoring of changes in OSPF and IS-IS domains u
 | FRRouting      | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
 
 [^1]:This command applies to the EdgeRouter line and older Unifi USG Gateways. New Unifi Gateway products use the [FRRouting Project](https://frrouting.org).
+
+**FRRouting (TE):** For richer link data (bandwidth, TE metric, admin group), append the output of **show ip ospf database opaque-area** to the same file. This is optional; the graph still builds from LSA 1/2/5 alone.
   
-LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.  
+LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.
+
+## Traffic Engineering (TE) link attributes
+
+![](docs/release-notes/v2.58/te_link_attributes.png)
+
+Topolograph can use **Traffic Engineering (TE)** link attributes from your LSDB for better visibility and filtering.
+
+- **Parsed values:** Link-level TE metric, administrative group (affinity), maximum and reservable bandwidth, and unreserved bandwidth per priority. Useful for capacity planning, path analysis, and finding links that meet or exceed certain TE constraints.
+- **OSPF:** Include **show ip ospf database opaque-area** in the same upload file as your router/network/external LSDB. Type 10 (opaque-area) LSAs carry the TE data; the rest of the graph is built from LSA 1, 2, and 5 as before.
+- **IS-IS:** TE attributes are taken from the IS-IS LSDB when using supported commands (e.g. FRR **show isis database detail**). No extra command is required beyond your normal IS-IS capture.
+- **Using TE in Topolograph:** Once a diagram is built with TE data, you can filter edges by TE metric or bandwidth via the diagram edges API (e.g. links with TE metric above a threshold or unreserved bandwidth below a value). The same TE attribute names are used for both OSPF and IS-IS.
+
+**Filtering TE links via SDK ([topolograph-sdk](https://github.com/Vadims06/topolograph-sdk)):** Use `graph.edges_list()` with range operators `__gt`, `__lt`, `__gte`, `__lte` on TE attributes:
+
+```python
+# Edges with TE metric >= 100
+edges = graph.edges_list(temetric__gte=100)
+
+# Edges with unreserved bandwidth (priority 0) below 1 Gbps
+edges = graph.edges_list(unreserved_bw_0__lt=1e9)
+
+# Edges between two nodes with max link bandwidth above 10 Gbps
+edges = graph.edges_list(src_node="1.1.1.1", dst_node="2.2.2.2", max_link_bw__gt=1e10)
+```
+
+TE attributes: `temetric`, `admin_group`, `max_link_bw`, `max_rsrv_link_bw`, `unreserved_bw_0` … `unreserved_bw_7`.
 
 # Supported vendors for OSPFv3 visualization
 | Vendor  | Command                                     | Stub network included                       | External (redistributed) network          | 
