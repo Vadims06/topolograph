@@ -3,7 +3,7 @@
 Topolograph is a web-based Python tool designed to visualize OSPF and IS-IS network topologies and analyze them offline — with no logins or passwords required.
 
 Topolograph builds OSPF/IS-IS network topology based on Link-State Database (LSDB) data collected from a single network device (thanks to the distributed nature of OSPF and IS-IS 🙂).
-You can upload LSDB output as a text file, or establish a GRE or BGP-LS session using OSPF Watcher or IS-IS Watcher, and visualize the topology in a local, Dockerized Topolograph UI.
+You can upload LSDB output as a text file, or establish a GRE or **BGP-LS** session using [OSPF Watcher](https://github.com/Vadims06/ospfwatcher) or [IS-IS Watcher](https://github.com/Vadims06/isiswatcher). **BGP-LS** carries link-state from either **OSPF** or **IS-IS** into Topolograph, depending on which Watcher you use; visualize the topology in a local, Dockerized Topolograph UI.
 
 Once uploaded, the topology represents a snapshot of your network state.
 After making changes — for example, redistributing routes from BGP into OSPF using route-maps and prefix-lists — you can upload the updated topology and compare it with the previous one to clearly see what has changed.
@@ -22,6 +22,7 @@ After making changes — for example, redistributing routes from BGP into OSPF u
 - Analyze network behavior when IGP link costs change
 - Identify the most loaded nodes and links, as well as fault-tolerant elements
 - Compare network states across different points in time
+- Ingest topology over **BGP-LS** from **OSPF** or **IS-IS** domains (via OSPF Watcher or IS-IS Watcher)
 - Detect asymmetric routing paths
 - Discover backed-up and non-backed-up networks using the Analytics / Network Heatmap
 - Build and visualize arbitrary topologies using YAML-based definitions
@@ -102,7 +103,15 @@ TE attributes: `temetric`, `admin_group`, `max_link_bw`, `max_rsrv_link_bw`, `un
 | ZTE     | show isis database verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
   
 # Visualization via BGP-LS
-* Please check README of [IS-IS Watcher](https://github.com/Vadims06/isiswatcher) how to setup BGP-LS session.  
+
+**BGP Link-State (BGP-LS)** lets a BGP speaker advertise IGP link-state to Topolograph. Topolograph accepts BGP-LS for **both** **OSPF** and **IS-IS**: use **OSPF Watcher** when your IGP is OSPF, and **IS-IS Watcher** when it is IS-IS. Setup details are in each project’s README:
+
+- [OSPF Watcher — BGP-LS](https://github.com/Vadims06/ospfwatcher)
+- [IS-IS Watcher — BGP-LS](https://github.com/Vadims06/isiswatcher)
+
+Real-time monitoring (including TE link attributes delivered over BGP-LS) appears in the Topolograph UI as updates stream in:
+
+![](docs/static/te_link_attributes_on_monitoring_page_full_with_bgpls_1.png)
 
 ### How to start
 - run commands specifically to your vendor (from Supported vendors table) on a single device ( if you have multiple areas - do it on ABR) save all commands output in a single file with .txt or .log extension and upload the file to Topolograph
