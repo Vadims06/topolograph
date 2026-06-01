@@ -1,0 +1,128 @@
+/* ===== Topolograph docs theme tweaks ===== */
+
+:root {
+  --md-primary-fg-color: #209cee;
+  --md-primary-fg-color--light: #4db4f3;
+  --md-primary-fg-color--dark: #1a7fc4;
+  --md-primary-bg-color: #fff;
+  --md-primary-bg-color--light: rgba(255, 255, 255, 0.7);
+  --md-accent-fg-color: #1a7fc4;
+}
+
+/* ===== Landing hero ===== */
+.tg-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  padding: 3rem 0 2.5rem;
+}
+
+@media screen and (max-width: 76.1875em) {
+  .tg-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 2rem 0 1.5rem;
+  }
+}
+
+.tg-hero__title {
+  font-size: 2.7rem;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+  background: linear-gradient(120deg, var(--md-primary-fg-color), var(--md-accent-fg-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tg-hero__tagline {
+  font-size: 1.05rem;
+  color: var(--md-default-fg-color--light);
+  margin: 0 0 1.6rem;
+  max-width: 34rem;
+}
+
+@media screen and (max-width: 76.1875em) {
+  .tg-hero__tagline { margin-left: auto; margin-right: auto; }
+}
+
+/* Markdown wraps the three button links into a single <p>; make THAT the grid.
+   Two-column grid: primary CTA spans the full top row, the two secondary
+   buttons share the row below — no orphan button leaving a gap. */
+.tg-hero__buttons > p {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin: 0;
+}
+
+.tg-hero__buttons .md-button {
+  margin: 0;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tg-hero__buttons .tg-cta {
+  grid-column: 1 / -1;
+}
+
+.tg-hero__media img {
+  width: 100%;
+  border-radius: 0.6rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.md-button.tg-cta {
+  background: var(--md-primary-fg-color);
+  color: #fff;
+  border-color: var(--md-primary-fg-color);
+}
+
+.md-button.tg-cta:hover {
+  background: var(--md-accent-fg-color);
+  border-color: var(--md-accent-fg-color);
+}
+
+/* ===== Section heading on landing ===== */
+.tg-section-title {
+  text-align: center;
+  font-weight: 700;
+  margin-top: 3rem;
+}
+
+.tg-section-sub {
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+  margin-top: -0.4rem;
+  margin-bottom: 1.6rem;
+}
+
+/* ===== Vendor strip ===== */
+.tg-vendors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.6rem;
+  justify-content: flex-start;
+  margin: 1rem auto 0;
+  max-width: 50rem;
+}
+
+.tg-vendors span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: 2rem;
+  background: var(--md-default-fg-color--lightest);
+  color: var(--md-default-fg-color--light);
+}
+
+/* Tighten grid cards a touch */
+.md-typeset .grid.cards > ul > li {
+  border-radius: 0.5rem;
+}
