@@ -1,2 +1,5 @@
 # MkDocs build output
 site/
+
+# Local docs build virtualenv
+.venv-docs/

@@ -1,10 +1,12 @@
 /* ===== Topolograph docs theme tweaks ===== */
 
 :root {
-  --md-primary-fg-color: #3f51b5;
-  --md-primary-fg-color--light: #5c6bc0;
-  --md-primary-fg-color--dark: #303f9f;
-  --md-accent-fg-color: #536dfe;
+  --md-primary-fg-color: #209cee;
+  --md-primary-fg-color--light: #4db4f3;
+  --md-primary-fg-color--dark: #1a7fc4;
+  --md-primary-bg-color: #fff;
+  --md-primary-bg-color--light: rgba(255, 255, 255, 0.7);
+  --md-accent-fg-color: #1a7fc4;
 }
 
 /* ===== Landing hero ===== */
@@ -47,14 +49,26 @@
   .tg-hero__tagline { margin-left: auto; margin-right: auto; }
 }
 
-.tg-hero__buttons {
-  display: flex;
-  flex-wrap: wrap;
+/* Markdown wraps the three button links into a single <p>; make THAT the grid.
+   Two-column grid: primary CTA spans the full top row, the two secondary
+   buttons share the row below — no orphan button leaving a gap. */
+.tg-hero__buttons > p {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 0.8rem;
+  margin: 0;
 }
 
-@media screen and (max-width: 76.1875em) {
-  .tg-hero__buttons { justify-content: center; }
+.tg-hero__buttons .md-button {
+  margin: 0;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tg-hero__buttons .tg-cta {
+  grid-column: 1 / -1;
 }
 
 .tg-hero__media img {
@@ -94,7 +108,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 0.6rem;
-  justify-content: center;
+  justify-content: flex-start;
   margin: 1rem auto 0;
   max-width: 50rem;
 }

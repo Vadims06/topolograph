@@ -101,7 +101,7 @@ independent of whether the network is currently producing events.
 
 <div class="grid cards" markdown>
 
--   :material-elasticsearch:{ .lg .middle } __ELK / Kibana__
+-   :simple-elasticsearch:{ .lg .middle } __ELK / Kibana__
 
     ---
 

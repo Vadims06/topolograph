@@ -59,7 +59,7 @@ into one file.
 3. Pick the **vendor** and **protocol** that match your capture.
 4. Submit — Topolograph parses the LSDB and renders the graph.
 
-![Uploading an LSDB and getting a graph](../assets/upload_graph_demo.gif)
+![Uploading an LSDB and getting a graph](../assets/text_file_and_short_paths.gif)
 
 The result is a **snapshot**: a frozen picture of the network state at the moment
 you captured the database. Every analysis you run happens against this snapshot,
