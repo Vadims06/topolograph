@@ -1,7 +1,7 @@
 site_name: Topolograph
 site_url: https://docs.topolograph.com/
 site_description: >-
-  Visualize and analyze OSPF and IS-IS network topologies offline — build
+  Visualize and analyze OSPF and IS-IS network topologies offline: build
   shortest and backup paths, simulate failures, plan link costs, and monitor
   your IGP in real time.
 site_author: Topolograph
@@ -132,6 +132,7 @@ nav:
       - monitoring/index.md
       - OSPF Watcher: monitoring/ospf-watcher.md
       - IS-IS Watcher: monitoring/isis-watcher.md
+      - Events, Timeline & Status: monitoring/events-timeline.md
       - ELK / Kibana: monitoring/elk-kibana.md
       - Zabbix: monitoring/zabbix.md
       - Webhooks & Slack: monitoring/webhooks.md
