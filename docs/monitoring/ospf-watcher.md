@@ -19,6 +19,8 @@ starts fast.
 - OSPF **TE attributes** (via opaque LSA or BGP-LS): administrative group,
   maximum link bandwidth, maximum reservable bandwidth, unreserved bandwidth, and
   TE default metric
+- OSPF **node role changes**: a router becoming (or ceasing to be) an **ABR**
+  (Area Border Router) or **ASBR** (AS Boundary Router)
 
 ![OSPF monitoring — new subnet event](../assets/ospf_monitoring_new_subnet.png)
 
@@ -80,6 +82,15 @@ A metric-change event:
 
 > `10.10.10.1` detected that the metric of internal stub network
 > `192.168.13.0/24` changed from `10` to `12`.
+
+A node-flag change event:
+
+```text
+2023-01-01T00:00:00Z,demo-watcher,node,10.1.1.3,changed,attr:abr,old:0,new:1,10.1.1.3,01Jan2023_00h00m00s_7_hosts,0,1234
+```
+
+> `10.1.1.3` advertised itself as an **ABR** (`abr` `0` → `1`). One event is
+> emitted per changed flag (`abr`, `asbr`; `overload`, `attached` for IS-IS).
 
 These records are what Logstash/Fluent Bit forward to
 [ELK](elk-kibana.md), [Zabbix](zabbix.md) and [Webhooks](webhooks.md).
