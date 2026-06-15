@@ -18,6 +18,8 @@ containers.
 - IS-IS networks **appearing/disappearing**
 - IS-IS **TE attributes**: administrative group, maximum link bandwidth, maximum
   reservable bandwidth, unreserved bandwidth, and TE default metric
+- IS-IS **node flags**: **overload** and **attached** bits, plus **ABR/ASBR**
+  role — a `node,changed` event is logged per flag transition
 
 Everything is grouped by **IS-IS level (L1/L2)** on the timeline:
 
