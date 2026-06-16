@@ -17,8 +17,8 @@ starts fast.
 - OSPF link **cost changes**
 - OSPF networks **appearing/disappearing**
 - OSPF **TE attributes** (via opaque LSA or BGP-LS): administrative group,
-  maximum link bandwidth, maximum reservable bandwidth, unreserved bandwidth, and
-  TE default metric
+  maximum link bandwidth, maximum reservable bandwidth, unreserved bandwidth,
+  TE default metric, and shared risk link group (SRLG)
 - OSPF **node role changes**: a router becoming (or ceasing to be) an **ABR**
   (Area Border Router) or **ASBR** (AS Boundary Router)
 

@@ -17,7 +17,8 @@ containers.
 - IS-IS link **cost changes**
 - IS-IS networks **appearing/disappearing**
 - IS-IS **TE attributes**: administrative group, maximum link bandwidth, maximum
-  reservable bandwidth, unreserved bandwidth, and TE default metric
+  reservable bandwidth, unreserved bandwidth, TE default metric, and shared risk
+  link group (SRLG)
 - IS-IS **node flags**: **overload (OL)** and **attached (ATT)** transitions
   (plus ABR/ASBR derived over BGP-LS)
 

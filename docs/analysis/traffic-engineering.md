@@ -18,6 +18,7 @@ visualization and filtering, for both **OSPF** and **IS-IS**.
 | Maximum link bandwidth | `max_link_bw` | Physical link capacity |
 | Maximum reservable bandwidth | `max_rsrv_link_bw` | Bandwidth available for reservation |
 | Unreserved bandwidth (per priority) | `unreserved_bw_0` … `unreserved_bw_7` | Remaining bandwidth at each of the 8 TE priorities |
+| Shared risk link group | `srlg` | Underscore-joined SRLG ids the link belongs to (RFC 4203 / RFC 5307) |
 
 The **same attribute names** are used regardless of whether the data came from
 OSPF or IS-IS.
@@ -41,8 +42,8 @@ OSPF or IS-IS.
 === "OSPF / IS-IS — BGP-LS"
 
     **BGP-LS carries TE attributes natively** — admin group, maximum and
-    reservable bandwidth, unreserved bandwidth, and the TE default metric — with
-    no opaque-LSA trick needed. TE updates stream into the monitoring view live.
+    reservable bandwidth, unreserved bandwidth, SRLG, and the TE default metric —
+    with no opaque-LSA trick needed. TE updates stream into the monitoring view live.
 
     [:octicons-arrow-right-24: BGP-LS session](../ingestion/bgp-ls.md)
 
