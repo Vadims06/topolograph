@@ -20,7 +20,10 @@ starts fast.
   maximum link bandwidth, maximum reservable bandwidth, unreserved bandwidth,
   TE default metric, and shared risk link group (SRLG)
 - OSPF **node role changes**: a router becoming (or ceasing to be) an **ABR**
-  (Area Border Router) or **ASBR** (AS Boundary Router)
+  (Area Border Router), **ASBR** (AS Boundary Router), or entering/leaving
+  **max-metric** (RFC 3137 stub router — all transit links advertised at the
+  maximum metric to steer transit traffic away; the OSPF analog of the IS-IS
+  overload bit)
 
 ![OSPF monitoring — new subnet event](../assets/ospf_monitoring_new_subnet.png)
 
@@ -90,7 +93,9 @@ A node-flag change event:
 ```
 
 > `10.1.1.3` advertised itself as an **ABR** (`abr` `0` → `1`). One event is
-> emitted per changed flag (`abr`, `asbr`; `overload`, `attached` for IS-IS).
+> emitted per changed flag (`abr`, `asbr`, `maxmetric` for OSPF; `overload`,
+> `attached` for IS-IS). Entering max-metric also emits a `metric` event per
+> link, since every transit link cost jumps to its maximum.
 
 These records are what Logstash/Fluent Bit forward to
 [ELK](elk-kibana.md), [Zabbix](zabbix.md) and [Webhooks](webhooks.md).
