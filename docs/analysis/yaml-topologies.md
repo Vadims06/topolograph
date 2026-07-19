@@ -88,6 +88,54 @@ Each edge has at minimum a `src`, `dst` and `cost`. Edges can also carry
 [Traffic Engineering attributes](traffic-engineering.md) (bandwidth, TE metric,
 admin group), which you can then filter on through the diagram edges API.
 
+## Network attributes
+
+Subnets terminated on a node live in a top-level `stub_networks:` section. They
+are termination metadata, exactly as when a subnet is parsed from a real LSDB —
+no graph node is created for them, so they count towards backup coverage and
+network score instead of towards the node count. A subnet advertised by two or
+more nodes is treated as backuped.
+
+```yaml
+stub_networks:
+  192.168.1.0/24:
+    - node: 10.10.10.1
+      cost: 10
+      area: 0
+    - node: 10.10.10.2
+      cost: 20
+      area: 0
+```
+
+| key | values / format | meaning |
+|---|---|---|
+| subnet | CIDR, e.g. `192.168.1.0/24` | the key of each entry; its value is the list of advertising nodes |
+| `node` | node name, must exist in `nodes` | node advertising the subnet |
+| `cost` | int | cost from that node to the subnet |
+| `area` | int | area the subnet is advertised in |
+| `metric_type` | int | IS-IS metric style |
+| `isnarrow`, `isextended` | bool | IS-IS metric encoding |
+
+Exporting a topology back to YAML keeps this section, so an LSDB → YAML → LSDB
+round trip does not lose the subnets.
+
+## MPLS TE tunnels
+
+A diagram can also declare RSVP-TE/SR-TE tunnels in a top-level `lsps:`
+section, next to `nodes`/`edges`. Topolograph runs CSPF placement over them
+(bandwidth, affinity, SRLG) and lets you query the result, or check whether a
+hypothetical new tunnel would fit, without touching the graph.
+
+```yaml
+lsps:
+  TUN_R1_R3:
+    src: 10.10.10.1
+    dst: 10.10.10.3
+    bandwidth: 2G
+```
+
+[:octicons-arrow-right-24: MPLS TE Tunnels](mpls-te-tunnels.md)
+
 ## Why use it
 
 - **Design before you build** — model a planned IGP domain and analyze it before

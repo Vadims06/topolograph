@@ -110,6 +110,43 @@ edges = graph.edges_list(src_node="1.1.1.1", dst_node="2.2.2.2", max_link_bw__gt
 
 TE attributes: `temetric`, `admin_group`, `max_link_bw`, `max_rsrv_link_bw`, `unreserved_bw_0` … `unreserved_bw_7`.
 
+## MPLS TE tunnels
+On top of the TE link attributes, a diagram can declare **MPLS TE tunnels** (RSVP-TE or SR-TE style) in an `lsps:` section. Topolograph runs CSPF placement over them — the same bandwidth, setup/hold priority, affinity and SRLG constraints a real router applies — without any signaling, and shows where each LSP landed and why an LSP failed to place.
+
+![MPLS TE tunnels: LSP table and placed paths on the graph](docs/static/mpls-lsp-graph-and-table.png)
+
+```yaml
+lsps:
+  TUN_R1_R3:
+    src: 10.10.10.1
+    dst: 10.10.10.3
+    metric_type: te
+    bandwidth: 2G
+    setup_priority: 7
+    admin_groups:
+      exclude-any: [red]
+    paths:
+      primary:
+        ero:
+          - 10.10.10.2
+      secondary:
+        role: standby
+        srlg_exclude: [1001]
+```
+
+```python
+# Which tunnels failed to place, and why
+graph.lsps_list(status="unplaced")
+
+# Which tunnels cross a link (pre-maintenance impact check)
+graph.lsps_list(via_edge="10.10.10.1,10.10.10.2")
+
+# Which path satisfies these constraints, without declaring a tunnel
+graph.cspf_path("10.10.10.1", "10.10.10.7", bandwidth="5G", admin_exclude_any=["red"])
+```
+
+Full key reference and CSPF placement rules: [MPLS TE Tunnels](https://docs.topolograph.com/analysis/mpls-te-tunnels/).
+
 ### How to start
 - run commands specifically to your vendor (from Supported vendors table) on a single device ( if you have multiple areas - do it on ABR) save all commands output in a single file with .txt or .log extension and upload the file to Topolograph
 - upload programmatically via Rest API. Multi devices LSDBs are supported via API only (v2.34).

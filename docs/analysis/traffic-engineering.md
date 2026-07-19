@@ -18,7 +18,7 @@ visualization and filtering, for both **OSPF** and **IS-IS**.
 | Maximum link bandwidth | `max_link_bw` | Physical link capacity |
 | Maximum reservable bandwidth | `max_rsrv_link_bw` | Bandwidth available for reservation |
 | Unreserved bandwidth (per priority) | `unreserved_bw_0` … `unreserved_bw_7` | Remaining bandwidth at each of the 8 TE priorities |
-| Shared risk link group | `srlg` | Underscore-joined SRLG ids the link belongs to (RFC 4203 / RFC 5307) |
+| Shared risk link group | `srlg` | List of SRLG ids the link belongs to (RFC 4203 / RFC 5307) |
 
 The **same attribute names** are used regardless of whether the data came from
 OSPF or IS-IS.

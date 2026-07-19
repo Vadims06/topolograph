@@ -3,5 +3,6 @@ site/
 
 # Local docs build virtualenv
 .venv-docs/
+venv-docs/
 
 .env

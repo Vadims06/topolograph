@@ -130,6 +130,70 @@ graph.edges_list(src_node="1.1.1.1", dst_node="2.2.2.2", max_link_bw__gt=1e10)
 See [Traffic Engineering](../analysis/traffic-engineering.md) for the attribute
 list and operators.
 
+## MPLS TE tunnels
+
+Read the CSPF placement result of the tunnels declared on a graph:
+
+```python
+graph.lsps_list()                                    # every tunnel path
+graph.lsps_list(status="unplaced")                   # only what failed to place
+graph.lsps_list(via_node="10.10.10.2")               # paths crossing a node
+graph.lsps_list(via_edge="10.10.10.1,10.10.10.2")    # paths crossing a link
+graph.lsps_list(include_path=True)                   # add the expanded node path
+
+graph.lsp("TUN_R1_R3")                               # one tunnel, path always included
+```
+
+Each path carries `placed`, `cost`, and — when it failed — `reason`,
+`reason_code` and `binding_constraints`. `reason_code` separates the two
+failures that need opposite fixes: `disconnected` means no path exists even
+with every constraint lifted (repair the topology), while
+`constraints_unsatisfiable` means a path exists but the request is too strict
+— relax the constraints named in `binding_constraints` (`bandwidth`,
+`affinity`, `srlg`). Several entries mean they only block in combination.
+
+Use `via_edge_key` instead of `via_edge` to pin an exact parallel/ECMP link;
+get the key from `graph.edges_list(include=["edge_key"])`.
+
+Managing tunnels:
+
+```python
+graph.add_lsp({"name": "TUN_R1_R3", "src": "10.10.10.1", "dst": "10.10.10.3",
+               "bandwidth": "2G"})
+graph.update_lsp("TUN_R1_R3", bandwidth="5G")
+graph.delete_lsp("TUN_R1_R3")
+graph.delete_lsps()                                  # all tunnels on the graph
+```
+
+Check whether a path satisfying the constraints exists, without creating a
+tunnel — the check accounts for bandwidth already held by placed tunnels:
+
+```python
+graph.cspf_path("10.10.10.1", "10.10.10.7",
+                bandwidth="5G",
+                metric_type="te",
+                admin_exclude_any=["red"],
+                srlg_exclude=[1001],
+                setup_priority=0)
+# {'path': [...], 'cost': 42, 'reason': ''}
+```
+
+A plain shortest path ignores tunnels, as real IP forwarding does without
+autoroute. Pass `with_lsps=True` to route over `autoroute` tunnels:
+
+```python
+graph.paths.shortest("10.10.10.1", "10.10.10.4", with_lsps=True)
+```
+
+How much TE bandwidth a link has left once every placed tunnel is accounted for:
+
+```python
+graph.edges_list(include=["lsp_left_bw"])
+```
+
+See [MPLS TE Tunnels](../analysis/mpls-te-tunnels.md) for the YAML key
+reference and the CSPF placement rules.
+
 ## The `topo` CLI
 
 The SDK installs a `topo` command:
