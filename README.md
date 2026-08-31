@@ -94,6 +94,11 @@ LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is option
 | Vendor  | Command                                     | Stub network included                       | External (redistributed) network          | 
 |---------|---------------------------------------------|---------------------------------------------|--------------------------------------------------|
 | Arista  | show ipv6 ospf database detail              | YES                     | YES                   |
+| IP Infusion OcNOS | show ipv6 ospf database router / network / external / intra-prefix | YES | YES |
+| Fortinet FortiOS  | get router info6 ospf database router / network / external / intra-prefix | YES | YES |
+| MikroTik RouterOS | /routing/ospf/lsa/print detail without-paging where instance=v3 | YES | YES |
+
+OcNOS and FortiOS OSPFv3: the per-LSA-type forms are required (the bare `show ipv6 ospf database` / `get router info6 ospf database` is an index table only), and `intra-prefix` is mandatory: OSPFv3 carries prefixes only in that LSA.
 
 
 # Supported vendors for ISIS visualization
@@ -104,6 +109,9 @@ LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is option
 | Nokia   | show router isis database detail            | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
 | Huawei   | display isis lsdb verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
 | ZTE     | show isis database verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
+| IP Infusion OcNOS | show isis database verbose (use `verbose`, not `detail`; only `verbose` prints the TE sub-TLVs) | YES | No, (need tested LSDB for adding it) |
+| Fortinet FortiOS  | get router info isis database detail        | YES                     | No, (need tested LSDB for adding it)                   |
+| MikroTik RouterOS | /routing/isis/lsp/print detail without-paging | YES                   | No, (need tested LSDB for adding it)                   |
   
 # Visualization via BGP-LS
 
