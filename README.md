@@ -38,6 +38,32 @@ Topolograph supports real-time monitoring of changes in OSPF, IS-IS and BGP doma
 - [BMP Watcher](https://github.com/Vadims06/bmpwatcher) — a passive BMP station for the BGP control plane. Routers stream their Adj-RIB-In to it; Topolograph stores the BGP graph beside your IGP graphs, binds the two by Router ID, and keeps pre-policy, post-policy and Loc-RIB observations apart so a candidate route is never shown as installed. See the [BMP Watcher guide](https://docs.topolograph.com/monitoring/bmp-watcher/).
 
 
+# BGP control plane over BMP
+
+Topolograph ingests the **BGP control plane** from your routers over **BMP**
+(RFC 7854; Adj-RIB-In/-Out pre/post-policy per RFC 8671, Loc-RIB per RFC 9069)
+and stores it as a BGP graph beside your OSPF/IS-IS graphs.
+
+- **Peering** - BGP sessions with state, and which RIB view each feed observes.
+- **Route storage** - IPv4, IPv6, VPNv4 and VPNv6, with VRF / RD / RT context.
+- **Best-path calculation** - RFC 4271 §9.1, RFC 4456 for reflected routes,
+  RFC 4364 for VPNs, over the attributes a collector feed carries:
+  1. highest `LOCAL_PREF`
+  2. shortest `AS_PATH`
+  3. lowest `ORIGIN` (IGP < EGP < incomplete)
+  4. lowest `MED` (compared only within the same neighbouring AS)
+  5. eBGP-learned over iBGP-learned
+  6. lowest `ORIGINATOR_ID` / BGP Identifier
+- **Path over IGP** - in BGP / VPN path mode the selected BGP next hop is
+  recursively resolved through the IGP shortest path, so the route is shown
+  with its real forwarding path and transport.
+
+Set-up: [BMP Watcher](https://github.com/Vadims06/bmpwatcher) ·
+[install guide](https://docs.topolograph.com/monitoring/bmp-watcher/).
+For network engineers, a route-analysis walk-through on the built-in demo:
+[topolograph.com/how-to/bgp](https://topolograph.com/how-to/bgp).
+
+
 # Supported vendors for OSPF visualization
 | Vendor         | LSA1                                           | LSA2                                            | LSA5                                             | SDK nornir driver support |
 | -------------- | ---------------------------------------------- | ----------------------------------------------- | ------------------------------------------------ | ------------------------- |
