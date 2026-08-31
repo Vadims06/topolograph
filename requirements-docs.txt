@@ -1,3 +1,5 @@
 # Documentation site (https://docs.topolograph.com) — build with:
 #   pip install -r requirements-docs.txt && mkdocs serve
 mkdocs-material>=9.7,<10
+mkdocs-static-i18n>=1.3,<2
+pytest>=8,<9

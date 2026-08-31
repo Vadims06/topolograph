@@ -1,8 +1,8 @@
 # Comparing Network States
 
-Each topology you upload is a **snapshot** — the network frozen at the moment of
-capture. Topolograph keeps your snapshots over time, which means you can put two
-of them side by side and see *exactly* what changed.
+Each topology you upload is a **snapshot** — the network frozen at the moment you
+upload it into Topolograph. Topolograph keeps your snapshots over time, which
+means you can put two of them side by side and see *exactly* what changed.
 
 ## The classic workflow
 
@@ -23,15 +23,13 @@ just consecutive ones.
 - **Networks/prefixes** that were added or withdrawn.
 - **Nodes** that joined or left the topology.
 
-![Differences in links between two snapshots](../static/MST_diff_links.png)
-
 This turns "did my change do what I expected?" into a visual, verifiable answer —
 instead of diffing raw `show` output by eye.
 
 ## Pairs well with monitoring
 
 Manual before/after snapshots are great for planned changes. For *unplanned*
-ones, a [Watcher](../monitoring/index.md) records every transition continuously,
+ones, a [Watcher](../monitoring/index.md) records every network change continuously,
 so you can scroll back through a timeline of states and see what changed and
 when — and alert on it via [ELK](../monitoring/elk-kibana.md),
 [Zabbix](../monitoring/zabbix.md) or [Slack](../monitoring/webhooks.md).

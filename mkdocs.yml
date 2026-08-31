@@ -21,6 +21,7 @@ exclude_docs: |
 
 theme:
   name: material
+  custom_dir: overrides
   language: en
   icon:
     logo: material/lan
@@ -48,8 +49,6 @@ theme:
         icon: material/brightness-4
         name: Switch to system preference
   features:
-    - navigation.instant
-    - navigation.instant.progress
     - navigation.tracking
     - navigation.tabs
     - navigation.tabs.sticky
@@ -133,6 +132,7 @@ nav:
       - monitoring/index.md
       - OSPF Watcher: monitoring/ospf-watcher.md
       - IS-IS Watcher: monitoring/isis-watcher.md
+      - BMP Watcher (BGP): monitoring/bmp-watcher.md
       - Events, Timeline & Status: monitoring/events-timeline.md
       - ELK / Kibana: monitoring/elk-kibana.md
       - Zabbix: monitoring/zabbix.md
@@ -151,3 +151,47 @@ nav:
 
 plugins:
   - search
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: ru
+          name: Русский
+          nav_translations:
+            Home: Главная
+            Getting Started: Начало работы
+            What is Topolograph?: Что такое Topolograph?
+            Quick Start with Docker: Быстрый старт с Docker
+            Your First Topology: Ваша первая топология
+            Getting Topology In: Получение топологии
+            Text File Upload: Загрузка текстового файла
+            GRE Session: Сессия GRE
+            BGP-LS Session: Сессия BGP-LS
+            Analysis & Visualization: Анализ и визуализация
+            Visualizing & Analyzing: Визуализация и анализ
+            Comparing Network States: Сравнение состояний сети
+            YAML-based Topologies: Топологии на основе YAML
+            MPLS TE Tunnels: Туннели MPLS TE
+            Real-Time Monitoring: Мониторинг в реальном времени
+            Events, Timeline & Status: События, таймлайн и статус
+            Webhooks & Slack: Webhooks и Slack
+            Automation & APIs: Автоматизация и API
+            Reference: Справочник
+            Supported Vendors: Поддерживаемые производители
+            Deployment & Configuration: Развёртывание и настройка
+            Changelog: История изменений
+            Community: Сообщество
+        - locale: zh
+          name: 中文
+        - locale: pt
+          name: Português
+        - locale: es
+          name: Español
+        - locale: fr
+          name: Français

@@ -9,7 +9,7 @@ the surface that fits your workflow:
 
     ---
 
-    Object-oriented REST client, an SSH-based LSDB collector (Nornir), and the
+    A Python REST API client, an SSH-based LSDB collector (Nornir), and the
     `topo` CLI.
 
     [:octicons-arrow-right-24: Python SDK](python-sdk.md)
@@ -26,7 +26,7 @@ the surface that fits your workflow:
 
     ---
 
-    A natural-language assistant that answers questions about your live IGP.
+    A natural-language assistant that answers questions about your live network.
 
     [:octicons-arrow-right-24: AI Agent](ai-agent.md)
 

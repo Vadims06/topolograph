@@ -126,3 +126,23 @@
 .md-typeset .grid.cards > ul > li {
   border-radius: 0.5rem;
 }
+
+/* The announcement bar is used only for the auto-translation notice. Material's
+   default banner is dark and full-bleed, which made the small notice text
+   unreadable; render it as a light, quiet strip instead. */
+.md-banner {
+  background-color: var(--md-default-fg-color--lightest);
+  color: var(--md-default-fg-color--light);
+}
+
+.tg-translation-notice {
+  padding: 0;
+  font-size: 0.7rem;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.tg-translation-notice a {
+  color: inherit;
+  text-decoration: underline;
+}

@@ -4,8 +4,6 @@ The simplest way to get a topology into Topolograph: copy the Link-State
 Database from **one** router and paste (or upload) it. No agents, no tunnels,
 nothing that touches the live network.
 
-This is the **Manual** ingestion method.
-
 ![Upload an LSDB text file and build short paths](../assets/text_file_and_short_paths.gif)
 
 ## Why one router is enough
@@ -14,6 +12,9 @@ OSPF and IS-IS are link-state protocols: every router inside an area/level holds
 an **identical** copy of the area's database. Topolograph reconstructs the whole
 topology from that single copy — so you only ever need to collect it once, from
 one device.
+
+To see the network across several areas, collect the output from an **ABR**
+(Area Border Router): it holds the LSDB of every area it connects to.
 
 ## 1. Collect the database
 
@@ -35,6 +36,7 @@ details.
     | Nokia | `show router ospf database type router detail` | `show router ospf database type network detail` | `show router ospf database type external detail` |
     | MikroTik | `/routing ospf lsa print detail file=lsa.txt` | `/routing ospf lsa print detail file=lsa.txt` | `/routing ospf lsa print detail file=lsa.txt` |
     | Huawei | `display ospf lsdb router` | `display ospf lsdb network` | `display ospf lsdb ase` |
+    | IP Infusion OcNOS | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` |
     | Palo Alto | `show routing protocol ospf dumplsdb` | `show routing protocol ospf dumplsdb` | `show routing protocol ospf dumplsdb` |
     | Ubiquiti[^ubnt] | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` |
     | Allied Telesis | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` |
@@ -61,14 +63,14 @@ details.
     | Nokia | `show router isis database detail` |
     | Huawei | `display isis lsdb verbose` |
     | ZTE | `show isis database verbose` |
-
-![LSDB collection commands per vendor](../assets/lsdb_vendor_commands.png)
+    | MikroTik RouterOS | `/routing/isis/lsp/print detail without-paging` |
 
 You can place the LSA 1 / 2 / 5 sections (OSPF) into a single file — Topolograph
 parses them together.
 
 !!! tip "Optional: richer links with TE data"
-    For FRRouting OSPF, append `show ip ospf database opaque-area` to the same
+    For FRRouting or IP Infusion OcNOS OSPF, append
+    `show ip ospf database opaque-area` to the same
     file to include link bandwidth, TE metric and administrative group. The graph
     still builds without it. See [Traffic Engineering](../analysis/traffic-engineering.md).
 
@@ -78,18 +80,20 @@ parses them together.
    [local install](../getting-started/quickstart-docker.md)).
 2. Start a topology upload and paste or attach your text file.
 3. Select the matching **vendor** and **protocol** (OSPF / IS-IS).
-4. Submit. Topolograph parses the database and renders the graph.
+4. Optionally, give the upload a **name** (e.g. `before router upgrade` or
+   `before maintenance`) so you can find the snapshot later.
+5. Click **Upload hosts**. Topolograph parses the database and renders the graph.
 
 ![Uploading an LSDB text file and building short paths](../assets/text_file_and_short_paths.gif)
 
-The result is a **snapshot** — a frozen picture of the network at capture time.
+The result is a **snapshot** — a frozen picture of the network at upload time.
 Every analysis runs against the snapshot, so nothing you try affects production.
 
 ## 3. Compare states over time
 
-Upload another capture later and Topolograph can **diff** the two snapshots,
-highlighting exactly what changed — new/removed nodes and links, cost changes,
-and appearing/disappearing networks. See
+Upload an updated LSDB file later and Topolograph can **diff** the two
+snapshots, highlighting exactly what changed — new/removed nodes and links, cost
+changes, and appearing/disappearing networks. See
 [Comparing Network States](../analysis/comparing-states.md).
 
 ## Uploading via API instead

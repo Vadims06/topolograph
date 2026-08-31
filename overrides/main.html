@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block announce %}
+{%- if page and page.url -%}
+  {%- set locale = page.url.split('/')[0] -%}
+  {%- set notices = {
+  'ru': 'Эта страница переведена автоматически. Если вы нашли ошибку, исправьте текст в <a href="https://github.com/Vadims06/topolograph">репозитории Topolograph</a>.',
+  'zh': '此页面由自动翻译生成。如发现错误，请在 <a href="https://github.com/Vadims06/topolograph">Topolograph 仓库</a> 中修改文本。',
+  'pt': 'Esta página foi traduzida automaticamente. Se encontrar um erro, corrija o texto no <a href="https://github.com/Vadims06/topolograph">repositório do Topolograph</a>.',
+  'es': 'Esta página se tradujo automáticamente. Si encuentra un error, corrija el texto en el <a href="https://github.com/Vadims06/topolograph">repositorio de Topolograph</a>.',
+  'fr': 'Cette page a été traduite automatiquement. En cas d’erreur, corrigez le texte dans le <a href="https://github.com/Vadims06/topolograph">dépôt de Topolograph</a>.'
+  } -%}
+  {%- if locale in notices -%}
+<div class="tg-translation-notice" role="note">{{ notices[locale] | safe }}</div>
+  {%- endif -%}
+{%- endif -%}
+{% endblock %}

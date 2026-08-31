@@ -1,7 +1,7 @@
 # Changelog
 
-Topolograph and its Watchers each publish version-by-version notes on GitHub.
-Rather than mirror them here, this page links straight to the source.
+Topolograph and its Watchers each publish release notes on GitHub. Below is a
+list of links to the latest release notes for every Topolograph repository.
 
 ## Per-component release notes
 

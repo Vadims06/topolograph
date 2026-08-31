@@ -1,7 +1,7 @@
 # Python SDK
 
-The **Topolograph Python SDK** is a Pythonic, object-oriented client for the
-REST API — plus a built-in **SSH collector** that gathers LSDBs from your devices,
+The **Topolograph Python SDK** is a REST API client for Topolograph, written in
+Python — plus a built-in **SSH collector** that gathers LSDBs from your devices,
 and a `topo` **CLI** built on top of it.
 
 [:simple-pypi: topolograph-sdk on PyPI](https://pypi.org/project/topolograph-sdk/){ .md-button }
@@ -36,7 +36,8 @@ print(graph.status()['status'])
 ## Collect topology over SSH
 
 The SDK can log in to your devices, run the right per-vendor LSDB commands, and
-hand you the raw text — ready to upload.
+hand you the raw output — ready to upload. The exact commands per vendor are
+listed on the [Supported Vendors](../reference/supported-vendors.md) page.
 
 ```python
 from topolograph import TopologyCollector

@@ -16,8 +16,7 @@ docker-compose pull
 docker-compose up -d
 ```
 
-Prefer a one-shot installer that can also bring up the Watchers? Use the
-`install.sh` script instead:
+Use the `install.sh` script instead:
 
 ```bash
 sudo ./install.sh
@@ -45,10 +44,10 @@ useful variables:
 | Variable | Purpose |
 | --- | --- |
 | `TOPOLOGRAPH_PORT` | Web UI port (default `8080`). Open `http://localhost:<port>/` after restarting. |
-| `NAPALM_USERNAME`, `NAPALM_PASSWORD` | Credentials Topolograph uses to log in to a device and pull its OSPF LSDB via NAPALM. |
 | `DNS` | IP of a DNS server, used to resolve router IDs into device names on the graph. |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL`, `TOPOLOGRAPH_WEB_API_PASSWORD` | Credentials for REST API requests. |
 | `TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS` | Allow-list of source IP ranges permitted to call the API. |
+| `TOPOLOGRAPH_API_TOKEN` | Token to authenticate REST API requests instead of a username/password pair. |
 | `MCP_PORT` | Port for the bundled [MCP server](../automation/mcp-server.md) (default `8000`). |
 
 After changing a port or other value, re-apply it:

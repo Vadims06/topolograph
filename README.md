@@ -23,16 +23,19 @@ After making changes — for example, redistributing routes from BGP into OSPF u
 - Identify the most loaded nodes and links, as well as fault-tolerant elements
 - Compare network states across different points in time
 - Ingest topology over **BGP-LS** from **OSPF** or **IS-IS** domains (via OSPF Watcher or IS-IS Watcher)
+- Ingest the **BGP** control plane over **BMP** — sessions, IPv4/IPv6/VPNv4/VPNv6 routes, VRF context — bound to your OSPF/IS-IS graphs (via BMP Watcher)
+- Look up what a router actually does with a destination: longest-prefix match, BGP best path, administrative distance, recursive next hop and the resulting IGP/LSP transport
 - Detect asymmetric routing paths
 - Discover backed-up and non-backed-up networks using the Analytics / Network Heatmap
 - Build and visualize arbitrary topologies using YAML-based definitions
 
 ## Real-Time Monitoring
 
-Topolograph supports real-time monitoring of changes in OSPF and IS-IS domains using Watcher agents:
+Topolograph supports real-time monitoring of changes in OSPF, IS-IS and BGP domains using Watcher agents:
 
 - [OSPF Watcher](https://github.com/Vadims06/ospfwatcher)
 - [IS-IS Watcher](https://github.com/Vadims06/isiswatcher)
+- [BMP Watcher](https://github.com/Vadims06/bmpwatcher) — a passive BMP station for the BGP control plane. Routers stream their Adj-RIB-In to it; Topolograph stores the BGP graph beside your IGP graphs, binds the two by Router ID, and keeps pre-policy, post-policy and Loc-RIB observations apart so a candidate route is never shown as installed. See the [BMP Watcher guide](https://docs.topolograph.com/monitoring/bmp-watcher/).
 
 
 # Supported vendors for OSPF visualization

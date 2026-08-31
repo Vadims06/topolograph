@@ -9,7 +9,7 @@ visualization and filtering, for both **OSPF** and **IS-IS**.
     Your graph builds fine from plain LSA 1/2/5 (OSPF) or the standard IS-IS
     LSDB. TE data is *extra* — turn it on when you need capacity-aware analysis.
 
-## What Topolograph parses
+## What Topolograph parses { #what-topolograph-parses }
 
 | Attribute | API/SDK name | Meaning |
 | --- | --- | --- |
@@ -56,7 +56,7 @@ as updates come in:
 
 Once a diagram has TE data, you can query edges by any TE attribute using the
 range operators `__gt`, `__lt`, `__gte`, `__lte` — handy for finding links that
-violate (or satisfy) a TE constraint. With the
+meet or fail a TE constraint. With the
 [Python SDK](../automation/python-sdk.md):
 
 ```python
@@ -74,7 +74,7 @@ The same filtering is available through the diagram edges REST API.
 
 ## IS-IS specifics
 
-IS-IS TE relies on **wide metrics** (Extended IS/IP Reachability, TLVs 22/135)
+IS-IS TE relies on **Wide Metrics** (Extended IS/IP Reachability, TLVs 22/135)
 and supports **IPv6** reachability (TLV 236). Vendor support for the relevant
 TLVs is summarized on the
 [Supported Vendors](../reference/supported-vendors.md#is-is-tlv-support) page.

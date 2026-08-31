@@ -1,8 +1,8 @@
 # What is Topolograph?
 
 **Topolograph** is a web-based tool for visualizing and analyzing **OSPF** and
-**IS-IS** network topologies — offline, self-hosted, and with no logins or
-passwords required.
+**IS-IS** network topologies - offline, self-hosted, with no network access and
+no logins or passwords required.
 
 Because OSPF and IS-IS are *link-state* protocols, every router in an area holds
 an identical copy of the area's Link-State Database (LSDB). That means
@@ -21,8 +21,8 @@ the LSDB into something you can explore and test:
 - **Visualize** the OSPF/IS-IS topology as an interactive graph.
 - **Build shortest paths** between any two nodes — and discover the **backup
   paths** (including secondary backups) the network would use.
-- **Simulate failures** — shut a link or a router and watch how traffic
-  re-routes, before you touch production.
+- **Simulate failures** - shut a link or a router and watch how traffic
+  re-routes, before the changes reach the real network.
 - **Plan link costs** — change IGP metrics on the fly and see the effect on
   path selection.
 - **Find weak spots** — identify the most loaded nodes and links, single points
@@ -59,7 +59,7 @@ same data model:
 flowchart LR
     R[Routers<br/>OSPF / IS-IS] -->|text file| T
     R -->|GRE| OW[OSPF / IS-IS Watcher]
-    R -->|BGP-LS| GB[GoBGP + forwarder]
+    R -->|BGP-LS| GB[GoBGP + BGP-LS Watcher]
     GB --> OW
     OW -->|live events| T[Topolograph]
     OW -->|events| ELK[ELK / Kibana]
@@ -76,15 +76,15 @@ flowchart LR
 | **IS-IS Watcher** | The same idea for IS-IS, including L1/L2 levels and IPv6. |
 | **Python SDK** | Object-oriented REST client, SSH-based LSDB collector (Nornir), and the `topo` CLI. |
 | **MCP Server** | Exposes the Topolograph API to LLM agents via the Model Context Protocol. |
-| **AI Agent** | A natural-language assistant that answers questions about your IGP. |
+| **AI Agent** | A natural-language network assistant that answers questions about your network (not only your IGP). |
 
 ## What Topolograph is *not*
 
-- It is **not** a routing daemon — it never injects routes or talks to the
-  forwarding plane. Watchers are *passive* listeners.
-- It is **not** a NMS replacement — it focuses specifically on link-state IGP
+- It is **not** a routing daemon - it never injects routes and takes no part in
+  forwarding traffic (the data plane). Watchers are *passive* listeners.
+- It is **not** a NMS replacement - it focuses specifically on link-state IGP
   topology and its analysis.
-- It does **not** require credentials to your devices to *analyze* a topology —
+- It does **not** require credentials to your devices to *analyze* a topology -
   a text file is enough. (Credentials are only needed if you let the SDK
   collect LSDBs over SSH for you.)
 

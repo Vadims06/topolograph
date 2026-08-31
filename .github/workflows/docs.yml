@@ -8,6 +8,13 @@ on:
     paths:
       - "docs/**"
       - "mkdocs.yml"
+      - "requirements-docs.txt"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "requirements-docs.txt"
       - ".github/workflows/docs.yml"
   workflow_dispatch:
 
@@ -29,6 +36,7 @@ jobs:
         with:
           python-version: "3.x"
       - run: pip install -r requirements-docs.txt
+      - run: pytest docs/i18n_coverage_test.py docs/i18n_render_test.py -v
       - run: mkdocs build --strict
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -36,6 +44,7 @@ jobs:
 
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

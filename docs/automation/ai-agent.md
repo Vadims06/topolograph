@@ -3,12 +3,18 @@
 The **OSPF & IS-IS AI Agent** is a natural-language assistant for your IGP. It
 talks to real OSPF/IS-IS domains — pulling from Topolograph snapshots or live
 [Watcher](../monitoring/index.md) state through the [MCP server](mcp-server.md) —
-and answers questions in plain English through a Streamlit web UI.
+and answers questions in plain English through a web UI.
 
 [:simple-github: vadims06/ospf-isis-ai-agent](https://github.com/Vadims06/ospf-isis-ai-agent){ .md-button }
 [:material-youtube: Demo video](https://youtu.be/92YBRXqZWUo){ .md-button }
 
 ![Network AI Assistant](../assets/ai_assistant_demo.png)
+
+!!! tip "Try the hosted agent"
+    A public instance runs at
+    **[agent.topolograph.com](https://agent.topolograph.com)** — ask it
+    questions straight away. It runs on Topolograph's own GPU-hosted model
+    (a **Qwen**-based LLM), so no OpenAI key is needed there.
 
 ## What you can ask
 
@@ -26,8 +32,8 @@ and answers questions in plain English through a Streamlit web UI.
 
 ```mermaid
 flowchart LR
-    U[You<br/>natural language] --> S[Streamlit UI]
-    S --> LLM[OpenAI model]
+    U[Your question<br/>in natural language] --> S[Topolograph Agent UI]
+    S --> LLM[LLM model]
     LLM --> MCP[Topolograph MCP server]
     MCP --> T[Topolograph<br/>snapshots + live state]
 ```

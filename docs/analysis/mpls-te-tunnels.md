@@ -9,9 +9,10 @@ signaling — and visualizes the result.
 
 ![MPLS TE tunnels: LSP table and placed paths on the graph](../static/mpls-lsp-graph-and-table.png)
 
-The **LSP tunnels** tab lists every path with its placement status, failure
-reason, bandwidth and priorities; selecting a node shows the tunnels that are
-ingress, transit or egress on it, and the placed paths are drawn on the canvas.
+The **LSP tunnels** tab lists every path with its placement status, the reason
+it could not be placed, bandwidth and priorities; selecting a node shows the
+tunnels that are ingress, transit or egress on it, and the placed paths are
+drawn on the network diagram.
 
 !!! info "YAML diagrams only, for now"
     `lsps:` is available on YAML-based diagrams. Support for tunnels reported
@@ -54,7 +55,7 @@ lsps:
 | `hold_priority` | tunnel/path | `0`–`7`, defaults to `setup_priority` | pool the reservation is held in; may not be weaker than the setup priority |
 | `admin_groups` | tunnel/path | dict: `exclude-any` / `include-any` / `include-all` → list of names | affinity filter |
 | `srlg_exclude` | path | list of int | SRLG constraint |
-| `color` | tunnel | CSS color | highlight color on canvas |
+| `color` | tunnel | CSS color | highlight color on the network diagram |
 | `autoroute` | tunnel | bool, default `false` | see below |
 | `paths` | tunnel | dict, path name → body; omitted = one dynamic `primary` | the tunnel's LSPs |
 | `role` | path | `primary` (default) \| `secondary` \| `standby` | path role |
@@ -91,17 +92,17 @@ preemptable the moment it is signaled, so that combination is rejected:
 (`setup_priority: 0` with `hold_priority: 7` is a validation error,
 `setup_priority: 7` with `hold_priority: 0` is fine).
 
-### Rejected (operational) keys
+### Unsupported (operational) keys
 
-`rro`, `oper_status`, `active_lsp_name`, and any `label_*` key are **rejected**
-in `lsps:` — they describe live signaling state (Record Route, current
+`rro`, `oper_status`, `active_lsp_name`, and any `label_*` key are **not
+supported** in `lsps:` — they describe live signaling state (Record Route, current
 status, active path), not declared intent, and only make sense once a real
 watcher reports them. A validation error is raised if you include one.
 
-## CSPF placement
+## CSPF path calculation
 
-On every save, Topolograph places each path in `setup_priority` order (RSVP-TE
-convention: `0` highest), same rules a real router would apply:
+On every recalculation, Topolograph processes each path in `setup_priority` order
+(RSVP-TE convention: `0` highest), same rules a real router would apply:
 
 - filters out edges that don't have enough bandwidth at the requested
   `setup_priority` pool, don't satisfy the affinity filter, or are in an
@@ -119,7 +120,7 @@ from the real advertised numbers.
 ECMP ties are broken deterministically: fewest hops, then lexicographic order
 of node names.
 
-## Reading placement results
+## Retrieving LSP placement results
 
 `GET /api/graph/{graph_time}/lsps` and `GET /api/graph/{graph_time}/lsps/{name}`
 return each path's placement outcome alongside its declared config:
@@ -146,7 +147,7 @@ return each path's placement outcome alongside its declared config:
 }
 ```
 
-`reason` explains *why* an unplaced path failed, in words. Alongside it,
+`reason` explains, in words, *why* a path could not be placed. Alongside it,
 `reason_code` gives the machine-readable category and `binding_constraints`
 names what is actually blocking:
 
@@ -157,8 +158,8 @@ names what is actually blocking:
 | `ero_strict_hop_unreachable` | a strict hop has no edge from the previous hop | fix the `ero` |
 | `endpoint_not_found` | `src`/`dst` is not in the graph | fix the endpoint |
 
-Several entries in `binding_constraints` mean they block only in combination —
-lifting any one of them is enough.
+Several entries in `binding_constraints` mean lifting any one of them is enough
+to place the LSP.
 
 Useful filters on the list endpoint:
 
@@ -198,8 +199,8 @@ result = graph.cspf_path(
 
 The answer accounts for bandwidth the **already declared tunnels hold**: on a
 topology with an `lsps:` section the check runs against what each link has
-left after placement, not against the advertised value, so the result never
-promises capacity that is already taken. Constraints are evaluated per setup
+left after placement, not against an aggregate figure, so it never returns a
+path over capacity that is already taken. Constraints are evaluated per setup
 priority, so a link can be full at one priority and still have room at a
 stronger one.
 
@@ -224,7 +225,7 @@ graph.paths.shortest("10.10.10.1", "10.10.10.4", with_lsps=True) # via active au
 ## What breaks if a link goes down?
 
 `edge_failure_reaction` predicts the whole-network impact of one or more
-links failing — connectivity, and which links pick up or lose traffic:
+links failing — the links that lose traffic and the links that pick it up:
 
 ```python
 graph.paths.edge_failure_reaction([("10.10.10.1", "10.10.10.2")])

@@ -5,7 +5,7 @@ tell you what it's *doing* — every adjacency that flaps, every cost that chang
 every prefix that comes and goes — and turn each into a searchable, alertable
 event.
 
-There are two Watchers, one per protocol, built on the same architecture:
+There are three Watchers, one per protocol, built on the same architecture:
 
 <div class="grid cards" markdown>
 
@@ -24,6 +24,14 @@ There are two Watchers, one per protocol, built on the same architecture:
     The same for IS-IS — including L1/L2 levels and IPv6.
 
     [:octicons-arrow-right-24: IS-IS Watcher](isis-watcher.md)
+
+-   :material-transit-connection-variant:{ .lg .middle } __BMP Watcher__
+
+    ---
+
+    BGP sessions, routes and VPN context over a passive BMP station.
+
+    [:octicons-arrow-right-24: BMP Watcher](bmp-watcher.md)
 
 </div>
 
@@ -47,7 +55,7 @@ flowchart LR
 
 ![Watcher and Topolograph: history vs present/future](../assets/functional-watcher-role.png)
 
-The Watcher stores the **history** of events (what happened and when); Topolograph
+The Watcher lets you see which events happened in the past; Topolograph
 shows the **present** state and lets you explore **potential future** outcomes.
 
 ## Detected events
@@ -57,7 +65,8 @@ Both Watchers detect the same classes of change:
 - **Neighbor adjacency** up / down
 - **Link cost** changes (old → new metric)
 - **Networks/prefixes** appearing or disappearing
-- **TE attributes** — admin group, max/reservable/unreserved bandwidth, TE metric
+- **TE attributes** added, changed, or removed — admin group,
+  max/reservable/unreserved bandwidth, TE metric
   (see [Traffic Engineering](../analysis/traffic-engineering.md))
 
 IS-IS additionally groups everything by **level (L1/L2)**.
@@ -71,7 +80,7 @@ Connection setup lives under [Getting Topology In](../ingestion/index.md):
 - [**BGP-LS session**](../ingestion/bgp-ls.md) — no tunnel; a single session
   carries the whole domain. Needs Watcher image `v3.1.0`+.
 
-## Deployment sizes
+## Deployment sizes { #deployment-sizes }
 
 You can start as small as a containerlab demo and grow to a full Watcher +
 Topolograph + ELK stack. A typical progression:

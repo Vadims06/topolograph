@@ -55,7 +55,7 @@ mean) so a single long calm period does not distort the threshold.
 | `pattern` | Wave classification (see below). |
 | `converged` | `true` if every device left down in the wave recovers (a later up) within the queried time window. A recovery after `end_time` is not visible, so a wave can read `converged: false` even if the network later recovered outside the window. |
 
-## Wave patterns
+## Wave patterns { #wave-patterns }
 
 `pattern` classifies a wave by what happened to device state. It mirrors the
 graph-level `status` from the Topolograph API

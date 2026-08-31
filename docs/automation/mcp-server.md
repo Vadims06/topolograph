@@ -44,9 +44,16 @@ Default endpoint: `http://0.0.0.0:8000/mcp`.
 | `get_graph_status` | Check graph health and connectivity |
 | `get_network_events` | Retrieve network up/down events |
 | `get_adjacency_events` | Get node/host and link events |
+| `get_events_timeline` | Merged timeline of network and adjacency events |
 | `get_nodes` | Query diagram nodes |
 | `get_edges` | Query diagram edges |
 | `get_shortest_path` | Compute shortest paths (with backup-path support) |
+| `get_cspf_path` | Constraint-filtered (CSPF) path, without creating a tunnel |
+| `get_edge_failure_reaction` | Predict the whole-network impact of links failing |
+| `get_lsps` | List MPLS TE LSP tunnels and their CSPF placement result |
+| `add_lsp` | Add an MPLS TE LSP tunnel to a graph |
+| `update_lsp` | Update or rename an MPLS TE LSP tunnel |
+| `delete_lsp` | Delete one LSP tunnel, or all tunnels on the graph |
 | `upload_graph` | Upload a new graph |
 
 ## What it unlocks

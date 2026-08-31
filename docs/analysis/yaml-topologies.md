@@ -5,7 +5,7 @@ it can also build one from a **YAML definition**. That means you can design an
 arbitrary topology from scratch (it doesn't even have to be an IGP domain), keep
 it updated over the REST API, and run all the same analysis on it.
 
-!!! abstract "Network Diagram as a Service (NDAS)"
+!!! abstract "Network Diagram as a Service"
     LSDB ⇄ YAML is interchangeable **both ways**. You can design an IGP domain
     from scratch *or* export an uploaded LSDB to YAML, then add links, change
     costs, and re-check the network's reaction to your edits.
@@ -138,12 +138,11 @@ lsps:
 
 ## Why use it
 
-- **Design before you build** — model a planned IGP domain and analyze it before
-  any device exists.
-- **Keep diagrams live** — update nodes/edges over the API as your inventory
-  changes (the "as a Service" part of NDAS).
-- **Mix in metadata** — tag nodes with site, role, or owner and query the graph
-  like a small inventory.
+- **Test a hypothesis before you build** — plan a new link or LSP, model it in
+  the YAML diagram, and check how the network re-converges.
+- **Serve a network diagram** — build the graph from nodes and edges, including
+  metadata such as provider, provider role, or node role. This is a Network
+  Diagram as a Service.
 
 ---
 

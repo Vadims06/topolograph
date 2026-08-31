@@ -25,27 +25,31 @@ goes, where does the traffic go?"*
 
 ![Backup shortest path tree](../static/backup_SPT.png)
 
-It also distinguishes backup paths that ride over ECMP from those that don't,
-which matters when you reason about capacity during a failure.
+When you reason about capacity during a failure, all links are counted, whether
+or not they belong to an ECMP set.
 
-## Simulating failures
+## Simulating failures { #simulating-failures }
 
-Test "what if" without touching anything live.
+Test "what if" scenarios without changing anything on the live network.
 
 ### Shut a link
 
-Remove a link and Topolograph recomputes paths instantly, showing how traffic
-re-routes around it.
+First make sure you are in failure-reaction mode: switch from the general view to
+the **Network reaction to failure** tab. On that tab a left-click on a link
+changes behaviour — each click simulates an adjacency going down / the link being
+removed from the graph. Topolograph recomputes paths instantly and shows how
+traffic re-routes around it.
 
 ![Network reaction to removing a link](../static/network_reaction_rem_edge1.png)
 
-You can see the result together with the affected statistics:
+You can see the result together with statistics on the recalculated paths:
 
 ![Network reaction to a removed edge, with stats](../static/network_reaction_rem_edge_with_stat.png)
 
 ### Shut a node
 
-Take an entire router out and watch traffic flow around the failed node.
+Simulate an entire router failing and watch traffic flow around the failed node.
+Right-click a node and choose **Shutdown this node**.
 
 ![Network reaction to shutting a node](../static/network_reaction_shut_node.png)
 
@@ -54,12 +58,16 @@ Take an entire router out and watch traffic flow around the failed node.
 ## Planning link costs
 
 Change an IGP metric on the fly and immediately see the effect on path
-selection — ideal for planning a maintenance, shifting traffic off a link, or
-validating a cost design before you push it.
+selection — ideal for planning network work, draining traffic off a link, or
+checking a metric before applying it on the real network.
+
+Make sure you are still on the **Network reaction to failure** tab. Right-click a
+link: a form listing the links appears. Set a new metric value next to the link
+you need — the re-routing result shows on the graph immediately.
 
 ![Network reaction to an OSPF cost change](../static/network_reaction_ospf_cost_change.png)
 
-## Network Heatmap
+## Network Heatmap { #network-heatmap }
 
 The **Network Heatmap** (under Analytics) reveals structural properties of the
 topology at a glance — which links and nodes carry the most paths, where your
@@ -67,8 +75,11 @@ single points of failure are, and which networks have **no backup path**.
 
 ![Network heatmap with networks](../static/network_heatmap_with_networks.png)
 
-Filter to the networks that are **not backed up** to find exactly where a single
-failure would cause a loss of reachability:
+Nodes marked red carry the most networks with no backup path.
+
+Choose **None backuped** networks to see networks with a single termination
+point: they attach to only one device, so if that device fails they become
+unreachable.
 
 ![Heatmap highlighting non-backed-up networks](../static/network_heatmap_with_not_backuped_networks.png)
 
@@ -90,7 +101,7 @@ paths** report finds these pairs for you.
 
     ---
 
-    See what changed between captures.
+    See what changed between snapshots.
 
     [:octicons-arrow-right-24: Comparing states](comparing-states.md)
 

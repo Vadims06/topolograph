@@ -33,18 +33,18 @@ Because there's no GRE tunnel and no OSPF/IS-IS adjacency to maintain, BGP-LS
 mode is simpler to deploy in environments where tunnels aren't practical, and a
 single session can carry topology from across the IGP domain.
 
-!!! info "Why a forwarder?"
-    GoBGP handles the BGP machinery and speaks the Link-State address family;
-    `bgplswatcher` (Go) bridges GoBGP to the Python Watcher over gRPC so the same
-    Watcher event pipeline is reused for both GRE and BGP-LS modes.
+!!! info "Why the BGP-LS Watcher?"
+    GoBGP handles the BGP machinery and speaks the Link State address family.
+    The BGP-LS Watcher (Go) bridges GoBGP to the Python Watcher over gRPC and
+    keeps GRE and BGP-LS modes behaving identically.
 
 ## 1. Configure BGP-LS on the router
 
-Enable the BGP **Link-State address family** and have BGP distribute the IGP's
-link-state information, then peer toward the host running the Watcher's GoBGP.
-The exact CLI is vendor-specific (look for `address-family link-state` /
-`distribute link-state` style commands). Point the BGP-LS peer at the Watcher
-host so GoBGP can receive the updates.
+Enable the BGP **Link State address family** and configure BGP to distribute the
+IGP's link-state information (activate BGP-LS). The exact commands are
+vendor-specific — consult your vendor's documentation for the BGP-LS address
+family configuration. Point the BGP-LS peer at the Watcher host so GoBGP can
+receive the updates.
 
 ## 2. Deploy the Watcher in BGP-LS mode
 
@@ -54,7 +54,7 @@ the Watcher repositories:
 [OSPF Watcher](https://github.com/Vadims06/ospfwatcher) ·
 [IS-IS Watcher](https://github.com/Vadims06/isiswatcher).
 
-## 3. Verify the BGP-LS session
+## 3. Verify the BGP-LS session { #3-verify-the-bgp-ls-session }
 
 The Watcher posts topology to Topolograph **after** the BGP session comes up, so
 start by confirming the session and the Link-State routes.
@@ -88,7 +88,7 @@ the Watcher will start posting topology to Topolograph.
 
 BGP-LS carries TE attributes natively — administrative group/color, maximum and
 reservable bandwidth, unreserved bandwidth, and the TE default metric — so you
-get rich link data without the opaque-LSA trick needed for text-file uploads.
+get rich link data with TE attributes by default.
 See [Traffic Engineering](../analysis/traffic-engineering.md).
 
 ## BGP-LS vs GRE

@@ -51,7 +51,7 @@ offline, no logins or passwords required.
 
     [:octicons-arrow-right-24: Getting topology in](ingestion/index.md)
 
--   :material-vector-polyline:{ .lg .middle } __Build paths & backups__
+-   :material-vector-polyline:{ .lg .middle } __Build primary & backup paths__
 
     ---
 
@@ -64,8 +64,8 @@ offline, no logins or passwords required.
 
     ---
 
-    Shut a link or a router and instantly see how traffic re-routes — before you
-    touch the production network.
+    Shut a link or a router and instantly see how traffic re-routes - before the
+    changes are applied to the real network.
 
     [:octicons-arrow-right-24: Failure simulation](analysis/visualizing.md#simulating-failures)
 
@@ -104,22 +104,22 @@ offline, no logins or passwords required.
 
 -   __:material-file-document-outline: Text file__
 
-    Paste or upload the LSDB output from one router. Great for ad-hoc analysis,
-    audits, and offline what-if planning.
+    Run the LSDB show commands on one router and save the output to a file.
+    Great for ad-hoc analysis, audits, and offline what-if planning.
 
     [:octicons-arrow-right-24: Text file upload](ingestion/text-file.md)
 
 -   __:material-tunnel: GRE session__
 
-    A Watcher peers with a router over a GRE adjacency and forwards live
+    A Watcher forms an adjacency with a router over GRE and forwards live
     link-state changes into Topolograph.
 
     [:octicons-arrow-right-24: GRE session](ingestion/gre.md)
 
 -   __:material-transit-connection-variant: BGP-LS session__
 
-    Carry OSPF or IS-IS link-state natively over BGP-LS — no GRE tunnel — via
-    GoBGP and the Watcher forwarder.
+    Carry OSPF or IS-IS link-state natively over BGP-LS, no GRE tunnel, via
+    GoBGP and the BGP-LS Watcher.
 
     [:octicons-arrow-right-24: BGP-LS session](ingestion/bgp-ls.md)
 
@@ -132,9 +132,10 @@ offline, no logins or passwords required.
 | **Topolograph** | The web app: visualize, analyze, simulate, compare | [Analysis & Visualization](analysis/index.md) |
 | **OSPF Watcher** | Live OSPF change monitoring (GRE or BGP-LS) | [OSPF Watcher](monitoring/ospf-watcher.md) |
 | **IS-IS Watcher** | Live IS-IS change monitoring (GRE or BGP-LS) | [IS-IS Watcher](monitoring/isis-watcher.md) |
+| **BMP Watcher** | Live BGP sessions, routes and VPN context (BMP) | [BMP Watcher](monitoring/bmp-watcher.md) |
 | **Python SDK** | Object-oriented API client + SSH collector + `topo` CLI | [Python SDK](automation/python-sdk.md) |
-| **MCP Server** | Model Context Protocol wrapper for LLM agents | [MCP Server](automation/mcp-server.md) |
-| **AI Agent** | Natural-language assistant for your IGP | [AI Agent](automation/ai-agent.md) |
+| **MCP Server** | Model Context Protocol for LLM agents | [MCP Server](automation/mcp-server.md) |
+| **AI Agent** | Natural-language network assistant | [AI Agent](automation/ai-agent.md) |
 
 ---
 

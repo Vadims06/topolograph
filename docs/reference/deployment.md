@@ -24,10 +24,10 @@ Configuration lives in `.env` next to `docker-compose.yml`.
 | --- | --- |
 | `TOPOLOGRAPH_PORT` | Web UI port (default `8080`). |
 | `MCP_PORT` | [MCP server](../automation/mcp-server.md) port (default `8000`). |
-| `NAPALM_USERNAME`, `NAPALM_PASSWORD` | Credentials for NAPALM-based LSDB pulls. |
 | `DNS` | DNS server IP used to resolve router IDs into device names. |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL`, `TOPOLOGRAPH_WEB_API_PASSWORD` | REST API credentials. |
 | `TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS` | Allow-list of source IP ranges for API calls. |
+| `TOPOLOGRAPH_API_TOKEN` | Token to authenticate REST API requests instead of a username/password pair. |
 
 After changing any value, re-apply with `docker-compose up -d`.
 

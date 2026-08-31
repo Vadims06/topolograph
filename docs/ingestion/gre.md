@@ -13,7 +13,7 @@ option.
 
 ## How it works
 
-- The Watcher runs an **FRR** instance inside an isolated network namespace.
+- The Watcher runs an **FRR** instance inside an isolated network environment.
 - That FRR forms an OSPF (or IS-IS) adjacency with your router **over a GRE
   tunnel**.
 - Once adjacent, the router floods its LSDB to the Watcher just like any other
@@ -24,11 +24,11 @@ option.
     The Watcher is a **listen-only** participant. An **XDP OSPF filter** inspects
     everything the FRR instance tries to advertise and drops any DB description
     or LSUpdate that announces more than the Watcher's own GRE tunnel network.
-    This guarantees the Watcher can never inject unexpected prefixes into your
-    OSPF domain. See [Listen-only mode](../monitoring/ospf-watcher.md#listen-only-mode-xdp).
+    This guarantees the Watcher can never announce unexpected prefixes into your
+    IGP domain. See [Listen-only mode](../monitoring/ospf-watcher.md#listen-only-mode-xdp).
 
-Each Watcher keeps all routes and updates inside its **own namespace**, so it
-never affects host routing or other Watchers.
+Each Watcher keeps all routes and updates inside an **isolated environment**, so
+it never affects host routing or other Watchers.
 
 ## 1. Configure the tunnel on the router
 
@@ -50,15 +50,16 @@ an adjacency can form across it.
 ## 2. Configure the Watcher
 
 On the Watcher side, the GRE tunnel network is set in the FRR config
-(`quagga/config/ospfd.conf` for OSPF). Deploying the Watcher lab namespace, for
-example via containerlab, creates:
+(`quagga/config/ospfd.conf` for OSPF). The Watcher is started by its **lab
+container**, which creates and wires up an isolated network environment for the
+Watcher and its FRR:
 
-- an isolated network namespace for the Watcher and its FRR,
+- an isolated network environment for the Watcher and its FRR,
 - a tap-interface pair connecting the Watcher to the Linux host,
-- the **GRE tunnel** inside the Watcher's namespace,
+- the **GRE tunnel** inside the Watcher's environment,
 - NAT for the GRE traffic,
 - the FRR + Watcher processes,
-- the **XDP OSPF filter** bound to the Watcher's tap interface.
+- the **XDP OSPF/IS-IS filter** bound to the Watcher's tap interface.
 
 The exact steps live in the Watcher repositories:
 [OSPF Watcher](https://github.com/Vadims06/ospfwatcher) ·
@@ -72,7 +73,11 @@ The exact steps live in the Watcher repositories:
 
 ## 3. Verify the adjacency
 
-Confirm the Watcher's FRR sees your router as a neighbor:
+Open a shell on the Watcher's FRR and run `vtysh`:
+
+```text
+docker exec -it <watcher-container> vtysh
+```
 
 ```text
 show ip ospf neighbor      # OSPF

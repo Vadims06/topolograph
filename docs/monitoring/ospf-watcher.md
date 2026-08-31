@@ -46,7 +46,7 @@ The connection itself is set up under [Getting Topology In](../ingestion/index.m
     [topolograph v2.27](https://github.com/Vadims06/topolograph/releases/tag/v2.27)
     or later.
 
-## Quick lab (containerlab)
+## Quick lab (containerlab) { #quick-lab-containerlab }
 
 A ready-made lab under `containerlab/frr01` lets you watch OSPF changes with no
 real hardware:
@@ -66,7 +66,7 @@ Topolograph and/or ELK to visualize and search them — see the
     Set `TEST_MODE=True` to replay a demo LSDB and sample events (adjacency loss,
     metric change) end-to-end through the pipeline.
 
-## Event log format
+## Event log format { #event-log-format }
 
 Watcher events are simple comma-separated lines. A host (adjacency) event:
 

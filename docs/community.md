@@ -1,7 +1,7 @@
 # Community & Support
 
-Topolograph is built in the open. Whether you want help, found a bug, or want to
-contribute — here's where to go.
+Topolograph is built in the open. Use the channels below if you need help, found
+a bug, or want to contribute.
 
 <div class="grid cards" markdown>
 

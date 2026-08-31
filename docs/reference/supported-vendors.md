@@ -17,6 +17,7 @@ the commands below to capture the LSDB, then
 | Nokia | `show router ospf database type router detail` | `show router ospf database type network detail` | `show router ospf database type external detail` | | ✅ |
 | MikroTik | `/routing ospf lsa print detail file=lsa.txt` | `/routing ospf lsa print detail file=lsa.txt` | `/routing ospf lsa print detail file=lsa.txt` | ✅[^mt-flags] | ✅ |
 | Huawei | `display ospf lsdb router` | `display ospf lsdb network` | `display ospf lsdb ase` | ✅ | ✅ |
+| IP Infusion OcNOS | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` | ✅ | |
 | Palo Alto | `show routing protocol ospf dumplsdb` | `show routing protocol ospf dumplsdb` | `show routing protocol ospf dumplsdb` | | ✅ |
 | Ubiquiti[^ubnt] | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` | | ✅ |
 | Allied Telesis | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` | | ✅ |
@@ -41,6 +42,10 @@ the commands below to capture the LSDB, then
     metric and admin-group data. The graph still builds from LSA 1/2/5 alone. See
     [Traffic Engineering](../analysis/traffic-engineering.md).
 
+!!! tip "Optional TE data (IP Infusion OcNOS)"
+    Append `show ip ospf database opaque-area` to the same file for TE link
+    attributes. The graph still builds from LSA 1/2/5 alone.
+
 ## OSPFv3
 
 | Vendor | Command | Stub network | External (redistributed) |
@@ -56,6 +61,7 @@ the commands below to capture the LSDB, then
 | Nokia | `show router isis database detail` | ✅ (needs a tested LSDB to confirm) | Not yet (needs a tested LSDB) | ✅ (needs a tested LSDB to confirm) |
 | Huawei | `display isis lsdb verbose` | ✅ (needs a tested LSDB to confirm) | Not yet (needs a tested LSDB) | ✅ (needs a tested LSDB to confirm) |
 | ZTE | `show isis database verbose` | ✅ (needs a tested LSDB to confirm) | Not yet (needs a tested LSDB) | ✅ (needs a tested LSDB to confirm) |
+| MikroTik RouterOS | `/routing/isis/lsp/print detail without-paging` | ✅ | ✅ | |
 
 !!! info "Node flags (overload / attached)"
     Overload (OL) and attached (ATT) are read from each LSP's `ATT/P/OL` column on
@@ -72,14 +78,14 @@ the commands below to capture the LSDB, then
 The IS-IS parser (used by Topolograph and the [IS-IS Watcher](../monitoring/isis-watcher.md))
 understands the following TLVs:
 
-| TLV | # | Cisco | Juniper | Nokia | FRR | Huawei | ZTE |
-| --- | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| IS Reachability | 2 | ✅ | ✅ | ✅ | ✅ | | ✅ |
-| Extended IS Reachability (new) | 22 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| IPv4 Internal Reachability (old) | 128 | ✅ | ✅ | ✅ | ✅ | ✅ | |
-| IPv4 External Reachability (old) | 130 | | | | | | |
-| Extended IPv4 Reachability (new) | 135 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| IPv6 Reachability | 236 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| TLV | # | Cisco | Juniper | Nokia | FRR | Huawei | ZTE | MikroTik |
+| --- | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| IS Reachability | 2 | ✅ | ✅ | ✅ | ✅ | | ✅ | ✅ |
+| Extended IS Reachability (new) | 22 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| IPv4 Internal Reachability (old) | 128 | ✅ | ✅ | ✅ | ✅ | ✅ | | ✅ |
+| IPv4 External Reachability (old) | 130 | | | | | | | |
+| Extended IPv4 Reachability (new) | 135 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| IPv6 Reachability | 236 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 Both **narrow** (old-style) and **wide** (new-style) metrics are parsed. Wide
 metrics carry TE attributes — see [Traffic Engineering](../analysis/traffic-engineering.md).
