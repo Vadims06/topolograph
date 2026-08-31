@@ -8,6 +8,8 @@ Routers open a TCP session towards it and stream their Adj-RIB-In. The watcher
 never speaks BGP, never peers, and never connects to a router itself — so it
 adds no BGP state to the network it observes.
 
+[:simple-github: vadims06/bmpwatcher](https://github.com/Vadims06/bmpwatcher){ .md-button }
+
 !!! info "BGP state is kept separate from your IGP graph"
     A BGP session is a control-plane relationship, not a forwarding link. BGP
     is stored as its own graph with its own lifecycle and is *bound* to your
@@ -82,31 +84,69 @@ network. The step-by-step walkthrough, with screenshots, is the in-app guide at
 
 ## Installing the collector
 
-The collector is [**bmpwatcher**](https://github.com/Vadims06/bmpwatcher) — a
-Go BMP station that separates the initial table replay from the changes that
-follow it. Its README covers building, running under Docker, and the router-side
-BMP configuration for FRR, IOS-XR, Junos and SR OS.
+!!! note "Compatibility"
+    The BGP graph and this collector need
+    [topolograph v2.69](https://github.com/Vadims06/topolograph/releases/tag/v2.69)
+    or later.
 
-Minimal run, writing both a snapshot and an event stream:
+The collector is [**bmpwatcher**](https://github.com/Vadims06/bmpwatcher) — a
+single static Go binary and a passive BMP *server*: routers dial in to
+`--bmp-port`, it never connects out to a router. It separates the initial table
+replay from the changes that follow. Its README covers the router-side BMP
+configuration for FRR, IOS-XR, Junos and SR OS.
+
+Create the API token first: **Settings → API Tokens → Create token**. The
+workspace is resolved from the token on the server and is never taken from the
+payload. The collector attaches it as `Authorization: Bearer` on every POST it
+makes; `--topolograph-api-token` defaults to `$TOPOLOGRAPH_API_TOKEN`.
+
+### Quick check
+
+Run it in the foreground once to confirm routers connect and a snapshot lands.
+Not durable — it stops with your shell.
 
 ```bash
+export TOPOLOGRAPH_API_TOKEN=sk-...
+
 bmpwatcher \
   --bmp-port=11019 \
   --source-id=pe1 \
   --watcher-name=bmp-dc1 \
   --events=/var/log/bmpwatcher/events.jsonl \
+  --topology-file=/var/log/bmpwatcher/topology.json \
   --topolograph-topology-url=https://topolograph.com/api/watcher/bgp
 ```
 
-!!! warning "Authentication is not wired into the collector yet"
-    `/api/watcher/bgp` requires `Authorization: Bearer sk-...`, and the
-    collector does not attach that header yet — a direct post is answered with
-    `401`. Until it ships, write the document locally with
-    `--topolograph-topology-file` and post it yourself (see the `curl` example
-    below).
+### With Docker, alongside Fluent Bit (recommended)
 
-Get the token from **Settings → API Tokens → Create token**. The workspace is
-resolved from the token on the server and is never taken from the payload.
+`fluentbit/docker-compose.yml` in the bmpwatcher repo carries an optional
+`bmpwatcher` service behind the `collector` profile, so one compose file runs
+the collector and the Fluent Bit event shipper together, both with
+`restart: unless-stopped`:
+
+```bash
+cd fluentbit
+cp .env.example .env      # set TOPOLOGRAPH_API_TOKEN, SOURCE_ID, LABS_DIR,
+                          # and TOPOLOGRAPH_TOPOLOGY_URL for a self-hosted instance
+docker compose --profile collector up -d
+```
+
+### As a service (systemd)
+
+For a host without Docker, the static binary under systemd is the lightest
+durable option. The repo ships `bmpwatcher.service` as a template.
+
+```bash
+sudo install -m 0755 bmpwatcher /usr/local/bin/bmpwatcher
+sudo install -m 0644 bmpwatcher.service /etc/systemd/system/bmpwatcher.service
+sudo mkdir -p /var/log/bmpwatcher
+printf 'TOPOLOGRAPH_API_TOKEN=sk-...\n' | sudo tee /etc/bmpwatcher.env >/dev/null
+sudo chmod 0600 /etc/bmpwatcher.env
+sudo systemctl enable --now bmpwatcher
+```
+
+`Restart=on-failure` and `WantedBy=multi-user.target` cover a crash and a
+reboot; logs go to the journal (`journalctl -u bmpwatcher -f`).
 
 ---
 
@@ -396,9 +436,18 @@ GET /api/graph/{graph_time}/route-lookup/{start_node}?destination=192.0.2.5&vrf=
 The decision order is deliberate:
 
 1. **Longest-prefix match** inside the selected table or VRF.
-2. **BGP best-path selection** — one path per prefix, on LOCAL_PREF, AS_PATH
-   length, ORIGIN and MED, before anything else compares protocols. A Loc-RIB
-   observation ends the comparison: it is the router's own choice.
+2. **BGP best-path selection** — one path per prefix (RFC 4271 §9.1;
+   RFC 4456 for reflected routes, RFC 4364 for VPNs), over the attributes a
+   collector feed carries:
+     1. highest `LOCAL_PREF`
+     2. shortest `AS_PATH`
+     3. lowest `ORIGIN` (IGP < EGP < incomplete)
+     4. lowest `MED`, compared only within the same neighbouring AS
+     5. eBGP-learned over iBGP-learned
+     6. lowest `ORIGINATOR_ID` / BGP Identifier
+
+   A Loc-RIB observation ends the comparison before these steps run — it is the
+   router's own choice, not a candidate to re-rank.
 3. **Administrative distance** between the surviving candidates of different
    protocols.
 4. **Recursive next-hop resolution**, loop- and depth-guarded.
@@ -436,8 +485,6 @@ under the same `sesid` are checkpoints and do not consume the window.
 
 ## Current limits
 
-- The collector does not yet attach the API token; post the snapshot with
-  `curl` in the meantime.
 - Run one collector per BMP speaker and set `--source-id`. Several speakers
   into one collector merge their observations.
 - EVPN routes are collected and stored, but the route table and route lookup
