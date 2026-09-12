@@ -129,7 +129,7 @@ Topolograph can use **Traffic Engineering (TE)** link attributes from your LSDB 
 
 - **Parsed values:** Link-level TE metric, administrative group (affinity), maximum and reservable bandwidth, and unreserved bandwidth per priority. Useful for capacity planning, path analysis, and finding links that meet or exceed certain TE constraints.
 - **OSPF:** Include **show ip ospf database opaque-area** in the same upload file as your router/network/external LSDB. Type 10 (opaque-area) LSAs carry the TE data; the rest of the graph is built from LSA 1, 2, and 5 as before.
-- **IS-IS:** TE attributes are taken from the IS-IS LSDB when using supported commands (e.g. FRR **show isis database detail**). No extra command is required beyond your normal IS-IS capture.
+- **IS-IS:** TE attributes are taken from the IS-IS LSDB when using supported commands (FRR **show isis database detail**, Nokia SR OS **show router isis database detail**, ZTE **show isis database verbose**). No extra command is required beyond your normal IS-IS capture.
 - **Using TE in Topolograph:** Once a diagram is built with TE data, you can filter edges by TE metric or bandwidth via the diagram edges API (e.g. links with TE metric above a threshold or unreserved bandwidth below a value). The same TE attribute names are used for both OSPF and IS-IS.
 
 **Filtering TE links via SDK ([topolograph-sdk](https://github.com/Vadims06/topolograph-sdk)):** Use `graph.edges_list()` with range operators `__gt`, `__lt`, `__gte`, `__lte` on TE attributes:
