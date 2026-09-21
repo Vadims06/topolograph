@@ -104,14 +104,15 @@ OcNOS and FortiOS OSPFv3: the per-LSA-type forms are required (the bare `show ip
 # Supported vendors for ISIS visualization
 | Vendor  | Command                                     | Stub network included                       | External (redistributed) network          | 
 |---------|---------------------------------------------|---------------------------------------------|--------------------------------------------------|
-| Cisco   | show isis database detail                   | YES                     | No, (need tested LSDB for adding it)                   |
-| Juniper  | show isis database extensive               | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
-| Nokia   | show router isis database detail            | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
-| Huawei   | display isis lsdb verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
-| ZTE     | show isis database verbose                  | YES, but need tested LSDB for checking it    | No, (need tested LSDB for adding it)                   |
-| IP Infusion OcNOS | show isis database verbose (use `verbose`, not `detail`; only `verbose` prints the TE sub-TLVs) | YES | No, (need tested LSDB for adding it) |
-| Fortinet FortiOS  | get router info isis database detail        | YES                     | No, (need tested LSDB for adding it)                   |
-| MikroTik RouterOS | /routing/isis/lsp/print detail without-paging | YES                   | No, (need tested LSDB for adding it)                   |
+| Cisco   | show isis database detail                   | YES                     | No, (need an LSDB sample for adding it)                   |
+| Juniper  | show isis database extensive               | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
+| Nokia   | show router isis database detail            | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
+| FRR     | show isis database detail                   | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
+| Huawei   | display isis lsdb verbose                  | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
+| ZTE     | show isis database verbose                  | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
+| IP Infusion OcNOS | show isis database verbose (use `verbose`, not `detail`; only `verbose` prints the TE sub-TLVs) | YES | YES |
+| Fortinet FortiOS  | get router info isis database detail        | YES                     | YES                   |
+| MikroTik RouterOS | /routing/isis/lsp/print detail without-paging | YES                   | No, (need an LSDB sample for adding it)                   |
   
 # Visualization via BGP-LS
 
@@ -127,9 +128,9 @@ Real-time monitoring (including TE link attributes delivered over BGP-LS) appear
 ## Traffic Engineering (TE) link attributes
 Topolograph can use **Traffic Engineering (TE)** link attributes from your LSDB for better visibility and filtering.
 
-- **Parsed values:** Link-level TE metric, administrative group (affinity), maximum and reservable bandwidth, and unreserved bandwidth per priority. Useful for capacity planning, path analysis, and finding links that meet or exceed certain TE constraints.
-- **OSPF:** Include **show ip ospf database opaque-area** in the same upload file as your router/network/external LSDB. Type 10 (opaque-area) LSAs carry the TE data; the rest of the graph is built from LSA 1, 2, and 5 as before.
-- **IS-IS:** TE attributes are taken from the IS-IS LSDB when using supported commands (FRR **show isis database detail**, Nokia SR OS **show router isis database detail**, ZTE **show isis database verbose**). No extra command is required beyond your normal IS-IS capture.
+- **Parsed values:** Link-level TE metric (`temetric`), administrative group (`admin_group`), maximum and reservable bandwidth (`max_link_bw`, `max_rsrv_link_bw`), unreserved bandwidth per priority (`unreserved_bw_0` … `unreserved_bw_7`), shared risk link group (`srlg`), interface and neighbor addresses, and link local/remote IDs. Useful for capacity planning, path analysis, and finding links that meet or exceed certain TE constraints. Which vendor's output provides which attribute, with the RFC section and sub-TLV number of each, is in [TE attributes by vendor](https://docs.topolograph.com/reference/supported-vendors/#te-attributes-by-vendor).
+- **OSPF:** Include **show ip ospf database opaque-area** in the same upload file as your router/network/external LSDB. Type 10 (opaque-area) LSAs carry the TE data; the rest of the graph is built from LSA 1, 2, and 5 as before. Supported: FRRouting and IP Infusion OcNOS.
+- **IS-IS:** TE attributes are taken from the IS-IS LSDB when using supported commands (FRR **show isis database detail**, Nokia SR OS **show router isis database detail**, ZTE **show isis database verbose**, IP Infusion OcNOS **show isis database verbose**, TE metric only). No extra command is required beyond your normal IS-IS capture. FRR prints SRLG only in builds that include [FRRouting/frr#22392](https://github.com/FRRouting/frr/pull/22392).
 - **Using TE in Topolograph:** Once a diagram is built with TE data, you can filter edges by TE metric or bandwidth via the diagram edges API (e.g. links with TE metric above a threshold or unreserved bandwidth below a value). The same TE attribute names are used for both OSPF and IS-IS.
 
 **Filtering TE links via SDK ([topolograph-sdk](https://github.com/Vadims06/topolograph-sdk)):** Use `graph.edges_list()` with range operators `__gt`, `__lt`, `__gte`, `__lte` on TE attributes:
@@ -697,4 +698,20 @@ COMMAND_REGISTRY = {
 After adding the vendor, submit a pull request to the [topolograph-sdk repository](https://github.com/Vadims06/topolograph-sdk). The SDK will automatically use these commands when collecting LSDB data from devices with the specified vendor in the inventory file.
 
 ## Used RFC
-RFC 2328
+| Protocol | RFC | What Topolograph reads |
+|---|---|---|
+| OSPFv2 | RFC 2328 | Router (1), Network (2) and AS-External (5) LSAs |
+| OSPFv2 | RFC 3630 | TE link attributes from opaque-area LSAs (type 10) |
+| OSPFv2 | RFC 4203 | Shared risk link group (SRLG), when the values arrive from a Watcher |
+| OSPFv2 | RFC 6987 | Stub router (max-metric) flag on nodes |
+| OSPFv3 | RFC 5340 | Router, Network, AS-External and Intra-Area-Prefix LSAs |
+| IS-IS | ISO/IEC 10589 | IS Reachability (TLV 2), Level 1 / Level 2 databases, overload and attached bits |
+| IS-IS | RFC 1195 | IPv4 Internal Reachability (TLV 128) |
+| IS-IS | RFC 5305 | Extended IS and IPv4 Reachability (TLVs 22, 135) and TE sub-TLVs |
+| IS-IS | RFC 5307 | Shared risk link group (TLV 138) and link local / remote identifiers |
+| IS-IS | RFC 5308 | IPv6 Reachability (TLV 236) |
+| MPLS TE | RFC 3209 | Setup and holding priorities in CSPF placement of LSP tunnels |
+| BGP | RFC 4271, RFC 4456, RFC 4364 | Best-path selection, route reflection and VPN routes |
+| BGP | RFC 7854, RFC 8671, RFC 9069 | BMP: Adj-RIB-In / Adj-RIB-Out and Loc-RIB |
+
+The same list, with the TE attributes per vendor, is in the [documentation](https://docs.topolograph.com/reference/supported-vendors/#supported-rfcs).
