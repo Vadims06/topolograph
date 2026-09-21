@@ -1,0 +1,92 @@
+name: 13-hosts-demo-isis
+
+mgmt:
+  network: isis13-mgmt
+  ipv4-subnet: 172.31.21.0/24
+
+topology:
+  defaults:
+    kind: linux
+    image: vadims06/frr:v10.8_srlg
+
+  nodes:
+    r10:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r10/frr.conf:/etc/frr/frr.conf
+    r100:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r100/frr.conf:/etc/frr/frr.conf
+    r101:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r101/frr.conf:/etc/frr/frr.conf
+    r11:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r11/frr.conf:/etc/frr/frr.conf
+    r110:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r110/frr.conf:/etc/frr/frr.conf
+    r111:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r111/frr.conf:/etc/frr/frr.conf
+    r13:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r13/frr.conf:/etc/frr/frr.conf
+    r130:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r130/frr.conf:/etc/frr/frr.conf
+    r131:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r131/frr.conf:/etc/frr/frr.conf
+    r14:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r14/frr.conf:/etc/frr/frr.conf
+    r15:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r15/frr.conf:/etc/frr/frr.conf
+    r30:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r30/frr.conf:/etc/frr/frr.conf
+    r31:
+      binds:
+        - daemons:/etc/frr/daemons
+        - r31/frr.conf:/etc/frr/frr.conf
+
+  links:
+    - endpoints: ["r10:eth1", "r100:eth1"]
+    - endpoints: ["r10:eth2", "r100:eth2"]
+    - endpoints: ["r10:eth3", "r101:eth1"]
+    - endpoints: ["r10:eth4", "r11:eth1"]
+    - endpoints: ["r11:eth2", "r101:eth2"]
+    - endpoints: ["r11:eth3", "r100:eth3"]
+    - endpoints: ["r13:eth1", "r101:eth3"]
+    - endpoints: ["r13:eth2", "r100:eth4"]
+    - endpoints: ["r14:eth1", "r111:eth1"]
+    - endpoints: ["r14:eth2", "r110:eth1"]
+    - endpoints: ["r15:eth1", "r111:eth2"]
+    - endpoints: ["r15:eth2", "r110:eth2"]
+    - endpoints: ["r100:eth5", "r111:eth3"]
+    - endpoints: ["r100:eth6", "r110:eth3"]
+    - endpoints: ["r100:eth7", "r101:eth4"]
+    - endpoints: ["r101:eth5", "r110:eth4"]
+    - endpoints: ["r101:eth6", "r111:eth4"]
+    - endpoints: ["r110:eth5", "r111:eth5"]
+    - endpoints: ["r10:eth5", "r30:eth1"]
+    - endpoints: ["r11:eth4", "r31:eth1"]
+    - endpoints: ["r30:eth2", "r131:eth1"]
+    - endpoints: ["r30:eth3", "r130:eth1"]
+    - endpoints: ["r30:eth4", "r31:eth2"]
+    - endpoints: ["r31:eth3", "r131:eth2"]
+    - endpoints: ["r31:eth4", "r130:eth2"]
+    - endpoints: ["r130:eth3", "r131:eth3"]

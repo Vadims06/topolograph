@@ -1,0 +1,803 @@
+Area lab:
+IS-IS Level-1 link-state database:
+LSP ID                  PduLen  SeqNumber   Chksum  Holdtime  ATT/P/OL
+1230.3003.0030.00-00 *    326   0x00000002  0xf8c7    1190    1/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0002
+  TE Router ID: 123.30.30.30
+  Router Capability: 123.30.30.30 , D:0, S:0
+    SR Algorithm:
+      0: SPF
+  Extended Reachability: 1231.2303.1031.00 (Metric: 10)
+    Local Interface IP Address(es): 10.30.131.1
+    Remote Interface IP Address(es): 10.30.131.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2303.0030.00 (Metric: 10)
+    Local Interface IP Address(es): 10.30.130.1
+    Remote Interface IP Address(es): 10.30.130.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1230.3103.1031.00 (Metric: 10)
+    Local Interface IP Address(es): 10.30.31.1
+    Remote Interface IP Address(es): 10.30.31.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  IPv4 Interface Address: 123.30.30.30
+  Extended IP Reachability: 10.1.30.0/30 (Metric: 10)
+  Extended IP Reachability: 10.30.131.0/30 (Metric: 10)
+  Extended IP Reachability: 10.30.130.0/30 (Metric: 10)
+  Extended IP Reachability: 10.30.31.0/30 (Metric: 10)
+  Extended IP Reachability: 123.30.30.30/32 (Metric: 10)
+
+1230.3103.1031.00-00      326   0x00000002  0xfda5    1160    1/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0002
+  TE Router ID: 123.31.31.31
+  Router Capability: 123.31.31.31 , D:0, S:0
+  Extended Reachability: 1230.3003.0030.00 (Metric: 10)
+    Local Interface IP Address(es): 10.30.31.2
+    Remote Interface IP Address(es): 10.30.31.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2303.1031.00 (Metric: 10)
+    Local Interface IP Address(es): 10.31.131.1
+    Remote Interface IP Address(es): 10.31.131.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2303.0030.00 (Metric: 10)
+    Local Interface IP Address(es): 10.31.130.1
+    Remote Interface IP Address(es): 10.31.130.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  IPv4 Interface Address: 123.31.31.31
+  Extended IP Reachability: 10.1.31.0/30 (Metric: 20)
+  Extended IP Reachability: 10.30.31.0/30 (Metric: 10)
+  Extended IP Reachability: 10.31.131.0/30 (Metric: 10)
+  Extended IP Reachability: 10.31.130.0/30 (Metric: 10)
+  Extended IP Reachability: 123.31.31.31/32 (Metric: 10)
+
+1231.2303.0030.00-00      317   0x00000002  0xdb79    1160    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0002
+  TE Router ID: 123.123.30.30
+  Router Capability: 123.123.30.30 , D:0, S:0
+  Extended Reachability: 1230.3003.0030.00 (Metric: 10)
+    Local Interface IP Address(es): 10.30.130.2
+    Remote Interface IP Address(es): 10.30.130.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1230.3103.1031.00 (Metric: 10)
+    Local Interface IP Address(es): 10.31.130.2
+    Remote Interface IP Address(es): 10.31.130.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2303.1031.00 (Metric: 10)
+    Local Interface IP Address(es): 10.130.131.1
+    Remote Interface IP Address(es): 10.130.131.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  IPv4 Interface Address: 123.123.30.30
+  Extended IP Reachability: 10.30.130.0/30 (Metric: 10)
+  Extended IP Reachability: 10.31.130.0/30 (Metric: 10)
+  Extended IP Reachability: 10.130.131.0/30 (Metric: 10)
+  Extended IP Reachability: 123.123.30.30/32 (Metric: 10)
+
+1231.2303.1031.00-00      317   0x00000002  0x4bfb    1179    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0002
+  TE Router ID: 123.123.31.31
+  Router Capability: 123.123.31.31 , D:0, S:0
+  Extended Reachability: 1230.3003.0030.00 (Metric: 10)
+    Local Interface IP Address(es): 10.30.131.2
+    Remote Interface IP Address(es): 10.30.131.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1230.3103.1031.00 (Metric: 10)
+    Local Interface IP Address(es): 10.31.131.2
+    Remote Interface IP Address(es): 10.31.131.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2303.0030.00 (Metric: 10)
+    Local Interface IP Address(es): 10.130.131.2
+    Remote Interface IP Address(es): 10.130.131.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  IPv4 Interface Address: 123.123.31.31
+  Extended IP Reachability: 10.30.131.0/30 (Metric: 10)
+  Extended IP Reachability: 10.31.131.0/30 (Metric: 10)
+  Extended IP Reachability: 10.130.131.0/30 (Metric: 10)
+  Extended IP Reachability: 123.123.31.31/32 (Metric: 10)
+
+    4 LSPs
+
+IS-IS Level-2 link-state database:
+LSP ID                  PduLen  SeqNumber   Chksum  Holdtime  ATT/P/OL
+1230.1001.0010.00-00      538   0x00000002  0x402e    1140    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0001
+  TE Router ID: 123.10.10.10
+  Router Capability: 123.10.10.10 , D:0, S:0
+  Extended Reachability: 1231.2310.0100.00 (Metric: 15)
+    Local Interface IP Address(es): 123.1.1.10
+    Remote Interface IP Address(es): 123.1.1.100
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 15
+  Extended Reachability: 1231.2310.0100.00 (Metric: 10)
+    Local Interface IP Address(es): 10.10.100.1
+    Remote Interface IP Address(es): 10.10.100.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2310.1101.00 (Metric: 35)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.10.101.1
+    Remote Interface IP Address(es): 10.10.101.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 35
+  Extended Reachability: 1230.1101.1011.00 (Metric: 10)
+    Local Interface IP Address(es): 10.10.11.1
+    Remote Interface IP Address(es): 10.10.11.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1230.3003.0030.00 (Metric: 1)
+    Local Interface IP Address(es): 10.1.30.1
+    Remote Interface IP Address(es): 10.1.30.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 1
+  Shared Risk Link Group: Neighbor 1231.2310.0100.00
+    Interface IP Address: 123.1.1.10
+    Neighbor IP Address: 123.1.1.100
+    SRLG Values: 100
+  Shared Risk Link Group: Neighbor 1231.2310.0100.00
+    Interface IP Address: 10.10.100.1
+    Neighbor IP Address: 10.10.100.2
+    SRLG Values: 100 300
+  IPv4 Interface Address: 123.10.10.10
+  Extended IP Reachability: 123.1.1.0/24 (Metric: 15)
+  Extended IP Reachability: 10.10.100.0/30 (Metric: 10)
+  Extended IP Reachability: 10.10.101.0/30 (Metric: 35)
+  Extended IP Reachability: 10.10.11.0/30 (Metric: 10)
+  Extended IP Reachability: 10.1.30.0/30 (Metric: 1)
+  Extended IP Reachability: 123.10.10.10/32 (Metric: 10)
+
+1230.1101.1011.00-00      402   0x00000002  0x49c7    1181    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0001
+  TE Router ID: 123.11.11.11
+  Router Capability: 123.11.11.11 , D:0, S:0
+  Extended Reachability: 1230.1001.0010.00 (Metric: 10)
+    Local Interface IP Address(es): 10.10.11.2
+    Remote Interface IP Address(es): 10.10.11.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2310.1101.00 (Metric: 20)
+    Local Interface IP Address(es): 10.11.101.1
+    Remote Interface IP Address(es): 10.11.101.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 20
+  Extended Reachability: 1231.2310.0100.00 (Metric: 10)
+    Local Interface IP Address(es): 10.11.100.1
+    Remote Interface IP Address(es): 10.11.100.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1230.3103.1031.00 (Metric: 20)
+    Local Interface IP Address(es): 10.1.31.1
+    Remote Interface IP Address(es): 10.1.31.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 20
+  IPv4 Interface Address: 123.11.11.11
+  Extended IP Reachability: 10.10.11.0/30 (Metric: 10)
+  Extended IP Reachability: 10.11.101.0/30 (Metric: 20)
+  Extended IP Reachability: 10.11.100.0/30 (Metric: 10)
+  Extended IP Reachability: 10.1.31.0/30 (Metric: 20)
+  Extended IP Reachability: 123.11.11.11/32 (Metric: 10)
+
+1230.1301.3013.00-00      240   0x00000002  0x4f30    1140    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0001
+  TE Router ID: 123.13.13.13
+  Router Capability: 123.13.13.13 , D:0, S:0
+  Extended Reachability: 1231.2310.1101.00 (Metric: 25)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.13.101.1
+    Remote Interface IP Address(es): 10.13.101.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 25
+  Extended Reachability: 1231.2310.0100.00 (Metric: 10)
+    Local Interface IP Address(es): 10.13.100.1
+    Remote Interface IP Address(es): 10.13.100.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  IPv4 Interface Address: 123.13.13.13
+  Extended IP Reachability: 10.13.101.0/30 (Metric: 25)
+  Extended IP Reachability: 10.13.100.0/30 (Metric: 10)
+  Extended IP Reachability: 123.13.13.13/32 (Metric: 10)
+
+1230.1401.4014.00-00      240   0x00000002  0xf435    1161    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0001
+  TE Router ID: 123.14.14.14
+  Router Capability: 123.14.14.14 , D:0, S:0
+  Extended Reachability: 1231.2311.1111.00 (Metric: 10)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.14.111.1
+    Remote Interface IP Address(es): 10.14.111.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2311.0110.00 (Metric: 10)
+    Local Interface IP Address(es): 10.14.110.1
+    Remote Interface IP Address(es): 10.14.110.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  IPv4 Interface Address: 123.14.14.14
+  Extended IP Reachability: 10.14.111.0/30 (Metric: 10)
+  Extended IP Reachability: 10.14.110.0/30 (Metric: 10)
+  Extended IP Reachability: 123.14.14.14/32 (Metric: 10)
+
+1230.1501.5015.00-00      240   0x00000002  0x54b1    1189    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0001
+  TE Router ID: 123.15.15.15
+  Router Capability: 123.15.15.15 , D:0, S:0
+  Extended Reachability: 1231.2311.1111.00 (Metric: 10)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.15.111.1
+    Remote Interface IP Address(es): 10.15.111.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2311.0110.00 (Metric: 10)
+    Local Interface IP Address(es): 10.15.110.1
+    Remote Interface IP Address(es): 10.15.110.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  IPv4 Interface Address: 123.15.15.15
+  Extended IP Reachability: 10.15.111.0/30 (Metric: 10)
+  Extended IP Reachability: 10.15.110.0/30 (Metric: 10)
+  Extended IP Reachability: 123.15.15.15/32 (Metric: 10)
+
+1230.3003.0030.00-00 *    178   0x00000002  0x8f08    1136    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0002
+  TE Router ID: 123.30.30.30
+  Router Capability: 123.30.30.30 , D:0, S:0
+    SR Algorithm:
+      0: SPF
+  Extended Reachability: 1230.1001.0010.00 (Metric: 10)
+    Local Interface IP Address(es): 10.1.30.2
+    Remote Interface IP Address(es): 10.1.30.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  IPv4 Interface Address: 123.30.30.30
+  Extended IP Reachability: 10.1.30.0/30 (Metric: 10)
+  Extended IP Reachability: 10.30.131.0/30 (Metric: 10)
+  Extended IP Reachability: 10.30.130.0/30 (Metric: 10)
+  Extended IP Reachability: 10.30.31.0/30 (Metric: 10)
+  Extended IP Reachability: 123.30.30.30/32 (Metric: 10)
+
+1230.3103.1031.00-00      178   0x00000002  0xf74c    1184    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0002
+  TE Router ID: 123.31.31.31
+  Router Capability: 123.31.31.31 , D:0, S:0
+  Extended Reachability: 1230.1101.1011.00 (Metric: 20)
+    Local Interface IP Address(es): 10.1.31.2
+    Remote Interface IP Address(es): 10.1.31.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 20
+  IPv4 Interface Address: 123.31.31.31
+  Extended IP Reachability: 10.1.31.0/30 (Metric: 20)
+  Extended IP Reachability: 10.30.31.0/30 (Metric: 10)
+  Extended IP Reachability: 10.31.131.0/30 (Metric: 10)
+  Extended IP Reachability: 10.31.130.0/30 (Metric: 10)
+  Extended IP Reachability: 123.31.31.31/32 (Metric: 10)
+
+1231.2310.0100.00-00      750   0x00000002  0x2571    1144    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0001
+  TE Router ID: 123.123.100.100
+  Router Capability: 123.123.100.100 , D:0, S:0
+  Extended Reachability: 1230.1001.0010.00 (Metric: 15)
+    Local Interface IP Address(es): 123.1.1.100
+    Remote Interface IP Address(es): 123.1.1.10
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 15
+  Extended Reachability: 1230.1001.0010.00 (Metric: 10)
+    Local Interface IP Address(es): 10.10.100.2
+    Remote Interface IP Address(es): 10.10.100.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1230.1101.1011.00 (Metric: 10)
+    Local Interface IP Address(es): 10.11.100.2
+    Remote Interface IP Address(es): 10.11.100.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1230.1301.3013.00 (Metric: 10)
+    Local Interface IP Address(es): 10.13.100.2
+    Remote Interface IP Address(es): 10.13.100.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2311.1111.00 (Metric: 20)
+    Local Interface IP Address(es): 10.100.111.1
+    Remote Interface IP Address(es): 10.100.111.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2311.0110.00 (Metric: 10)
+    Admin Group: 0x00000004
+      Bit positions: 2
+    Local Interface IP Address(es): 10.100.110.1
+    Remote Interface IP Address(es): 10.100.110.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 500000 (Bytes/sec),	[5]: 500000 (Bytes/sec)
+      [6]: 500000 (Bytes/sec),	[7]: 500000 (Bytes/sec)
+    Traffic Engineering Metric: 100
+  Extended Reachability: 1231.2310.1101.00 (Metric: 15)
+    Local Interface IP Address(es): 10.100.101.1
+    Remote Interface IP Address(es): 10.100.101.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Shared Risk Link Group: Neighbor 1230.1001.0010.00
+    Interface IP Address: 123.1.1.100
+    Neighbor IP Address: 123.1.1.10
+    SRLG Values: 100
+  Shared Risk Link Group: Neighbor 1230.1001.0010.00
+    Interface IP Address: 10.10.100.2
+    Neighbor IP Address: 10.10.100.1
+    SRLG Values: 100 300
+  Shared Risk Link Group: Neighbor 1231.2311.1111.00
+    Interface IP Address: 10.100.111.1
+    Neighbor IP Address: 10.100.111.2
+    SRLG Values: 200
+  Shared Risk Link Group: Neighbor 1231.2311.0110.00
+    Interface IP Address: 10.100.110.1
+    Neighbor IP Address: 10.100.110.2
+    SRLG Values: 200
+  IPv4 Interface Address: 123.123.100.100
+  Extended IP Reachability: 123.1.1.0/24 (Metric: 15)
+  Extended IP Reachability: 10.10.100.0/30 (Metric: 10)
+  Extended IP Reachability: 10.11.100.0/30 (Metric: 10)
+  Extended IP Reachability: 10.13.100.0/30 (Metric: 10)
+  Extended IP Reachability: 10.100.111.0/30 (Metric: 20)
+  Extended IP Reachability: 10.100.110.0/30 (Metric: 10)
+  Extended IP Reachability: 10.100.101.0/30 (Metric: 15)
+  Extended IP Reachability: 123.123.100.100/32 (Metric: 10)
+
+1231.2310.1101.00-00      586   0x00000002  0x09c1    1151    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0001
+  TE Router ID: 123.123.101.101
+  Router Capability: 123.123.101.101 , D:0, S:0
+  Extended Reachability: 1230.1001.0010.00 (Metric: 35)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.10.101.2
+    Remote Interface IP Address(es): 10.10.101.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 35
+  Extended Reachability: 1230.1101.1011.00 (Metric: 20)
+    Local Interface IP Address(es): 10.11.101.2
+    Remote Interface IP Address(es): 10.11.101.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 20
+  Extended Reachability: 1230.1301.3013.00 (Metric: 25)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.13.101.2
+    Remote Interface IP Address(es): 10.13.101.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 25
+  Extended Reachability: 1231.2310.0100.00 (Metric: 15)
+    Local Interface IP Address(es): 10.100.101.2
+    Remote Interface IP Address(es): 10.100.101.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2311.0110.00 (Metric: 15)
+    Local Interface IP Address(es): 10.101.110.1
+    Remote Interface IP Address(es): 10.101.110.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 15
+  Extended Reachability: 1231.2311.1111.00 (Metric: 10)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.101.111.1
+    Remote Interface IP Address(es): 10.101.111.2
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  IPv4 Interface Address: 123.123.101.101
+  Extended IP Reachability: 10.10.101.0/30 (Metric: 35)
+  Extended IP Reachability: 10.11.101.0/30 (Metric: 20)
+  Extended IP Reachability: 10.13.101.0/30 (Metric: 25)
+  Extended IP Reachability: 10.100.101.0/30 (Metric: 15)
+  Extended IP Reachability: 10.101.110.0/30 (Metric: 15)
+  Extended IP Reachability: 10.101.111.0/30 (Metric: 10)
+  Extended IP Reachability: 123.123.101.101/32 (Metric: 10)
+
+1231.2311.0110.00-00      456   0x00000002  0xb62d    1178    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0001
+  TE Router ID: 123.123.110.110
+  Router Capability: 123.123.110.110 , D:0, S:0
+  Extended Reachability: 1230.1401.4014.00 (Metric: 10)
+    Local Interface IP Address(es): 10.14.110.2
+    Remote Interface IP Address(es): 10.14.110.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1230.1501.5015.00 (Metric: 10)
+    Local Interface IP Address(es): 10.15.110.2
+    Remote Interface IP Address(es): 10.15.110.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2310.0100.00 (Metric: 10)
+    Admin Group: 0x00000004
+      Bit positions: 2
+    Local Interface IP Address(es): 10.100.110.2
+    Remote Interface IP Address(es): 10.100.110.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 500000 (Bytes/sec),	[5]: 500000 (Bytes/sec)
+      [6]: 500000 (Bytes/sec),	[7]: 500000 (Bytes/sec)
+    Traffic Engineering Metric: 100
+  Extended Reachability: 1231.2310.1101.00 (Metric: 15)
+    Local Interface IP Address(es): 10.101.110.2
+    Remote Interface IP Address(es): 10.101.110.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 15
+  Extended Reachability: 1231.2311.1111.00 (Metric: 10)
+    Remote Interface IP Address(es): 10.110.111.2
+  Shared Risk Link Group: Neighbor 1231.2310.0100.00
+    Interface IP Address: 10.100.110.2
+    Neighbor IP Address: 10.100.110.1
+    SRLG Values: 200
+  IPv4 Interface Address: 123.123.110.110
+  Extended IP Reachability: 10.14.110.0/30 (Metric: 10)
+  Extended IP Reachability: 10.15.110.0/30 (Metric: 10)
+  Extended IP Reachability: 10.100.110.0/30 (Metric: 10)
+  Extended IP Reachability: 10.101.110.0/30 (Metric: 15)
+  Extended IP Reachability: 10.110.111.0/30 (Metric: 10)
+  Extended IP Reachability: 123.123.110.110/32 (Metric: 10)
+
+1231.2311.1111.00-00      468   0x00000002  0xe6b6    1171    0/0/0
+  Protocols Supported: IPv4
+  Area Address: 49.0001
+  TE Router ID: 123.123.111.111
+  Router Capability: 123.123.111.111 , D:0, S:0
+  Extended Reachability: 1230.1401.4014.00 (Metric: 10)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.14.111.2
+    Remote Interface IP Address(es): 10.14.111.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1230.1501.5015.00 (Metric: 10)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.15.111.2
+    Remote Interface IP Address(es): 10.15.111.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2310.0100.00 (Metric: 20)
+    Local Interface IP Address(es): 10.100.111.2
+    Remote Interface IP Address(es): 10.100.111.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2310.1101.00 (Metric: 10)
+    Admin Group: 0x00000002
+      Bit positions: 1
+    Local Interface IP Address(es): 10.101.111.2
+    Remote Interface IP Address(es): 10.101.111.1
+    Maximum Bandwidth: 1.25e+07 (Bytes/sec)
+    Maximum Reservable Bandwidth: 1.25e+07 (Bytes/sec)
+    Unreserved Bandwidth:
+      [0]: 1.25e+06 (Bytes/sec),	[1]: 1.25e+06 (Bytes/sec)
+      [2]: 1.25e+06 (Bytes/sec),	[3]: 1.25e+06 (Bytes/sec)
+      [4]: 1.25e+06 (Bytes/sec),	[5]: 1.25e+06 (Bytes/sec)
+      [6]: 1.25e+06 (Bytes/sec),	[7]: 1.25e+06 (Bytes/sec)
+    Traffic Engineering Metric: 10
+  Extended Reachability: 1231.2311.0110.00 (Metric: 10)
+    Remote Interface IP Address(es): 10.110.111.1
+  Shared Risk Link Group: Neighbor 1231.2310.0100.00
+    Interface IP Address: 10.100.111.2
+    Neighbor IP Address: 10.100.111.1
+    SRLG Values: 200
+  IPv4 Interface Address: 123.123.111.111
+  Extended IP Reachability: 10.14.111.0/30 (Metric: 10)
+  Extended IP Reachability: 10.15.111.0/30 (Metric: 10)
+  Extended IP Reachability: 10.100.111.0/30 (Metric: 20)
+  Extended IP Reachability: 10.101.111.0/30 (Metric: 10)
+  Extended IP Reachability: 10.110.111.0/30 (Metric: 10)
+  Extended IP Reachability: 123.123.111.111/32 (Metric: 10)
+
+    11 LSPs
+
