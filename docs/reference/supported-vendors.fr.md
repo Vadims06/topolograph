@@ -50,16 +50,26 @@ puis [importez-la](../ingestion/text-file.md).
 | Fournisseur | Commande | Réseau stub | External (redistribué) |
 | --- | --- | :---: | :---: |
 | Arista | `show ipv6 ospf database detail` | ✅ | ✅ |
+| IP Infusion OcNOS | `show ipv6 ospf database router`, `network`, `external`, `intra-prefix` | ✅ | ✅ |
+| Fortinet FortiOS | `get router info6 ospf database router`, `network`, `external`, `intra-prefix` | ✅ | ✅ |
+| MikroTik RouterOS | `/routing/ospf/lsa/print detail without-paging where instance=v3` | ✅ | ✅ |
+
+!!! note
+    OcNOS et FortiOS exigent les formes par type de LSA : `show ipv6 ospf database` / `get router info6 ospf database` sans type n'affiche qu'une table d'index, et `intra-prefix` est obligatoire car OSPFv3 ne transporte les préfixes que dans ce LSA.
 
 ## IS-IS
 
 | Fournisseur | Commande | Réseau stub | External (redistribué) | Flags de nœud (OL/ATT) |
 | --- | --- | --- | --- | :---: |
-| Cisco | `show isis database detail` | ✅ | Pas encore (nécessite une LSDB testée) | ✅ |
-| Juniper | `show isis database extensive` | ✅ (nécessite une LSDB testée pour confirmer) | Pas encore (nécessite une LSDB testée) | ✅ (nécessite une LSDB testée pour confirmer) |
-| Nokia | `show router isis database detail` | ✅ (nécessite une LSDB testée pour confirmer) | Pas encore (nécessite une LSDB testée) | ✅ (nécessite une LSDB testée pour confirmer) |
-| Huawei | `display isis lsdb verbose` | ✅ (nécessite une LSDB testée pour confirmer) | Pas encore (nécessite une LSDB testée) | ✅ (nécessite une LSDB testée pour confirmer) |
-| ZTE | `show isis database verbose` | ✅ (nécessite une LSDB testée pour confirmer) | Pas encore (nécessite une LSDB testée) | ✅ (nécessite une LSDB testée pour confirmer) |
+| Cisco | `show isis database detail` | ✅ | Pas encore (nécessite un exemple de LSDB) | ✅ |
+| Juniper | `show isis database extensive` | ✅ (nécessite un exemple de LSDB pour confirmer) | Pas encore (nécessite un exemple de LSDB) | ✅ (nécessite un exemple de LSDB pour confirmer) |
+| Nokia | `show router isis database detail` | ✅ (nécessite un exemple de LSDB pour confirmer) | Pas encore (nécessite un exemple de LSDB) | ✅ (nécessite un exemple de LSDB pour confirmer) |
+| Huawei | `display isis lsdb verbose` | ✅ (nécessite un exemple de LSDB pour confirmer) | Pas encore (nécessite un exemple de LSDB) | ✅ (nécessite un exemple de LSDB pour confirmer) |
+| ZTE | `show isis database verbose` | ✅ (nécessite un exemple de LSDB pour confirmer) | Pas encore (nécessite un exemple de LSDB) | ✅ (nécessite un exemple de LSDB pour confirmer) |
+| FRRouting | `show isis database detail` | ✅ | Pas encore (nécessite un exemple de LSDB) | ✅ |
+| IP Infusion OcNOS | `show isis database verbose` | ✅ | ✅ | ✅ |
+| Fortinet FortiOS | `get router info isis database detail` | ✅ | ✅ | ✅ (nécessite un exemple de LSDB pour confirmer) |
+| MikroTik RouterOS | `/routing/isis/lsp/print detail without-paging` | ✅ | ✅ | |
 
 !!! info "Flags de nœud (overload / attached)"
     Overload (OL) et attached (ATT) sont lus depuis la colonne `ATT/P/OL`
@@ -68,7 +78,7 @@ puis [importez-la](../ingestion/text-file.md).
     (qui dérive en plus ABR/ASBR via BGP-LS).
 
 !!! info "Un cas non pris en charge ?"
-    Plusieurs scénarios IS-IS sont marqués « nécessite une LSDB testée » —
+    Plusieurs scénarios IS-IS sont marqués « nécessite un exemple de LSDB » —
     si vous pouvez partager un exemple de base de données, le support peut
     être ajouté. Ouvrez une issue sur le dépôt concerné.
 
@@ -78,18 +88,74 @@ Le parser IS-IS (utilisé par Topolograph et par
 l'[IS-IS Watcher](../monitoring/isis-watcher.md)) comprend les TLV
 suivants :
 
-| TLV | # | Cisco | Juniper | Nokia | FRR | Huawei | ZTE |
-| --- | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| IS Reachability | 2 | ✅ | ✅ | ✅ | ✅ | | ✅ |
-| Extended IS Reachability (new) | 22 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| IPv4 Internal Reachability (old) | 128 | ✅ | ✅ | ✅ | ✅ | ✅ | |
-| IPv4 External Reachability (old) | 130 | | | | | | |
-| Extended IPv4 Reachability (new) | 135 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| IPv6 Reachability | 236 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| TLV | # | RFC | Cisco | Juniper | Nokia | FRR | Huawei | ZTE | MikroTik |
+| --- | :-: | --- | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| IS Reachability | 2 | ISO 10589 | ✅ | ✅ | ✅ | ✅ |  | ✅ | ✅ |
+| Extended IS Reachability (new) | 22 | RFC 5305 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| IPv4 Internal Reachability (old) | 128 | RFC 1195 | ✅ | ✅ | ✅ | ✅ | ✅ |  | ✅ |
+| IPv4 External Reachability (old) | 130 | RFC 1195 |  |  |  |  |  |  |  |
+| Extended IPv4 Reachability (new) | 135 | RFC 5305 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| IPv6 Reachability | 236 | RFC 5308 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 Les métriques **narrow** (ancien style) et **wide** (nouveau style) sont
 toutes deux analysées. Les métriques wide portent des attributs TE — voir
 [Ingénierie de trafic](../analysis/traffic-engineering.md).
+
+## Attributs TE par fournisseur { #te-attributes-by-vendor }
+
+Ce que l'analyseur de chaque fournisseur convertit en attributs de lien. Une cellule vide signifie que l'attribut n'est pas lu depuis cette sortie, même si le routeur l'annonce. Une session [Watcher](../monitoring/isis-watcher.md) ou BGP-LS transporte tous les attributs annoncés par le routeur.
+
+### IS-IS { #te-is-is }
+
+| Attribut TE | Nom API/SDK | Défini dans | FRR | Nokia | ZTE | OcNOS |
+| --- | --- | --- | :-: | :-: | :-: | :-: |
+| Métrique TE par défaut | `temetric` | RFC 5305 §3.7, sub-TLV 18 | ✅ | ✅ |  | ✅ |
+| Groupe administratif | `admin_group` | RFC 5305 §3.1, sub-TLV 3 | ✅ | ✅ | ✅ |  |
+| Bande passante maximale du lien | `max_link_bw` | RFC 5305 §3.4, sub-TLV 9 | ✅ | ✅ | ✅ |  |
+| Bande passante réservable maximale | `max_rsrv_link_bw` | RFC 5305 §3.5, sub-TLV 10 | ✅ | ✅ | ✅ |  |
+| Bande passante non réservée (par priorité) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 5305 §3.6, sub-TLV 11 | ✅ | ✅ | ✅ |  |
+| Groupe de liens à risque partagé | `srlg` | RFC 5307 §1.2, TLV 138 | ✅ |  |  |  |
+| Adresse de l'interface / du voisin | `local_ip_address`, `remote_ip_address` | RFC 5305 §3.2, §3.3, sub-TLVs 6 / 8 | ✅ | ✅ | ✅ |  |
+| Identifiant local / distant du lien | `link_local_id`, `link_remote_id` | RFC 5307 §1.1, sub-TLV 4 |  |  | ✅ |  |
+
+Commandes qui affichent les sous-TLV : `show isis database detail` (FRR), `show router isis database detail` (Nokia SR OS), `show isis database verbose` (ZTE, IP Infusion OcNOS). OcNOS n'affiche les sous-TLV TE qu'avec `verbose`, pas avec `detail`.
+
+!!! note
+    FRR n'affiche le SRLG que dans les builds qui incluent [FRRouting/frr#22392](https://github.com/FRRouting/frr/pull/22392).
+
+### OSPF { #te-ospf }
+
+| Attribut TE | Nom API/SDK | Défini dans | FRR | OcNOS |
+| --- | --- | --- | :-: | :-: |
+| Métrique TE par défaut | `temetric` | RFC 3630 §2.5.5, sub-TLV 5 | ✅ | ✅ |
+| Groupe administratif | `admin_group` | RFC 3630 §2.5.9, sub-TLV 9 | ✅ |  |
+| Bande passante maximale du lien | `max_link_bw` | RFC 3630 §2.5.6, sub-TLV 6 | ✅ |  |
+| Bande passante réservable maximale | `max_rsrv_link_bw` | RFC 3630 §2.5.7, sub-TLV 7 | ✅ |  |
+| Bande passante non réservée (par priorité) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 3630 §2.5.8, sub-TLV 8 | ✅ |  |
+| Groupe de liens à risque partagé | `srlg` | RFC 4203 §1.3, sub-TLV 16 |  |  |
+| Adresse de l'interface locale / distante | `local_ip_address`, `remote_ip_address` | RFC 3630 §2.5.3, §2.5.4, sub-TLVs 3 / 4 | ✅ | ✅ |
+
+Ajoutez `show ip ospf database opaque-area` au même fichier de chargement. OcNOS affiche la métrique TE sous le nom `Admin Metric`.
+
+## RFC pris en charge { #supported-rfcs }
+
+RFC implémentés dans les analyseurs et les calculs de Topolograph.
+
+| Protocole | RFC | Ce que lit Topolograph |
+| --- | --- | --- |
+| OSPFv2 | RFC 2328 | LSA Router (1), Network (2) et AS-External (5) |
+| OSPFv2 | RFC 3630 | Attributs TE des liens issus des LSA opaque-area (type 10) |
+| OSPFv2 | RFC 4203 | Groupe de liens à risque partagé (SRLG), lorsque les valeurs proviennent d'un Watcher |
+| OSPFv2 | RFC 6987 | Drapeau stub router (max-metric) sur les nœuds |
+| OSPFv3 | RFC 5340 | LSA Router, Network, AS-External et Intra-Area-Prefix |
+| IS-IS | ISO/IEC 10589 | IS Reachability (TLV 2), bases Level 1 / Level 2, bits overload et attached |
+| IS-IS | RFC 1195 | IPv4 Internal Reachability (TLV 128) |
+| IS-IS | RFC 5305 | Extended IS et IPv4 Reachability (TLV 22, 135) et sous-TLV TE |
+| IS-IS | RFC 5307 | Groupe de liens à risque partagé (TLV 138) et identifiants local / distant du lien |
+| IS-IS | RFC 5308 | IPv6 Reachability (TLV 236) |
+| MPLS TE | RFC 3209 | Priorités setup et holding dans le placement CSPF des tunnels LSP |
+| BGP | RFC 4271, RFC 4456, RFC 4364 | Sélection du meilleur chemin, route reflection et routes VPN |
+| BGP | RFC 7854, RFC 8671, RFC 9069 | BMP : Adj-RIB-In / Adj-RIB-Out et Loc-RIB |
 
 ## Ingestion via BGP-LS
 

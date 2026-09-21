@@ -13,14 +13,14 @@ disposición para una visualización y filtrado más completos, tanto para
 
 ## Qué analiza Topolograph { #what-topolograph-parses }
 
-| Attribute | API/SDK name | Meaning |
-| --- | --- | --- |
-| TE default metric | `temetric` | métrica de enlace específica de TE (independiente del costo de IGP) |
-| Administrative group | `admin_group` | afinidad / color / clase de recurso |
-| Maximum link bandwidth | `max_link_bw` | capacidad física del enlace |
-| Maximum reservable bandwidth | `max_rsrv_link_bw` | ancho de banda disponible para reserva |
-| Unreserved bandwidth (per priority) | `unreserved_bw_0` … `unreserved_bw_7` | ancho de banda restante en cada una de las 8 prioridades de TE |
-| Shared risk link group | `srlg` | lista de ID de SRLG a los que pertenece el enlace (RFC 4203 / RFC 5307) |
+| Attribute | API/SDK name | Meaning | Definido en |
+| --- | --- | --- | --- |
+| TE default metric | `temetric` | métrica de enlace específica de TE (independiente del costo de IGP) | RFC 3630 §2.5.5 / RFC 5305 §3.7 |
+| Administrative group | `admin_group` | afinidad / color / clase de recurso | RFC 3630 §2.5.9 / RFC 5305 §3.1 |
+| Maximum link bandwidth | `max_link_bw` | capacidad física del enlace | RFC 3630 §2.5.6 / RFC 5305 §3.4 |
+| Maximum reservable bandwidth | `max_rsrv_link_bw` | ancho de banda disponible para reserva | RFC 3630 §2.5.7 / RFC 5305 §3.5 |
+| Unreserved bandwidth (per priority) | `unreserved_bw_0` … `unreserved_bw_7` | ancho de banda restante en cada una de las 8 prioridades de TE | RFC 3630 §2.5.8 / RFC 5305 §3.6 |
+| Shared risk link group | `srlg` | lista de ID de SRLG a los que pertenece el enlace (RFC 4203 / RFC 5307) | RFC 4203 §1.3 / RFC 5307 §1.2 |
 
 Se usan los **mismos nombres de atributo** sin importar si los datos vinieron
 de OSPF o de IS-IS.
@@ -33,15 +33,13 @@ de OSPF o de IS-IS.
     carga que su LSDB de router/network/external. Las LSA tipo 10
     (opaque-area) transportan los datos de TE; el resto del grafo se
     construye a partir de LSA 1, 2 y 5 como de costumbre.
+    Se admiten FRRouting e IP Infusion OcNOS.
 
     [:octicons-arrow-right-24: Carga de archivo de texto](../ingestion/text-file.md)
 
 === "IS-IS — archivo de texto"
 
-    Los atributos de TE vienen directamente de la LSDB de IS-IS cuando usa
-    los comandos detallados estándar (por ejemplo, en FRR
-    **`show isis database detail`**). No se requiere ningún comando extra
-    más allá de su captura normal de IS-IS.
+    Los atributos de TE proceden directamente de la LSDB de IS-IS cuando se usa el comando detallado del proveedor: **`show isis database detail`** (FRR), **`show router isis database detail`** (Nokia SR OS) o **`show isis database verbose`** (ZTE, IP Infusion OcNOS). No se necesita ningún comando adicional aparte de la captura normal de IS-IS. Los atributos que lee el parser de cada proveedor están en [Atributos de TE por proveedor](../reference/supported-vendors.md#te-attributes-by-vendor).
 
 === "OSPF / IS-IS — BGP-LS"
 
@@ -85,6 +83,8 @@ TE en IS-IS depende de las **métricas amplias** (Extended IS/IP
 Reachability, TLV 22/135) y admite alcanzabilidad **IPv6** (TLV 236). La
 compatibilidad de proveedores con los TLV relevantes se resume en la página
 [Proveedores compatibles](../reference/supported-vendors.md#is-is-tlv-support).
+
+Los atributos de TE que se leen de cada proveedor se enumeran en [Atributos de TE por proveedor](../reference/supported-vendors.md#te-attributes-by-vendor).
 
 ## Monitoreo de cambios de TE
 
