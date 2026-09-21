@@ -10,6 +10,9 @@ git clone https://github.com/Vadims06/topolograph-docker.git
 cd topolograph-docker
 docker-compose pull
 docker-compose up -d
+
+!!! info "不含第三方统计"
+    Docker 镜像不会加载 topolograph.com 使用的 Google Analytics 和 Yandex Metrika 计数器。
 # or: sudo ./install.sh   (can also bring up the Watchers)
 ```
 

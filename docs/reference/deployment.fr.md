@@ -11,6 +11,9 @@ git clone https://github.com/Vadims06/topolograph-docker.git
 cd topolograph-docker
 docker-compose pull
 docker-compose up -d
+
+!!! info "Pas d'analyse tierce"
+    L'image Docker ne charge pas les compteurs Google Analytics et Yandex Metrika utilisés par topolograph.com.
 # ou : sudo ./install.sh   (peut aussi démarrer les Watchers)
 ```
 
