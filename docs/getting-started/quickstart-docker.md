@@ -45,6 +45,7 @@ useful variables:
 | --- | --- |
 | `TOPOLOGRAPH_PORT` | Web UI port (default `8080`). Open `http://localhost:<port>/` after restarting. |
 | `DNS` | IP of a DNS server, used to resolve router IDs into device names on the graph. |
+| `DNS_LOOKUP_DEADLINE_SEC` | Max seconds an upload waits for DNS names (default `5`). Nodes not resolved in time keep their IP as a label. |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL`, `TOPOLOGRAPH_WEB_API_PASSWORD` | Credentials for REST API requests. |
 | `TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS` | Allow-list of source IP ranges permitted to call the API. |
 | `TOPOLOGRAPH_API_TOKEN` | Token to authenticate REST API requests instead of a username/password pair. |
