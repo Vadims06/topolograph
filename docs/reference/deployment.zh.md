@@ -27,6 +27,7 @@ docker-compose up -d
 | `TOPOLOGRAPH_PORT` | Web UI 端口（默认 `8080`）。 |
 | `MCP_PORT` | [MCP server](../automation/mcp-server.md) 端口（默认 `8000`）。 |
 | `DNS` | 用于将路由器 ID 解析为设备名称的 DNS 服务器 IP。 |
+| `DNS_LOOKUP_DEADLINE_SEC` | 上传时等待 DNS 名称的最长秒数（默认 `5`）。未及时解析的节点仍以 IP 作为标签。 |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL`、`TOPOLOGRAPH_WEB_API_PASSWORD` | REST API 凭据。 |
 | `TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS` | 允许调用 API 的源 IP 范围白名单。 |
 | `TOPOLOGRAPH_API_TOKEN` | 用于对 REST API 请求进行身份验证的令牌，可替代用户名/密码。 |

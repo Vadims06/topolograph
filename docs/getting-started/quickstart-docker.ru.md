@@ -46,6 +46,7 @@ http://localhost:8080/
 | --- | --- |
 | `TOPOLOGRAPH_PORT` | Порт веб-интерфейса (по умолчанию `8080`). После перезапуска откройте `http://localhost:<port>/`. |
 | `DNS` | IP DNS-сервера, используемого для преобразования router ID в имена устройств на графе. |
+| `DNS_LOOKUP_DEADLINE_SEC` | Максимальное время в секундах, которое загрузка ждёт ответа DNS (по умолчанию `5`). Узлы, не разрешённые вовремя, остаются подписаны IP-адресом. |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL`, `TOPOLOGRAPH_WEB_API_PASSWORD` | Учётные данные для запросов к REST API. |
 | `TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS` | Список разрешённых диапазонов исходных IP-адресов, которым можно обращаться к API. |
 | `TOPOLOGRAPH_API_TOKEN` | Токен для аутентификации запросов к REST API вместо пары логин/пароль. |
