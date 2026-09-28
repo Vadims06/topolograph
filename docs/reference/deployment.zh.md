@@ -44,7 +44,7 @@ docker-compose up -d
 | `TOPOLOGRAPH_PORT` | Topolograph 端口（默认 `8080`）。 |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL` / `_PASSWORD` | Watcher 用于提交数据的 API 用户（例如 `ospf@topolograph.com`）。 |
 | `TEST_MODE` | 如果为 `True`，则从静态文件回放演示事件，而不是读取实时 IGP。 |
-| `WATCHER_IP` | 在容器中主机名解析不可靠时，覆盖 Watcher 上报的源 IP（`srcid`）。 |
+| `WATCHER_IP` | 在容器中主机名解析不可靠时，覆盖 Watcher 上报的源 IP。 |
 | `EXPORT_TO_ELASTICSEARCH_BOOL`、`ELASTIC_IP` | 启用并指向一个 [ELK](../monitoring/elk-kibana.md) 技术栈。 |
 | `EXPORT_TO_WEBHOOK_URL_BOOL`、`WEBHOOK_URL` | 启用 [WebHook/Slack](../monitoring/webhooks.md) 通知。 |
 

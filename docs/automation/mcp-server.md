@@ -50,6 +50,9 @@ Default endpoint: `http://0.0.0.0:8000/mcp`.
 | `get_shortest_path` | Compute shortest paths (with backup-path support) |
 | `get_cspf_path` | Constraint-filtered (CSPF) path, without creating a tunnel |
 | `get_edge_failure_reaction` | Predict the whole-network impact of links failing |
+| `list_vpns` | Fabric VNIs and VRFs, or the VPNs one router sees |
+| `get_routes` | Where a MAC or IP is, and what a VRF or VNI holds (BGP, EVPN) |
+| `get_route_events` | Route history, including MAC moves between VTEPs |
 | `get_lsps` | List MPLS TE LSP tunnels and their CSPF placement result |
 | `add_lsp` | Add an MPLS TE LSP tunnel to a graph |
 | `update_lsp` | Update or rename an MPLS TE LSP tunnel |

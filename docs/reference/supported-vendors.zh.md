@@ -148,6 +148,7 @@ Topolograph 的解析器和计算中已实现的 RFC。
 | MPLS TE | RFC 3209 | LSP 隧道 CSPF 放置中的 setup 与 holding 优先级 |
 | BGP | RFC 4271, RFC 4456, RFC 4364 | 最佳路径选择、路由反射和 VPN 路由 |
 | BGP | RFC 7854, RFC 8671, RFC 9069 | BMP：Adj-RIB-In / Adj-RIB-Out 与 Loc-RIB |
+| BGP | RFC 7432, RFC 9136, RFC 8365, RFC 6514 | EVPN：VXLAN 上的 MAC/IP、Inclusive Multicast、Ethernet Segment 与 IP Prefix 路由 |
 
 ## 通过 BGP-LS 导入
 

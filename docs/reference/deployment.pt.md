@@ -45,7 +45,7 @@ dele adiciona mais algumas:
 | `TOPOLOGRAPH_PORT` | Porta do Topolograph (padrão `8080`). |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL` / `_PASSWORD` | Usuário de API com o qual o Watcher publica (ex.: `ospf@topolograph.com`). |
 | `TEST_MODE` | Se `True`, reproduz eventos de demonstração de um arquivo estático em vez de ler o IGP ao vivo. |
-| `WATCHER_IP` | Sobrescreve o IP de origem reportado pelo Watcher (`srcid`) quando a resolução de hostname não é confiável em containers. |
+| `WATCHER_IP` | Sobrescreve o IP de origem reportado pelo Watcher quando a resolução de hostname não é confiável em containers. |
 | `EXPORT_TO_ELASTICSEARCH_BOOL`, `ELASTIC_IP` | Habilita e direciona para uma pilha [ELK](../monitoring/elk-kibana.md). |
 | `EXPORT_TO_WEBHOOK_URL_BOOL`, `WEBHOOK_URL` | Habilita notificações via [WebHook/Slack](../monitoring/webhooks.md). |
 

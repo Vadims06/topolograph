@@ -61,191 +61,102 @@ ID, Ethernet Tag, MAC, IP.
 не показывается как выбранный или установленный - ради этого различия оба
 потока и существуют.
 
-### Наблюдения, а не подсети
-
-Один и тот же префикс сохраняется отдельно для каждого спикера, каждого пира,
-каждого path ID и каждого потока политик. Все копии сохраняются, потому что
-«кто, кому и что анонсировал» - это ровно тот вопрос, на который отвечает
-мониторинг таблицы.
-
 ---
 
 ## Установка коллектора
 
-Коллектор - [**bmpwatcher**](https://github.com/Vadims06/bmpwatcher), станция
-BMP на Go, которая отделяет первоначальную выгрузку таблицы от последующих
-изменений. В его README описаны сборка, запуск в Docker и настройка BMP на
-стороне маршрутизатора для FRR, IOS-XR, Junos и SR OS.
+Попробовать без реальной сети можно на containerlab-лабе [13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp) из репозитория bmpwatcher.
 
-Минимальный запуск со снимком и потоком событий:
+Коллектор - [**bmpwatcher**](https://github.com/Vadims06/bmpwatcher), опубликованный
+как Docker-образ `vadims06/bmpwatcher:latest`: пассивная станция BMP, к которой маршрутизаторы
+подключаются по TCP 11019, сам он к маршрутизаторам не подключается. Он отделяет
+первоначальную выгрузку таблицы от последующих изменений. В его README описана
+настройка BMP на стороне маршрутизатора для FRR, IOS-XR, Junos и SR OS.
 
-```bash
-bmpwatcher \
-  --bmp-port=11019 \
-  --source-id=pe1 \
-  --watcher-name=bmp-dc1 \
-  --events=/var/log/bmpwatcher/events.jsonl \
-  --topolograph-topology-url=https://topolograph.com/api/watcher/bgp
-```
+Нужен аккаунт Topolograph: зарегистрируйтесь на topolograph.com или, в
+self-hosted установке, войдите пользователем из её `.env` (`TOPOLOGRAPH_WEB_API_USERNAME_EMAIL` / `TOPOLOGRAPH_WEB_API_PASSWORD`).
+Создайте токен API: **API → Токен → Create Token**. Рабочее пространство определяется
+по токену на сервере и никогда не берётся из тела запроса.
 
-!!! warning "Аутентификация в коллекторе ещё не реализована"
-    `/api/watcher/bgp` требует `Authorization: Bearer sk-...`, а коллектор
-    пока не добавляет этот заголовок - прямая отправка получает `401`. До
-    выхода этой возможности сохраняйте документ локально через
-    `--topolograph-topology-file` и отправляйте его сами (пример с `curl`
-    ниже).
+### Запуск через Docker Compose
 
-Токен создаётся в **Settings → API Tokens → Create token**. Рабочее
-пространство определяется по токену на сервере и никогда не берётся из тела
-запроса.
-
----
-
-## API приёма данных
-
-### `POST /api/watcher/bgp` - снимок топологии
-
-Коллектор собирает всю таблицу за своё окно сбора и отправляет её одним
-документом.
+Compose-файл репозитория bmpwatcher запускает коллектор и отправщик событий Fluent Bit вместе:
 
 ```bash
-curl -sS -X POST https://topolograph.com/api/watcher/bgp \
-  -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  --data @topolograph-topology.json
+git clone https://github.com/Vadims06/bmpwatcher.git && cd bmpwatcher
+cp .env.example .env
+docker compose --profile collector up -d
 ```
 
-```json
-{
-  "time": "2026-08-17T09:12:03Z",
-  "user": "bmp-dc1",
-  "srcid": "pe1",
-  "sesid": "b4f1c8e2",
-  "topology": {
-    "nodes": [
-      {"name": "10.0.0.1", "asn": "65001", "role": "speaker", "router_ip": "10.0.0.1"},
-      {"name": "10.0.0.2", "asn": "65002", "role": "peer"}
-    ],
-    "edges": [
-      {"source": "10.0.0.1", "target": "10.0.0.2",
-       "peer_ip": "10.0.0.2", "local_ip": "10.0.0.1", "asn": "65002",
-       "peer_type": 0, "policies": ["pre", "post"], "families": ["1/1", "1/128"]}
-    ],
-    "networks": [
-      {"subnet": "192.0.2.0/24", "type": "1", "subtype": 1,
-       "bmp_source": "10.0.0.1", "peer_ip": "10.0.0.2",
-       "policy": ["post"], "path_id": 0, "nexthop": "10.0.0.2",
-       "vpn_rd": "65001:100", "rt": "65001:100",
-       "labels": [24001], "data": {}}
-    ]
-  }
-}
-```
+Задайте в `.env`:
 
-| Поле | Значение |
-|---|---|
-| `time` | время снимка, ISO 8601 - оно же ключ проверки на устаревание |
-| `srcid` | экземпляр коллектора |
-| `sesid` | один *запуск* коллектора; меняется при каждом рестарте |
-| `nodes[].role` | `speaker` - сообщает; `peer` - о нём только сообщили |
-| `edges[]` | одна **сессия** BGP, а не одна пара маршрутизаторов |
-| `networks[]` | одно **наблюдение** маршрута |
-| `networks[].type` / `subtype` | AFI строкой, SAFI числом |
-| `networks[].data` | исходная запись коллектора, чтобы не потерять непереведённые в поля атрибуты |
+- `TOPOLOGRAPH_HOST`: IP-адрес хоста с Docker, не `localhost`, потому что Topolograph и BMP Watcher работают в своих сетях контейнеров; `topolograph.com` для публичного экземпляра.
+- `TOPOLOGRAPH_PORT`: по умолчанию `8080`, `443` для topolograph.com.
+- `WEBHOOK_TLS_ON`: `off` для своего Topolograph, `on` для topolograph.com.
+- `TOPOLOGRAPH_API_TOKEN`: токен `sk-...`.
+- `SOURCE_ID`: имя этого коллектора в Topolograph, например `dc1-rr`. Не меняйте его: контейнер, пересозданный с тем же именем, сохраняет свои данные вместе.
+- `BMPWATCHER_LOG_DIR`: куда коллектор пишет свои файлы, по умолчанию `/var/log/bmpwatcher`.
 
-**Ответ**
+Останавливается с тем же профилем: `docker compose --profile collector down`. Включите запуск Docker при загрузке (`systemctl enable docker`): контейнеры поднимутся после сбоя и перезагрузки.
 
-```json
-{"graph_time": "17Aug2026_09h12m03s_6_hosts", "checkpoint": false, "routes": 1428}
-```
-
-`graph_time` - публичный идентификатор для всех методов чтения ниже, в том же
-формате, что и у графов IGP.
-
-**Порядок и повторные отправки.** `sesid` создаётся при старте коллектора - ровно тогда, когда спикеры заново выгружают свои таблицы. Внутри одного
-`sesid` побеждает наибольшее `time`; более старое или равное отклоняется с
-`400 stale snapshot`. Периодическая полная переотправка с тем же `sesid`
-считается **сверочной контрольной точкой**, а не новым графом: возвращается
-`checkpoint: true`, это подтверждает, что источник жив в тихой сети, и
-исправляет текущее представление, если оно разошлось. Новый `sesid` заменяет
-предыдущий запуск.
-
-Все Route Target извлекаются из `data.base_attrs.ext_community_list`, а не
-только из продвинутого поля `rt` - маршрут с несколькими RT остаётся видимым
-при поиске по любому из них.
-
-### `POST /api/watcher/bgp/events` - поток изменений
-
-Принимает один объект события или их список.
+Первый снимок уходит, когда каждый маршрутизатор выгрузил свою таблицу: примерно через 30 секунд после того, как его маршруты перестали приходить, и не позже чем через 5 минут после первого. Проверьте, что он отправлен:
 
 ```bash
-curl -sS -X POST https://topolograph.com/api/watcher/bgp/events \
-  -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '[{
-        "srcid": "pe1", "sesid": "b4f1c8e2", "seq": 41,
-        "watcher_time": "2026-08-17T09:14:11Z",
-        "event_name": "prefix", "event_status": "withdraw",
-        "event_object": "192.0.2.0/24", "event_detected_by": "10.0.0.2",
-        "bmp_source": "10.0.0.1", "policy": "post",
-        "afi": 1, "safi": 1, "prefix": "192.0.2.0", "prefix_len": 24,
-        "family_data": {"peer_ip": "10.0.0.2"}
-      }]'
+docker logs bmpwatcher 2>&1 | grep 'topology posted'
 ```
 
-| Поле | Значение |
-|---|---|
-| `event_name` | `prefix`, `l3vpn`, `evpn`, `peer` |
-| `event_status` | `add`, `change`, `withdraw` (маршруты); `up`, `down` (пиры) |
-| `event_detected_by` | маршрутизатор, о котором изменение |
-| `bmp_source` | спикер, который сообщил - на рефлектированной сессии это другой роутер |
-| `seq` | монотонный в пределах `sesid`; точная дедупликация и обнаружение пропусков |
-| `watcher_time` | часы коллектора - упорядочивают поток |
-| `bmp_timestamp` | часы маршрутизатора - только для корреляции, не для порядка |
-| `replay_suspect` | возможно, хвост выгрузки, а не живое изменение |
+### EVPN: первые сообщения
 
-```json
-{"accepted": 1, "duplicates": 0}
+*Topolograph v2.73 или новее, BMP Watcher v1.1.0 или новее. Экспорт EVPN проверен на FRR.*
+
+На вопросы про EVPN отвечает граф OSPF или IS-IS, поэтому в Topolograph нужен
+граф, в котором Router ID совпадают с BGP-спикерами.
+
+1. **Возьмите граф IGP.** Для своей сети загрузите LSDB или запустите
+   [OSPF Watcher](ospf-watcher.md) / [IS-IS Watcher](isis-watcher.md). Для лабы
+   [13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp) её OSPF-underlay - это демо-граф на 13 роутеров,
+   который Topolograph создаёт в каждом аккаунте при первом входе; для IS-IS
+   загрузите [demo_isis_LSDB.txt](https://github.com/Vadims06/topolograph/blob/master/demo_isis_LSDB.txt) как FRR IS-IS.
+2. **Включите BMP на route reflector'ах**: на них есть EVPN-маршруты всех
+   leaf, а leaf отдаёт только то, что узнал сам. FRR подключает BMP модулем,
+   поэтому добавьте `-M bmp` в `bgpd_options` и перезапустите FRR:
+
+```
+# /etc/frr/daemons
+bgpd_options="   --daemon -M bmp -A 127.0.0.1"
 ```
 
-Событие, чья пара `(srcid, sesid)` не совпадает с сохранённым снимком,
-отклоняется - **сначала отправьте топологию, потом включайте поток событий**.
-Повторный `seq` считается дубликатом и отбрасывается; пропуск в `seq`
-логируется как потерянное сообщение.
+```
+router bgp 65000
+ bmp targets topolograph
+  bmp connect 198.51.100.10 port 11019 min-retry 1000 max-retry 2000
+  bmp monitor l2vpn evpn pre-policy
+  bmp monitor l2vpn evpn post-policy
+```
 
-Событие up/down пира влияет только на отображение. Коллектор и так выдаёт
-обычный withdraw на каждый префикс, который нёс упавший пир, поэтому само
-событие пира никогда не меняет состояние маршрутов.
+В containerlab отредактируйте файл `daemons` лабы и пересоздайте лабу: перезапуск
+FRR внутри работающего контейнера рвёт её линки. В `bmp connect` укажите адрес хоста
+коллектора, до которого роутеры доходят по TCP 11019; в containerlab это шлюз
+management-сети лабы (`docker network inspect <mgmt-network>`).
 
-### `POST /api/watcher/vrfs` - инвентарь VRF
-
-Route Distinguisher идентифицирует VPN-маршруты, но *имя* VRF и его
-импортируемые/экспортируемые Route Target знает только устройство. Отправка
-инвентаря позволяет искать по имени VRF, а не по RD.
+3. **Запустите коллектор**, как описано выше.
+4. **Проверьте ответ на графе IGP**: граф, у которого в `protocols` есть
+   `bgp`, его VNI и VRF, и leaf одного VNI.
 
 ```bash
-curl -sS -X POST https://topolograph.com/api/watcher/vrfs \
-  -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "router_id": "10.0.0.1",
-        "observed_at": "2026-08-17T09:10:00Z",
-        "vrfs": [{
-          "name": "Red",
-          "families": [{
-            "afi": "ipv4", "safi": "unicast",
-            "route_distinguisher": "65001:100",
-            "import_route_targets": ["65001:100", "65001:999"],
-            "export_route_targets": ["65001:100"]
-          }]
-        }]
-      }'
+TOPOLOGRAPH_URL=http://<host-ip>:8080   # https://topolograph.com для публичного экземпляра
+curl -sS "$TOPOLOGRAPH_URL/api/graph/?protocol=bgp" -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN"
+curl -sS "$TOPOLOGRAPH_URL/api/graph/<graph_time>/vpns" -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN"
+curl -sS "$TOPOLOGRAPH_URL/api/graph/<graph_time>/nodes?protocol=bgp&vni=<vni>" -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN"
 ```
 
-Каждое наблюдение сохраняется со своей меткой времени, а не затирает
-предыдущее, поэтому старый граф по-прежнему может восстановить состояние VRF
-таким, каким оно было тогда. Уникальность - `(рабочее пространство, router_id,
-rd)`; неизменившаяся переотправка ничего не пишет.
+Пустой список `?protocol=bgp` означает, что граф BGP ещё не привязан:
+проверьте `GET /api/bgp-graph/<bgp_graph_time>/bindings`. Первоначальная
+таблица приходит в снимке, а поток событий несёт только последующие изменения.
+
+В каждом аккаунте есть демо-граф BGP, снятый с лабы
+13-hosts-demo-bgp и привязанный к тому же демо-графу, поэтому на нём в ответах будут
+и демо-маршруты.
 
 ---
 
@@ -260,6 +171,12 @@ BGP, охватывающий два домена IGP, привязываетс�
 |---|---|
 | `bound` | пересечение Router ID ≥ 80 %, однозначно |
 | `needs_mapping` | ниже порога или два равных кандидата - ждёт подтверждения |
+
+Граф BGP сначала привязывается к графу IGP, который действовал в его момент
+времени: самому позднему, не новее графа BGP. Снимки IGP, сделанные позже, пока
+этот граф BGP остаётся самым новым для своего источника, тоже привязываются,
+если в них остались роутеры первого совпадения. Роутер, появившийся после
+снимка IGP, учитывается по событиям соседства OSPF.
 
 Совпадение Router ID - **свидетельство, а не требование**. BGP Router ID и OSPF
 Router ID обычно совпадают, но Topolograph на этом не настаивает: неоднозначные
@@ -287,7 +204,7 @@ curl -sS -X DELETE ".../api/bgp-graph/<bgp_graph_time>/<igp_graph_time>/binding"
 
 ---
 
-## Чтение данных
+## Запросы к данным BGP
 
 ### Графы, узлы и сессии
 
@@ -320,8 +237,8 @@ GET /api/bgp-graph/{bgp_graph_time}/node/{router_id}/routes?evidence=loc_rib
 | Параметр | Поведение |
 |---|---|
 | `prefix=192.0.2.0/24` | точное совпадение по полному префиксу |
-| `prefix=192.0.2.5` | вхождение - все маршруты, покрывающие адрес |
-| `prefix=192.0.2.0/24&lpm=1` | самый длинный совпадающий префикс, одна строка |
+| `prefix=192.0.2.5` | вхождение - все маршруты, покрывающие адрес, сначала самый длинный префикс |
+| `mac`, `vni` | только EVPN, см. [EVPN](#evpn) |
 | `afi` / `safi` | числовое семейство |
 | `rd` | Route Distinguisher |
 | `vrf` | имя VRF, раскрывается в его RD через инвентарь |
@@ -417,27 +334,99 @@ GET /api/graph/{graph_time}/route-lookup/{start_node}?destination=192.0.2.5&vrf=
 сообщённая таблица плюс таблицы его непосредственных соседей по сессиям.
 Маршрутизатор без BGP не наследует ничего.
 
----
+## EVPN
 
-## Хранение
+*Topolograph v2.73 или новее, BMP Watcher v1.1.0 или новее.*
 
-Topolograph хранит последние графы BGP **по каждому источнику** (`srcid`),
-поэтому установка с двумя коллекторами сохраняет полное окно для каждого.
-Когда эпоха выпадает из окна, вместе с ней удаляются её маршруты и привязки.
-Периодические переотправки с тем же `sesid` - контрольные точки, окно они не
-расходуют.
+BGP EVPN поверх VXLAN (AFI 25 / SAFI 70) читается из BMP-потока route
+reflector'ов. Любой вопрос про EVPN задаётся графу OSPF или IS-IS: отвечает
+привязанный к нему граф BGP, а каждый VTEP сопоставляется с роутером, которому
+принадлежит адрес, поэтому путь к хосту заканчивается на leaf за ним.
+
+### Типы маршрутов
+
+| Тип маршрута | RFC | Для чего используется |
+|---|---|---|
+| 1 Ethernet Auto-Discovery | [RFC 7432](https://datatracker.ietf.org/doc/html/rfc7432) | хранится и ищется |
+| 2 MAC/IP Advertisement | RFC 7432 | где хост: MAC, IP, VNI, VTEP, ESI; переезды MAC |
+| 3 Inclusive Multicast Ethernet Tag | RFC 7432, [RFC 6514](https://datatracker.ietf.org/doc/html/rfc6514) | какие leaf являются VTEP для VNI (VNI берётся из атрибута PMSI Tunnel) |
+| 4 Ethernet Segment | RFC 7432 | хранится и ищется |
+| 5 IP Prefix | [RFC 9136](https://datatracker.ietf.org/doc/html/rfc9136) | подсети VRF и его L3VNI |
+
+### Атрибуты маршрута
+
+У маршрута EVPN есть обычные RD, route target, next hop и community, а также
+объект `evpn`:
+
+| Поле | Значение |
+|---|---|
+| `route_type` | от 1 до 5 |
+| `mac` | MAC хоста (RT-2) |
+| `ip`, `ip_len` | IP хоста (RT-2), префикс и его длина (RT-5), роутер-источник (RT-3, RT-4) |
+| `vni` | L2VNI (RT-2, RT-3) |
+| `l3vni` | L3VNI VRF (RT-5, а также RT-2 при symmetric IRB) |
+| `esi` | Ethernet Segment ID; все нули - хост подключён к одному leaf |
+| `eth_tag` | Ethernet Tag ID |
+| `vtep` | VTEP: роутер-источник для RT-3 и RT-4, next hop для остальных |
+| `mm_seq` | порядковый номер MAC Mobility ([RFC 7432 §15](https://datatracker.ietf.org/doc/html/rfc7432#section-15)) |
+
+У RT-2 и RT-5 заполнен и `prefix` (адрес хоста с /32 или /128 либо префикс RT-5),
+поэтому `prefix=` находит хосты и подсети EVPN так же, как любые другие маршруты.
+
+```json
+{
+  "afi": 25, "safi": 70, "rd": "1:123.123.31.31:5",
+  "route_targets": ["65000:1020"], "nexthop": "123.123.31.31",
+  "evpn": {"route_type": 2, "mac": "00:c1:ab:00:00:03", "ip": null, "ip_len": null,
+           "vni": 1020, "l3vni": null, "esi": "00:00:00:00:00:00:00:00:00:00",
+           "eth_tag": 0, "vtep": "123.123.31.31", "mm_seq": null}
+}
+```
+
+### На какие вопросы отвечает
+
+Все они задаются графу IGP (`{graph_time}`), время графа BGP не нужно.
+
+| Вопрос | Запрос |
+|---|---|
+| Какие VNI и VRF есть в фабрике? | `GET /api/graph/{graph_time}/vpns` |
+| Какие VPN видит один роутер? | `GET /api/graph/{graph_time}/node/{router_id}/vpns` |
+| Какие leaf несут VNI 1020 или VRF tenant1? | `GET /api/graph/{graph_time}/nodes?protocol=bgp&vni=1020` (или `vrf=tenant1`) |
+| Где хост: leaf, VNI, VRF, MAC? | `GET /api/graph/{graph_time}/routes?prefix=10.10.20.13` или `?mac=00:c1:ab:00:00:03` |
+| Подключён ли хост к нескольким leaf? | тот же запрос: несколько VTEP с одним ненулевым `esi` |
+| Что маршрутизирует VRF? | `GET /api/graph/{graph_time}/routes?vrf=tenant1` |
+| Что лежит на одном leaf для VNI? | `GET /api/graph/{graph_time}/node/{router_id}/routes?vni=1010` |
+| Переезжал ли MAC, откуда, куда и когда? | `GET /api/events/{graph_time}/routes?mac=00:c1:ab:00:00:01&last_minutes=60` |
+| Как underlay доходит до всех VTEP одного VNI? | `GET /api/graph/{graph_time}/path/{node_a}/{vtep1},{vtep2}` |
+
+`routes` также принимает `at=` для момента в прошлом, а ещё `vtep=`, `rt=`,
+`rd=`, `page`, `per_page`. В истории событий строка, где MAC появился на новом
+VTEP, содержит `moved_from_vtep`. Один MAC от нескольких VTEP с одним ESI - это
+multihoming, а не переезд.
+
+Строка VPN группирует маршруты по имени VRF, если оно известно из инвентаря VRF,
+иначе по route target; bridge domain EVPN - одна строка на L2VNI:
+
+```json
+{"name": null, "vni": 1020, "l3vni": 5000,
+ "route_targets": ["65000:1020", "65000:5000"],
+ "route_distinguishers": ["1:123.123.30.30:5", "1:123.123.31.31:5"],
+ "prefix_count": 4}
+```
+
+В интерфейсе те же ответы есть в форме пути BGP / VPN и в Graph table, вкладка
+BGP Routes, где для каждого поля выше есть колонка. Пошаговый разбор на
+демо-данных - в [BGP how-to](https://topolograph.com/how-to/bgp#evpn), лаба, на которой они сняты, -
+[containerlab/13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp).
 
 ---
 
 ## Текущие ограничения
 
-- Коллектор пока не добавляет API-токен; временно отправляйте снимок через
-  `curl`.
-- Запускайте по одному коллектору на BMP-спикер и задавайте `--source-id`.
-  Несколько спикеров в один коллектор смешают свои наблюдения.
-- Маршруты EVPN собираются и сохраняются, но таблица маршрутов и route lookup
-  ориентированы на префиксы; EVPN пока не является полноценным объектом
-  поиска.
+- EVPN предполагает, что VNI едины для всей фабрики: локально значимые VNI
+  (RFC 8365) не поддерживаются.
+- Какой leaf является designated forwarder для Ethernet Segment, решают сами
+  leaf, и по BMP это не передаётся.
 - Router ID, который законно присутствует в двух привязанных доменах IGP, при
   классификации сессий относится к одному из них.
 

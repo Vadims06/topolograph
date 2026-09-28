@@ -45,6 +45,9 @@ python mcp-server.py
 | `get_nodes` | 查询图上的节点 |
 | `get_edges` | 查询图上的链路 |
 | `get_shortest_path` | 计算最短路径（支持备份路径） |
+| `list_vpns` | fabric 的 VNI 与 VRF，或某台路由器可见的 VPN |
+| `get_routes` | MAC 或 IP 的位置，以及 VRF 或 VNI 的内容（BGP、EVPN） |
+| `get_route_events` | 路由历史，包括 MAC 在 VTEP 之间的迁移 |
 | `upload_graph` | 上传一个新的图 |
 
 ## 它能带来什么

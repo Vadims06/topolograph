@@ -32,7 +32,7 @@ architecture :
 
     ---
 
-    Sessions BGP, routes et contexte VPN via une station BMP passive.
+    Sessions BGP, routes et contexte VPN et EVPN via une station BMP passive.
 
     [:octicons-arrow-right-24: BMP Watcher](bmp-watcher.md)
 

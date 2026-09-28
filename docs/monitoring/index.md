@@ -29,7 +29,7 @@ There are three Watchers, one per protocol, built on the same architecture:
 
     ---
 
-    BGP sessions, routes and VPN context over a passive BMP station.
+    BGP sessions, routes, VPN and EVPN context over a passive BMP station.
 
     [:octicons-arrow-right-24: BMP Watcher](bmp-watcher.md)
 

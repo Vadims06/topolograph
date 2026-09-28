@@ -30,7 +30,7 @@ arquitetura:
 
     ---
 
-    Sessões BGP, rotas e contexto de VPN por uma estação BMP passiva.
+    Sessões BGP, rotas e contexto de VPN e EVPN por uma estação BMP passiva.
 
     [:octicons-arrow-right-24: BMP Watcher](bmp-watcher.md)
 

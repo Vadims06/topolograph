@@ -48,6 +48,9 @@ Point de terminaison par défaut : `http://0.0.0.0:8000/mcp`.
 | `get_nodes` | Interroger les nœuds du diagramme |
 | `get_edges` | Interroger les liens du diagramme |
 | `get_shortest_path` | Calculer les chemins les plus courts (avec prise en charge des chemins de secours) |
+| `list_vpns` | VNI et VRF de la fabric, ou les VPN qu'un routeur voit |
+| `get_routes` | Où se trouve un MAC ou une IP et ce que contient une VRF ou un VNI (BGP, EVPN) |
+| `get_route_events` | Historique des routes, y compris les déplacements de MAC entre VTEP |
 | `upload_graph` | Importer un nouveau graphe |
 
 ## Ce que cela permet

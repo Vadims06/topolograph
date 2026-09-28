@@ -51,6 +51,9 @@ python mcp-server.py
 | `get_shortest_path` | Вычисление кратчайших путей (с поддержкой резервных путей) |
 | `get_cspf_path` | Путь с фильтрацией по ограничениям (CSPF), без создания туннеля |
 | `get_edge_failure_reaction` | Прогноз влияния на всю сеть при отказе линков |
+| `list_vpns` | VNI и VRF фабрики или VPN, которые видит один роутер |
+| `get_routes` | Где находится MAC или IP и что содержит VRF или VNI (BGP, EVPN) |
+| `get_route_events` | История маршрутов, включая переезды MAC между VTEP |
 | `get_lsps` | Список туннелей MPLS TE LSP и результат их размещения через CSPF |
 | `add_lsp` | Добавить туннель MPLS TE LSP на граф |
 | `update_lsp` | Изменить или переименовать туннель MPLS TE LSP |

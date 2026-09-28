@@ -23,7 +23,7 @@ topo = Topolograph(
 )
 
 graph = topo.graphs.get(latest=True)
-print(graph.graph_time, graph.protocol, graph.hosts['count'])
+print(graph.graph_time, graph.protocols, graph.hosts['count'])
 print(graph.status()['status'])
 ```
 

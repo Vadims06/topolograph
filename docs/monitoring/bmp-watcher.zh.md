@@ -35,10 +35,10 @@ Segment ID、Ethernet Tag、MAC、IP。
 | BMP 消息 | Topolograph 的处理 |
 |---|---|
 | Route Monitoring | 构建路由表，以及之后的每一次路由变化 |
-| Peer Up | 会话状态，以及对端的 BGP Identifier —— 事件归属的 Router ID |
+| Peer Up | 会话状态，以及对端的 BGP Identifier - 事件归属的 Router ID |
 | Peer Down | 会话拆除，并为该对端承载的每条路由生成 withdraw |
 | Initiation / Termination | 采集器会话的生命周期 |
-| Statistics Report | 忽略 —— 计数器不是路由状态 |
+| Statistics Report | 忽略 - 计数器不是路由状态 |
 
 ### 策略流与证据级别
 
@@ -49,183 +49,104 @@ Segment ID、Ethernet Tag、MAC、IP。
 | 流 | Evidence | 含义 |
 |---|---|---|
 | `pre` / `out-pre` | `pre_policy` | 对端通告了它；本路由器可能已拒绝 |
-| `post` / `out-post` | `post_policy` | 本路由器接受了它 —— 候选路径 |
-| `loc-rib` | `loc_rib` | 路由器自己的选择 —— 已安装的最优路径 |
+| `post` / `out-post` | `post_policy` | 本路由器接受了它 - 候选路径 |
+| `loc-rib` | `loc_rib` | 路由器自己的选择 - 已安装的最优路径 |
 | `fib` | `fib` | 存在于转发表中 |
 
 它们绝不会被合并。只在 pre-policy 中出现的路由**永远**不会被报告为已选中或
-已安装 —— 这个区分正是两条流存在的理由。
-
-### 是观测记录，不是子网
-
-同一个前缀会按 speaker、按对端、按 path ID、按策略流分别保存。所有副本都会保留，
-因为"谁向谁通告了什么"正是监控一张路由表要回答的问题。
+已安装 - 这个区分正是两条流存在的理由。
 
 ---
 
 ## 安装采集器
 
-采集器是 [**bmpwatcher**](https://github.com/Vadims06/bmpwatcher) —— 一个 Go 编写
-的 BMP 站点，它把最初的表回放与其后的变化区分开。其 README 涵盖了编译、Docker
-运行方式，以及 FRR、IOS-XR、Junos 和 SR OS 上的路由器侧 BMP 配置。
+无需真实网络即可试用：运行 bmpwatcher 仓库中的 containerlab 实验拓扑 [13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp)。
 
-同时产生快照与事件流的最小运行方式：
+采集器是 [**bmpwatcher**](https://github.com/Vadims06/bmpwatcher)，以 Docker 镜像
+`vadims06/bmpwatcher:latest` 发布：一个被动的 BMP 站，路由器通过 TCP 11019 连接它，它从不主动连接路由器。
+它把初始表导出与之后的变化分开。其 README 介绍了 FRR、IOS-XR、Junos 和 SR OS 路由器侧的 BMP 配置。
 
-```bash
-bmpwatcher \
-  --bmp-port=11019 \
-  --source-id=pe1 \
-  --watcher-name=bmp-dc1 \
-  --events=/var/log/bmpwatcher/events.jsonl \
-  --topolograph-topology-url=https://topolograph.com/api/watcher/bgp
-```
+你需要一个 Topolograph 账号：在 topolograph.com 注册，或者在自托管实例上用其 `.env` 中设置的用户登录
+（`TOPOLOGRAPH_WEB_API_USERNAME_EMAIL` / `TOPOLOGRAPH_WEB_API_PASSWORD`）。
+创建 API 令牌：**API → Token → Create Token**。工作区由服务器根据令牌确定，从不取自请求体。
 
-!!! warning "采集器尚未接入鉴权"
-    `/api/watcher/bgp` 需要 `Authorization: Bearer sk-...`，而采集器目前不会附加
-    该头部 —— 直接推送会收到 `401`。在该能力发布之前，请用
-    `--topolograph-topology-file` 将文档写到本地，再自行提交（见下面的 `curl`
-    示例）。
+### 使用 Docker Compose 运行
 
-在 **Settings → API Tokens → Create token** 获取令牌。工作区由服务端根据令牌解析，
-绝不会取自请求体。
-
----
-
-## 数据接入 API
-
-### `POST /api/watcher/bgp` —— 拓扑快照
-
-采集器在其采集窗口内汇聚整张表，并作为一个文档提交。
+bmpwatcher 仓库的 compose 文件同时运行采集器和 Fluent Bit 事件发送器：
 
 ```bash
-curl -sS -X POST https://topolograph.com/api/watcher/bgp \
-  -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  --data @topolograph-topology.json
+git clone https://github.com/Vadims06/bmpwatcher.git && cd bmpwatcher
+cp .env.example .env
+docker compose --profile collector up -d
 ```
 
-```json
-{
-  "time": "2026-08-17T09:12:03Z",
-  "user": "bmp-dc1",
-  "srcid": "pe1",
-  "sesid": "b4f1c8e2",
-  "topology": {
-    "nodes": [
-      {"name": "10.0.0.1", "asn": "65001", "role": "speaker", "router_ip": "10.0.0.1"},
-      {"name": "10.0.0.2", "asn": "65002", "role": "peer"}
-    ],
-    "edges": [
-      {"source": "10.0.0.1", "target": "10.0.0.2",
-       "peer_ip": "10.0.0.2", "local_ip": "10.0.0.1", "asn": "65002",
-       "peer_type": 0, "policies": ["pre", "post"], "families": ["1/1", "1/128"]}
-    ],
-    "networks": [
-      {"subnet": "192.0.2.0/24", "type": "1", "subtype": 1,
-       "bmp_source": "10.0.0.1", "peer_ip": "10.0.0.2",
-       "policy": ["post"], "path_id": 0, "nexthop": "10.0.0.2",
-       "vpn_rd": "65001:100", "rt": "65001:100",
-       "labels": [24001], "data": {}}
-    ]
-  }
-}
-```
+在 `.env` 中设置：
 
-| 字段 | 含义 |
-|---|---|
-| `time` | 快照时间戳，ISO 8601 —— 同时是过期判定依据 |
-| `srcid` | 采集器实例 |
-| `sesid` | 采集器的一次*运行*；每次重启都会改变 |
-| `nodes[].role` | `speaker` 会上报；`peer` 只是被上报的对象 |
-| `edges[]` | 一条 BGP **会话**，而不是一对路由器 |
-| `networks[]` | 一条路由**观测记录** |
-| `networks[].type` / `subtype` | AFI 为字符串，SAFI 为数字 |
-| `networks[].data` | 采集器原始记录，未被提升为字段的属性不会丢失 |
+- `TOPOLOGRAPH_HOST`：Docker 主机的 IP 地址，不要用 `localhost`，因为 Topolograph 和 BMP Watcher 运行在各自的容器网络中；公共实例填 `topolograph.com`。
+- `TOPOLOGRAPH_PORT`：默认 `8080`，topolograph.com 用 `443`。
+- `WEBHOOK_TLS_ON`：自托管 Topolograph 为 `off`，topolograph.com 为 `on`。
+- `TOPOLOGRAPH_API_TOKEN`：`sk-...` 令牌。
+- `SOURCE_ID`：该采集器在 Topolograph 中的名称，例如 `dc1-rr`。保持不变：用同一名称重建的容器会把数据保存在一起。
+- `BMPWATCHER_LOG_DIR`：采集器写入文件的目录，默认 `/var/log/bmpwatcher`。
 
-**响应**
+用同一 profile 停止：`docker compose --profile collector down`。让 Docker 开机自启（`systemctl enable docker`）：容器会在崩溃和重启后恢复。
 
-```json
-{"graph_time": "17Aug2026_09h12m03s_6_hosts", "checkpoint": false, "routes": 1428}
-```
-
-`graph_time` 是下文所有读取接口使用的公开标识符，格式与 IGP 图一致。
-
-**顺序与重发。** `sesid` 在采集器启动时生成 —— 正是 speaker 重新回放路由表的时刻。
-在同一个 `sesid` 内 `time` 最新者胜出；更旧或相等的会以 `400 stale snapshot`
-拒绝。相同 `sesid` 下的周期性全量重发被视为**对账检查点**而不是新图：返回
-`checkpoint: true`，它证明在安静的网络中数据源仍然存活，并在当前视图出现漂移时
-予以纠正。新的 `sesid` 会取代上一次运行。
-
-所有 Route Target 都从 `data.base_attrs.ext_community_list` 提取，而不仅取被提升
-的 `rt` 字段 —— 带多个 RT 的路由按其中任意一个查询都能命中。
-
-### `POST /api/watcher/bgp/events` —— 变化流
-
-接受单个事件对象或事件列表。
+每台路由器导出完自己的表后，第一个快照才会发出：大约在其路由停止到达 30 秒后，最迟在第一条路由到达 5 分钟后。检查是否已发送：
 
 ```bash
-curl -sS -X POST https://topolograph.com/api/watcher/bgp/events \
-  -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '[{
-        "srcid": "pe1", "sesid": "b4f1c8e2", "seq": 41,
-        "watcher_time": "2026-08-17T09:14:11Z",
-        "event_name": "prefix", "event_status": "withdraw",
-        "event_object": "192.0.2.0/24", "event_detected_by": "10.0.0.2",
-        "bmp_source": "10.0.0.1", "policy": "post",
-        "afi": 1, "safi": 1, "prefix": "192.0.2.0", "prefix_len": 24,
-        "family_data": {"peer_ip": "10.0.0.2"}
-      }]'
+docker logs bmpwatcher 2>&1 | grep 'topology posted'
 ```
 
-| 字段 | 含义 |
-|---|---|
-| `event_name` | `prefix`、`l3vpn`、`evpn`、`peer` |
-| `event_status` | 路由为 `add`、`change`、`withdraw`；对端为 `up`、`down` |
-| `event_detected_by` | 变化所涉及的路由器 |
-| `bmp_source` | 上报该变化的 speaker —— 在任何反射会话上都是另一台路由器 |
-| `seq` | 在 `sesid` 内单调递增；用于精确去重和缺口检测 |
-| `watcher_time` | 采集器时钟 —— 用于排序 |
-| `bmp_timestamp` | 路由器时钟 —— 仅用于关联，不用于排序 |
-| `replay_suspect` | 可能是回放的尾部，而非实时变化 |
+### EVPN：第一批消息
 
-```json
-{"accepted": 1, "duplicates": 0}
+*需要 Topolograph v2.73 及以上、BMP Watcher v1.1.0 及以上。EVPN 导出已在 FRR 上验证。*
+
+EVPN 问题由你的 OSPF 或 IS-IS 图回答，因此 Topolograph 需要一张 Router ID 与 BGP
+speaker 一致的图。
+
+1. **准备 IGP 图。** 自己的网络：上传其 LSDB，或运行
+   [OSPF Watcher](ospf-watcher.md) / [IS-IS Watcher](isis-watcher.md)。
+   [13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp) 实验拓扑：其 OSPF underlay 就是 Topolograph 在每个账户
+   首次登录时创建的 13 台路由器演示图；IS-IS 则将
+   [demo_isis_LSDB.txt](https://github.com/Vadims06/topolograph/blob/master/demo_isis_LSDB.txt) 作为 FRR IS-IS 上传。
+2. **在 route reflector 上启用 BMP**：它们持有所有 leaf 的 EVPN 路由，而 leaf
+   只导出自己学到的路由。FRR 以模块方式加载 BMP，因此需在 `bgpd_options` 中加入
+   `-M bmp` 并重启 FRR：
+
+```
+# /etc/frr/daemons
+bgpd_options="   --daemon -M bmp -A 127.0.0.1"
 ```
 
-`(srcid, sesid)` 与已存快照不匹配的事件会被拒绝 ——
-**请先提交拓扑，再启动事件流**。重复的 `seq` 计为重复并丢弃；`seq` 出现缺口会
-记录为消息丢失。
+```
+router bgp 65000
+ bmp targets topolograph
+  bmp connect 198.51.100.10 port 11019 min-retry 1000 max-retry 2000
+  bmp monitor l2vpn evpn pre-policy
+  bmp monitor l2vpn evpn post-policy
+```
 
-对端 up/down 事件仅用于展示。采集器已经为掉线对端承载的每个前缀发出常规
-withdraw，因此对端事件本身绝不会改变路由状态。
+在 containerlab 中，请编辑实验拓扑的 `daemons` 文件并重新部署：在运行中的容器里重启 FRR
+会断开其实验链路。`bmp connect` 填写路由器可通过 TCP 11019 访问的采集器主机地址；在
+containerlab 中即实验管理网络的网关（`docker network inspect <mgmt-network>`）。
 
-### `POST /api/watcher/vrfs` —— VRF 清单
-
-Route Distinguisher 标识 VPN 路由，但只有设备知道 VRF 的*名称*及其导入/导出
-Route Target。提交清单后即可按 VRF 名称而非 RD 检索。
+3. **按上文启动采集器。**
+4. **在 IGP 图上检查结果**：`protocols` 中包含 `bgp` 的图、它的 VNI 与 VRF，以及某个
+   VNI 的 leaf。
 
 ```bash
-curl -sS -X POST https://topolograph.com/api/watcher/vrfs \
-  -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "router_id": "10.0.0.1",
-        "observed_at": "2026-08-17T09:10:00Z",
-        "vrfs": [{
-          "name": "Red",
-          "families": [{
-            "afi": "ipv4", "safi": "unicast",
-            "route_distinguisher": "65001:100",
-            "import_route_targets": ["65001:100", "65001:999"],
-            "export_route_targets": ["65001:100"]
-          }]
-        }]
-      }'
+TOPOLOGRAPH_URL=http://<host-ip>:8080   # 公共实例使用 https://topolograph.com
+curl -sS "$TOPOLOGRAPH_URL/api/graph/?protocol=bgp" -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN"
+curl -sS "$TOPOLOGRAPH_URL/api/graph/<graph_time>/vpns" -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN"
+curl -sS "$TOPOLOGRAPH_URL/api/graph/<graph_time>/nodes?protocol=bgp&vni=<vni>" -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN"
 ```
 
-每次观测都带自己的时间戳保存，而不是覆盖上一次，因此较早的图仍然可以还原当时的
-VRF 状态。唯一性为 `(工作区, router_id, rd)`；内容未变的重发不会写入。
+`?protocol=bgp` 返回空列表表示 BGP 图尚未绑定：请检查
+`GET /api/bgp-graph/<bgp_graph_time>/bindings`。初始路由表随快照到达，事件流只携带
+之后的变化。
+
+每个账户都有一张演示 BGP 图，采自 13-hosts-demo-bgp 实验拓扑，
+并绑定到同一张演示图，因此该图上的答案也包含演示路由。
 
 ---
 
@@ -238,7 +159,11 @@ IGP 域的 BGP 图会同时绑定到两者。
 | 状态 | 含义 |
 |---|---|
 | `bound` | Router ID 重合度 ≥ 80%，且无歧义 |
-| `needs_mapping` | 低于阈值，或两个候选并列 —— 等待确认 |
+| `needs_mapping` | 低于阈值，或两个候选并列 - 等待确认 |
+
+BGP 图首先绑定到其自身时间点生效的 IGP 图：即不晚于该 BGP 图的最新一张。
+之后拍摄的 IGP 快照，只要该 BGP 图仍是其来源的最新图，并且快照中仍保留首次匹配到的
+路由器，也会被绑定。在 IGP 快照之后加入的路由器，通过其 OSPF 邻接事件计入。
 
 Router ID 重合是**证据，而不是硬性要求**。BGP Router ID 与 OSPF Router ID 通常
 一致，但 Topolograph 从不强制：有歧义的结果会保留下来由你确认。
@@ -257,12 +182,12 @@ curl -sS -X DELETE ".../api/bgp-graph/<bgp_graph_time>/<igp_graph_time>/binding"
 !!! note "IS-IS 需要真实的 Router ID"
     IS-IS 节点在内部由解析器生成的伪 Router ID 命名，这个地址在网络中并不存在。
     只有设备自己通告的 **TE Router ID** 才算身份。不通告 TE Router ID 的设备对
-    重合度没有贡献 —— 这是诚实的结果，而不是缺陷。请在设备上启用 TE，或在
+    重合度没有贡献 - 这是诚实的结果，而不是缺陷。请在设备上启用 TE，或在
     **主机名映射**页面手工填写 Router ID；之后它会像主机名一样迁移到后续的图。
 
 ---
 
-## 数据读取
+## 查询 BGP 数据
 
 ### 图、节点与会话
 
@@ -282,7 +207,7 @@ GET /api/bgp-graph/{bgp_graph_time}/sessions?igp_relation=inter-domain&bgp_sessi
 | `external` | 至少一端不属于任何已绑定的图 |
 
 `bgp_session_type` 为 `ibgp` 或 `ebgp`，由会话 ASN 与 speaker 自身 ASN 比较得出，
-而不是取自 `AS_PATH[0]` —— 后者在反射路由上会产生误导。
+而不是取自 `AS_PATH[0]` - 后者在反射路由上会产生误导。
 
 ### 路由检索
 
@@ -294,8 +219,8 @@ GET /api/bgp-graph/{bgp_graph_time}/node/{router_id}/routes?evidence=loc_rib
 | 查询参数 | 行为 |
 |---|---|
 | `prefix=192.0.2.0/24` | 按完整前缀精确匹配 |
-| `prefix=192.0.2.5` | 包含匹配 —— 覆盖该地址的所有路由 |
-| `prefix=192.0.2.0/24&lpm=1` | 最长前缀匹配，返回一行 |
+| `prefix=192.0.2.5` | 包含匹配：覆盖该地址的所有路由，最长前缀在前 |
+| `mac`、`vni` | 仅 EVPN，见 [EVPN](#evpn) |
 | `afi` / `safi` | 数字形式的地址族 |
 | `rd` | Route Distinguisher |
 | `vrf` | VRF 名称，通过清单解析为其 RD |
@@ -330,7 +255,7 @@ GET /api/bgp-graph/{bgp_graph_time}/events/timeline
 
 `compare` 为每处变化返回一行：`added`、`withdrawn` 或带前后状态的 `changed`。
 
-在监控时间线上，`bgp_peer` 为每次会话 up/down 生成一个标记 —— 数量少，且每次抖动
+在监控时间线上，`bgp_peer` 为每次会话 up/down 生成一个标记 - 数量少，且每次抖动
 都重要；`bgp_route` 则做聚簇，因此一阵路由抖动只呈现为一个带计数的标记，而不是
 成千上万个点。
 
@@ -359,7 +284,7 @@ GET /api/graph/{graph_time}/route-lookup/{start_node}?destination=192.0.2.5&vrf=
 决策顺序是刻意设计的：
 
 1. 在选定的表或 VRF 内做**最长前缀匹配**。
-2. **BGP 最优路径选择** —— 每个前缀一条路径，依据 LOCAL_PREF、AS_PATH 长度、
+2. **BGP 最优路径选择** - 每个前缀一条路径，依据 LOCAL_PREF、AS_PATH 长度、
    ORIGIN 和 MED，在任何跨协议比较之前完成。Loc-RIB 观测直接结束比较：那就是
    路由器自己的选择。
 3. 在不同协议的存活候选之间比较**管理距离**。
@@ -375,30 +300,100 @@ GET /api/graph/{graph_time}/route-lookup/{start_node}?destination=192.0.2.5&vrf=
 | IS-IS | 115 |
 | iBGP | 200 |
 
-管理距离属于**路由**，而不属于拓扑边。OSPF、IS-IS 与 BGP 的度量值从不互相比较 ——
+管理距离属于**路由**，而不属于拓扑边。OSPF、IS-IS 与 BGP 的度量值从不互相比较 -
 度量只在其所属协议内部有意义。iBGP 还是 eBGP 由学到该路由的会话决定，而不是由
 `AS_PATH[0]` 决定。
 
 候选路由被限定在起始节点实际能看到的范围内：它自己上报的表，加上它直连会话邻居
 的表。不运行 BGP 的路由器不会继承任何东西。
 
----
+## EVPN
 
-## 保留策略
+*需要 Topolograph v2.73 及以上、BMP Watcher v1.1.0 及以上。*
 
-Topolograph **按数据源**（`srcid`）保留最近的若干 BGP 图，因此运行两个采集器的
-部署会各自保留完整的窗口。当某个 epoch 移出窗口时，它的路由和绑定一并删除。
-相同 `sesid` 下的周期性重发属于检查点，不占用窗口。
+基于 VXLAN 的 BGP EVPN（AFI 25 / SAFI 70）从 route reflector 的 BMP 数据流中读取。
+所有 EVPN 问题都针对你的 OSPF 或 IS-IS 图提出：由绑定到它的 BGP 图回答，每个 VTEP
+都解析为拥有该地址的路由器，因此到主机的路径终止于其后面的 leaf。
+
+### 路由类型
+
+| 路由类型 | RFC | 用途 |
+|---|---|---|
+| 1 Ethernet Auto-Discovery | [RFC 7432](https://datatracker.ietf.org/doc/html/rfc7432) | 存储并可搜索 |
+| 2 MAC/IP Advertisement | RFC 7432 | 主机位置：MAC、IP、VNI、VTEP、ESI；MAC 迁移 |
+| 3 Inclusive Multicast Ethernet Tag | RFC 7432、[RFC 6514](https://datatracker.ietf.org/doc/html/rfc6514) | 哪些 leaf 是某个 VNI 的 VTEP（VNI 取自 PMSI Tunnel 属性） |
+| 4 Ethernet Segment | RFC 7432 | 存储并可搜索 |
+| 5 IP Prefix | [RFC 9136](https://datatracker.ietf.org/doc/html/rfc9136) | VRF 的子网及其 L3VNI |
+
+### 路由属性
+
+EVPN 路由带有常规的 RD、route target、next hop 和 community，另有一个 `evpn` 对象：
+
+| 字段 | 含义 |
+|---|---|
+| `route_type` | 1 到 5 |
+| `mac` | 主机 MAC（RT-2） |
+| `ip`、`ip_len` | 主机 IP（RT-2），前缀及其长度（RT-5），发起路由器（RT-3、RT-4） |
+| `vni` | L2VNI（RT-2、RT-3） |
+| `l3vni` | VRF 的 L3VNI（RT-5，以及 symmetric IRB 下的 RT-2） |
+| `esi` | Ethernet Segment ID；全零表示单归属主机 |
+| `eth_tag` | Ethernet Tag ID |
+| `vtep` | VTEP：RT-3 与 RT-4 为发起路由器，其余为 next hop |
+| `mm_seq` | MAC Mobility 序列号（[RFC 7432 §15](https://datatracker.ietf.org/doc/html/rfc7432#section-15)） |
+
+RT-2 与 RT-5 同时填写 `prefix`（主机地址 /32 或 /128，或 RT-5 前缀），因此
+`prefix=` 能像查找其他路由一样找到 EVPN 主机和子网。
+
+```json
+{
+  "afi": 25, "safi": 70, "rd": "1:123.123.31.31:5",
+  "route_targets": ["65000:1020"], "nexthop": "123.123.31.31",
+  "evpn": {"route_type": 2, "mac": "00:c1:ab:00:00:03", "ip": null, "ip_len": null,
+           "vni": 1020, "l3vni": null, "esi": "00:00:00:00:00:00:00:00:00:00",
+           "eth_tag": 0, "vtep": "123.123.31.31", "mm_seq": null}
+}
+```
+
+### 能回答的问题
+
+所有问题都针对 IGP 图（`{graph_time}`）提出，无需 BGP 图时间。
+
+| 问题 | 请求 |
+|---|---|
+| fabric 中有哪些 VNI 和 VRF？ | `GET /api/graph/{graph_time}/vpns` |
+| 某台路由器看到哪些 VPN？ | `GET /api/graph/{graph_time}/node/{router_id}/vpns` |
+| 哪些 leaf 承载 VNI 1020 或 VRF tenant1？ | `GET /api/graph/{graph_time}/nodes?protocol=bgp&vni=1020` (或 `vrf=tenant1`) |
+| 主机在哪里：leaf、VNI、VRF、MAC？ | `GET /api/graph/{graph_time}/routes?prefix=10.10.20.13` 或 `?mac=00:c1:ab:00:00:03` |
+| 主机是否多归属？ | 同一请求：多个 VTEP 共享同一个非零 `esi` |
+| 某个 VRF 路由哪些前缀？ | `GET /api/graph/{graph_time}/routes?vrf=tenant1` |
+| 某个 leaf 上某 VNI 有什么？ | `GET /api/graph/{graph_time}/node/{router_id}/routes?vni=1010` |
+| MAC 是否迁移过，从哪个 leaf 到哪个，何时？ | `GET /api/events/{graph_time}/routes?mac=00:c1:ab:00:00:01&last_minutes=60` |
+| underlay 如何到达某个 VNI 的所有 VTEP？ | `GET /api/graph/{graph_time}/path/{node_a}/{vtep1},{vtep2}` |
+
+`routes` 还接受 `at=`（过去的某个时刻），以及 `vtep=`、`rt=`、`rd=`、`page`、
+`per_page`。在事件历史中，MAC 出现在新 VTEP 上的那一行带有 `moved_from_vtep`。
+同一 MAC 由多个 VTEP 以同一 ESI 通告属于多归属，而不是迁移。
+
+VPN 行在 VRF 清单知道名称时按 VRF 名称分组，否则按 route target 分组；EVPN 的
+bridge domain 每个 L2VNI 一行：
+
+```json
+{"name": null, "vni": 1020, "l3vni": 5000,
+ "route_targets": ["65000:1020", "65000:5000"],
+ "route_distinguishers": ["1:123.123.30.30:5", "1:123.123.31.31:5"],
+ "prefix_count": 4}
+```
+
+在界面中，同样的答案位于 BGP / VPN 路径表单，以及 Graph table 的 BGP Routes，
+其中上面每个字段都有对应的列。基于演示数据的逐步说明见 [BGP how-to](https://topolograph.com/how-to/bgp#evpn)，
+采集这些数据的实验拓扑见 [containerlab/13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp)。
 
 ---
 
 ## 当前限制
 
-- 采集器尚未附加 API 令牌；暂时请用 `curl` 提交快照。
-- 每个 BMP speaker 运行一个采集器并设置 `--source-id`。多个 speaker 汇入一个
-  采集器会使它们的观测混在一起。
-- EVPN 路由会被采集和保存，但路由表与 route lookup 面向前缀设计；EVPN 尚不是
-  一等检索对象。
+- EVPN 假定 VNI 在整个 fabric 内全局一致：不支持本地有效的 VNI（RFC 8365）。
+- Ethernet Segment 的 designated forwarder 由 leaf 自己选举，BMP 不携带这一信息。
 - 合法出现在两个已绑定 IGP 域中的 Router ID，在会话分类时只会归属其中之一。
 
 ---
@@ -408,5 +403,5 @@ Topolograph **按数据源**（`srcid`）保留最近的若干 BGP 图，因此�
 - [bmpwatcher on GitHub](https://github.com/Vadims06/bmpwatcher)
 - [OSPF Watcher](ospf-watcher.md) · [IS-IS Watcher](isis-watcher.md)
 - [事件、时间线与状态](events-timeline.md)
-- [BGP-LS 会话](../ingestion/bgp-ls.md) —— BGP-LS 承载的是 *IGP* 拓扑，与本页
+- [BGP-LS 会话](../ingestion/bgp-ls.md) - BGP-LS 承载的是 *IGP* 拓扑，与本页
   讨论的 BGP 路由状态是不同的主题

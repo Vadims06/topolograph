@@ -30,7 +30,7 @@
 
     ---
 
-    Сессии BGP, маршруты и контекст VPN через пассивную станцию BMP.
+    Сессии BGP, маршруты, контекст VPN и EVPN через пассивную станцию BMP.
 
     [:octicons-arrow-right-24: BMP Watcher](bmp-watcher.md)
 

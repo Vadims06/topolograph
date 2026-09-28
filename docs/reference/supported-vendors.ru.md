@@ -152,6 +152,7 @@ RFC, реализованные в парсерах и расчётах Topologr
 | MPLS TE | RFC 3209 | Приоритеты setup и holding при CSPF-размещении LSP-туннелей |
 | BGP | RFC 4271, RFC 4456, RFC 4364 | Выбор лучшего пути, route reflection и VPN-маршруты |
 | BGP | RFC 7854, RFC 8671, RFC 9069 | BMP: Adj-RIB-In / Adj-RIB-Out и Loc-RIB |
+| BGP | RFC 7432, RFC 9136, RFC 8365, RFC 6514 | EVPN: маршруты MAC/IP, Inclusive Multicast, Ethernet Segment и IP Prefix поверх VXLAN |
 
 ## Передача данных через BGP-LS
 
