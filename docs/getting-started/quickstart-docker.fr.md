@@ -47,6 +47,7 @@ La configuration se trouve dans un fichier `.env` à côté de
 | --- | --- |
 | `TOPOLOGRAPH_PORT` | Port de l'interface web (`8080` par défaut). Ouvrez `http://localhost:<port>/` après redémarrage. |
 | `DNS` | IP d'un serveur DNS, utilisée pour résoudre les identifiants de routeur en noms d'équipements sur le graphe. |
+| `DNS_LOOKUP_DEADLINE_SEC` | Durée maximale en secondes pendant laquelle un import attend les noms DNS (`5` par défaut). Les nœuds non résolus à temps gardent leur IP comme étiquette. |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL`, `TOPOLOGRAPH_WEB_API_PASSWORD` | Identifiants pour les requêtes de l'API REST. |
 | `TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS` | Liste blanche des plages d'IP source autorisées à appeler l'API. |
 | `TOPOLOGRAPH_API_TOKEN` | Jeton pour authentifier les requêtes de l'API REST à la place d'un couple identifiant/mot de passe. |

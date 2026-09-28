@@ -28,6 +28,7 @@ docker-compose up -d
 | `TOPOLOGRAPH_PORT` | Порт веб-интерфейса (по умолчанию `8080`). |
 | `MCP_PORT` | Порт [MCP-сервера](../automation/mcp-server.md) (по умолчанию `8000`). |
 | `DNS` | IP DNS-сервера, используемого для преобразования router ID в имена устройств. |
+| `DNS_LOOKUP_DEADLINE_SEC` | Максимальное время в секундах, которое загрузка ждёт ответа DNS (по умолчанию `5`). Узлы, не разрешённые вовремя, остаются подписаны IP-адресом. |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL`, `TOPOLOGRAPH_WEB_API_PASSWORD` | Учётные данные REST API. |
 | `TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS` | Список разрешённых диапазонов исходных IP для вызовов API. |
 | `TOPOLOGRAPH_API_TOKEN` | Токен для аутентификации запросов к REST API вместо пары логин/пароль. |

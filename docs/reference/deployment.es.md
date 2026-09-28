@@ -28,6 +28,7 @@ La configuración vive en `.env`, junto a `docker-compose.yml`.
 | `TOPOLOGRAPH_PORT` | Puerto de la interfaz web (por defecto `8080`). |
 | `MCP_PORT` | Puerto del [servidor MCP](../automation/mcp-server.md) (por defecto `8000`). |
 | `DNS` | IP del servidor DNS usado para resolver router IDs a nombres de dispositivo. |
+| `DNS_LOOKUP_DEADLINE_SEC` | Segundos máximos que una carga espera los nombres DNS (por defecto `5`). Los nodos no resueltos a tiempo conservan su IP como etiqueta. |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL`, `TOPOLOGRAPH_WEB_API_PASSWORD` | Credenciales de la API REST. |
 | `TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS` | Lista de permitidos de rangos de IP de origen para llamadas a la API. |
 | `TOPOLOGRAPH_API_TOKEN` | Token para autenticar solicitudes a la API REST en lugar de un par usuario/contraseña. |
