@@ -48,6 +48,9 @@ Endpoint padrão: `http://0.0.0.0:8000/mcp`.
 | `get_nodes` | Consulta os nós do diagrama |
 | `get_edges` | Consulta os enlaces do diagrama |
 | `get_shortest_path` | Calcula caminhos mais curtos (com suporte a caminho de backup) |
+| `list_vpns` | VNIs e VRFs da fabric, ou as VPNs que um roteador vê |
+| `get_routes` | Onde está um MAC ou IP e o que uma VRF ou VNI contém (BGP, EVPN) |
+| `get_route_events` | Histórico de rotas, incluindo movimentos de MAC entre VTEPs |
 | `upload_graph` | Envia um novo grafo |
 
 ## O que isso desbloqueia

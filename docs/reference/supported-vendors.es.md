@@ -155,6 +155,7 @@ RFC implementados en los parsers y los cálculos de Topolograph.
 | MPLS TE | RFC 3209 | Prioridades de setup y holding en la colocación CSPF de túneles LSP |
 | BGP | RFC 4271, RFC 4456, RFC 4364 | Selección del mejor camino, route reflection y rutas VPN |
 | BGP | RFC 7854, RFC 8671, RFC 9069 | BMP: Adj-RIB-In / Adj-RIB-Out y Loc-RIB |
+| BGP | RFC 7432, RFC 9136, RFC 8365, RFC 6514 | EVPN: rutas MAC/IP, Inclusive Multicast, Ethernet Segment e IP Prefix sobre VXLAN |
 
 ## Ingesta vía BGP-LS
 

@@ -47,7 +47,7 @@ docker-compose up -d
 | `TOPOLOGRAPH_PORT` | Порт Topolograph (по умолчанию `8080`). |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL` / `_PASSWORD` | Пользователь API, от имени которого Watcher отправляет данные (например, `ospf@topolograph.com`). |
 | `TEST_MODE` | При `True` воспроизводит демонстрационные события из статического файла вместо чтения живого IGP. |
-| `WATCHER_IP` | Переопределяет сообщаемый исходный IP Watcher-а (`srcid`), когда разрешение имени хоста в контейнерах ненадёжно. |
+| `WATCHER_IP` | Переопределяет сообщаемый исходный IP Watcher-а, когда разрешение имени хоста в контейнерах ненадёжно. |
 | `EXPORT_TO_ELASTICSEARCH_BOOL`, `ELASTIC_IP` | Включает и указывает адрес стека [ELK](../monitoring/elk-kibana.md). |
 | `EXPORT_TO_WEBHOOK_URL_BOOL`, `WEBHOOK_URL` | Включает уведомления [WebHook/Slack](../monitoring/webhooks.md). |
 

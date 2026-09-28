@@ -45,7 +45,7 @@ When you also run a [Watcher](../monitoring/index.md), its `.env` adds a few mor
 | `TOPOLOGRAPH_PORT` | Topolograph port (default `8080`). |
 | `TOPOLOGRAPH_WEB_API_USERNAME_EMAIL` / `_PASSWORD` | API user the Watcher posts as (e.g. `ospf@topolograph.com`). |
 | `TEST_MODE` | If `True`, replays demo events from a static file instead of reading the live IGP. |
-| `WATCHER_IP` | Override the Watcher's reported source IP (`srcid`) when hostname resolution is unreliable in containers. |
+| `WATCHER_IP` | Override the Watcher's reported source IP when hostname resolution is unreliable in containers. |
 | `EXPORT_TO_ELASTICSEARCH_BOOL`, `ELASTIC_IP` | Enable and target an [ELK](../monitoring/elk-kibana.md) stack. |
 | `EXPORT_TO_WEBHOOK_URL_BOOL`, `WEBHOOK_URL` | Enable [WebHook/Slack](../monitoring/webhooks.md) notifications. |
 

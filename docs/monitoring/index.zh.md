@@ -28,7 +28,7 @@
 
     ---
 
-    通过被动 BMP 站点采集 BGP 会话、路由与 VPN 上下文。
+    通过被动 BMP 站点采集 BGP 会话、路由以及 VPN 与 EVPN 上下文。
 
     [:octicons-arrow-right-24: BMP Watcher](bmp-watcher.md)
 

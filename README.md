@@ -23,7 +23,8 @@ After making changes — for example, redistributing routes from BGP into OSPF u
 - Identify the most loaded nodes and links, as well as fault-tolerant elements
 - Compare network states across different points in time
 - Ingest topology over **BGP-LS** from **OSPF** or **IS-IS** domains (via OSPF Watcher or IS-IS Watcher)
-- Ingest the **BGP** control plane over **BMP** — sessions, IPv4/IPv6/VPNv4/VPNv6 routes, VRF context — bound to your OSPF/IS-IS graphs (via BMP Watcher)
+- Ingest the **BGP** control plane over **BMP**: sessions, IPv4/IPv6/VPNv4/VPNv6 and **EVPN** routes, VRF context, bound to your OSPF/IS-IS graphs (via BMP Watcher)
+- Find where a host sits in an **EVPN/VXLAN** fabric, which leaves carry a VNI or VRF, and when a MAC moved between VTEPs
 - Look up what a router actually does with a destination: longest-prefix match, BGP best path, administrative distance, recursive next hop and the resulting IGP/LSP transport
 - Detect asymmetric routing paths
 - Discover backed-up and non-backed-up networks using the Analytics / Network Heatmap
@@ -45,7 +46,7 @@ Topolograph ingests the **BGP control plane** from your routers over **BMP**
 and stores it as a BGP graph beside your OSPF/IS-IS graphs.
 
 - **Peering** - BGP sessions with state, and which RIB view each feed observes.
-- **Route storage** - IPv4, IPv6, VPNv4 and VPNv6, with VRF / RD / RT context.
+- **Route storage** - IPv4, IPv6, VPNv4, VPNv6 and EVPN, with VRF / RD / RT context.
 - **Best-path calculation** - RFC 4271 §9.1, RFC 4456 for reflected routes,
   RFC 4364 for VPNs, over the attributes a collector feed carries:
   1. highest `LOCAL_PREF`
@@ -57,6 +58,12 @@ and stores it as a BGP graph beside your OSPF/IS-IS graphs.
 - **Path over IGP** - in BGP / VPN path mode the selected BGP next hop is
   recursively resolved through the IGP shortest path, so the route is shown
   with its real forwarding path and transport.
+- **EVPN** (RFC 7432, RFC 9136) - route types 1 to 5 with MAC, IP, VNI, L3VNI,
+  ESI, Ethernet Tag, VTEP and MAC Mobility sequence. Asked on the IGP graph:
+  where a host is, which leaves are VTEPs of a VNI or VRF, whether a MAC moved
+  and from which VTEP, whether a host is multihomed, and the underlay path to
+  every VTEP. Field reference and API: [EVPN](https://docs.topolograph.com/monitoring/bmp-watcher/#evpn).
+  Demo lab: [13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp).
 
 Set-up: [BMP Watcher](https://github.com/Vadims06/bmpwatcher) ·
 [install guide](https://docs.topolograph.com/monitoring/bmp-watcher/).

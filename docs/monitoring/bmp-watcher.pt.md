@@ -7,7 +7,7 @@ ambos.
 Ele é uma estação [BMP](https://datatracker.ietf.org/doc/html/rfc7854) passiva.
 Os roteadores abrem uma sessão TCP em direção a ele e enviam a sua Adj-RIB-In.
 O watcher não fala BGP, não estabelece peering e nunca se conecta a um roteador
-por conta própria — portanto não acrescenta nenhum estado BGP à rede observada.
+por conta própria - portanto não acrescenta nenhum estado BGP à rede observada.
 
 !!! info "O estado BGP é mantido separado do seu grafo IGP"
     Uma sessão BGP é uma relação de plano de controle, não um enlace de
@@ -31,7 +31,7 @@ por conta própria — portanto não acrescenta nenhum estado BGP à rede observ
 
 Uma rota VPN só é única junto com o seu Route Distinguisher, então o RD faz
 parte da sua identidade. Uma rota EVPN não tem prefixo algum e é identificada
-pelos componentes de NLRI da RFC 7432 — tipo de rota, Ethernet Segment ID,
+pelos componentes de NLRI da RFC 7432 - tipo de rota, Ethernet Segment ID,
 Ethernet Tag, MAC, IP.
 
 ### Mensagens BMP
@@ -39,10 +39,10 @@ Ethernet Tag, MAC, IP.
 | Mensagem BMP | O que o Topolograph faz com ela |
 |---|---|
 | Route Monitoring | monta a tabela e cada mudança de rota subsequente |
-| Peer Up | estado da sessão e o BGP Identifier do peer — o Router ID a que os eventos são atribuídos |
+| Peer Up | estado da sessão e o BGP Identifier do peer - o Router ID a que os eventos são atribuídos |
 | Peer Down | encerramento da sessão e um withdraw por rota que aquele peer carregava |
 | Initiation / Termination | ciclo de vida da sessão do coletor |
-| Statistics Report | ignorada — contadores não são estado de roteamento |
+| Statistics Report | ignorada - contadores não são estado de roteamento |
 
 ### Fluxos de política e nível de evidência
 
@@ -53,197 +53,112 @@ Loc-RIB é mantido como uma terceira observação:
 | Fluxo | Evidência | Significa |
 |---|---|---|
 | `pre` / `out-pre` | `pre_policy` | o peer anunciou; o roteador pode tê-la rejeitado |
-| `post` / `out-post` | `post_policy` | o roteador aceitou — um caminho candidato |
-| `loc-rib` | `loc_rib` | a escolha do próprio roteador — o melhor caminho instalado |
+| `post` / `out-post` | `post_policy` | o roteador aceitou - um caminho candidato |
+| `loc-rib` | `loc_rib` | a escolha do próprio roteador - o melhor caminho instalado |
 | `fib` | `fib` | presente na tabela de encaminhamento |
 
 Eles nunca são mesclados. Uma rota vista apenas em pre-policy **nunca** é
-reportada como selecionada ou instalada — essa distinção é a razão de existirem
+reportada como selecionada ou instalada - essa distinção é a razão de existirem
 os dois fluxos.
-
-### Observações, não sub-redes
-
-O mesmo prefixo é armazenado uma vez por speaker, uma por peer, uma por path ID
-e uma por fluxo de política. Todas as cópias sobrevivem, porque "quem anunciou o
-quê para quem" é exatamente a pergunta que uma tabela monitorada responde.
 
 ---
 
 ## Instalando o coletor
 
-O coletor é o [**bmpwatcher**](https://github.com/Vadims06/bmpwatcher) — uma
-estação BMP em Go que separa o replay inicial da tabela das mudanças que vêm
-depois. O README dele cobre a compilação, a execução em Docker e a configuração
-BMP do lado do roteador para FRR, IOS-XR, Junos e SR OS.
+Para testar sem uma rede real, execute o laboratório containerlab [13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp) do repositório bmpwatcher.
 
-Execução mínima, produzindo tanto o snapshot quanto o fluxo de eventos:
+O coletor é o [**bmpwatcher**](https://github.com/Vadims06/bmpwatcher), publicado
+como a imagem Docker `vadims06/bmpwatcher:latest`: uma estação BMP passiva à qual os roteadores
+se conectam em TCP 11019; ele nunca se conecta a um roteador. Ele separa a carga inicial
+da tabela das mudanças que vêm depois. O README dele cobre a configuração BMP do lado do
+roteador para FRR, IOS-XR, Junos e SR OS.
 
-```bash
-bmpwatcher \
-  --bmp-port=11019 \
-  --source-id=pe1 \
-  --watcher-name=bmp-dc1 \
-  --events=/var/log/bmpwatcher/events.jsonl \
-  --topolograph-topology-url=https://topolograph.com/api/watcher/bgp
-```
+Você precisa de uma conta no Topolograph: cadastre-se em topolograph.com ou, em uma
+instância self-hosted, entre com o usuário definido no `.env` dela (`TOPOLOGRAPH_WEB_API_USERNAME_EMAIL` / `TOPOLOGRAPH_WEB_API_PASSWORD`).
+Crie um token de API: **API → Token → Create Token**. O workspace é resolvido a partir
+do token no servidor e nunca vem do payload.
 
-!!! warning "A autenticação ainda não está integrada ao coletor"
-    `/api/watcher/bgp` exige `Authorization: Bearer sk-...`, e o coletor ainda
-    não anexa esse cabeçalho — um envio direto recebe `401`. Até que isso seja
-    lançado, escreva o documento localmente com `--topolograph-topology-file` e
-    faça o POST você mesmo (veja o exemplo com `curl` abaixo).
+### Executar com Docker Compose
 
-Obtenha o token em **Settings → API Tokens → Create token**. O workspace é
-resolvido a partir do token no servidor e nunca é lido do payload.
-
----
-
-## API de ingestão
-
-### `POST /api/watcher/bgp` — o snapshot da topologia
-
-O coletor monta a tabela inteira durante a sua janela de coleta e a envia como
-um único documento.
+O arquivo compose do repositório bmpwatcher executa juntos o coletor e o remetente de eventos Fluent Bit:
 
 ```bash
-curl -sS -X POST https://topolograph.com/api/watcher/bgp \
-  -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  --data @topolograph-topology.json
+git clone https://github.com/Vadims06/bmpwatcher.git && cd bmpwatcher
+cp .env.example .env
+docker compose --profile collector up -d
 ```
 
-```json
-{
-  "time": "2026-08-17T09:12:03Z",
-  "user": "bmp-dc1",
-  "srcid": "pe1",
-  "sesid": "b4f1c8e2",
-  "topology": {
-    "nodes": [
-      {"name": "10.0.0.1", "asn": "65001", "role": "speaker", "router_ip": "10.0.0.1"},
-      {"name": "10.0.0.2", "asn": "65002", "role": "peer"}
-    ],
-    "edges": [
-      {"source": "10.0.0.1", "target": "10.0.0.2",
-       "peer_ip": "10.0.0.2", "local_ip": "10.0.0.1", "asn": "65002",
-       "peer_type": 0, "policies": ["pre", "post"], "families": ["1/1", "1/128"]}
-    ],
-    "networks": [
-      {"subnet": "192.0.2.0/24", "type": "1", "subtype": 1,
-       "bmp_source": "10.0.0.1", "peer_ip": "10.0.0.2",
-       "policy": ["post"], "path_id": 0, "nexthop": "10.0.0.2",
-       "vpn_rd": "65001:100", "rt": "65001:100",
-       "labels": [24001], "data": {}}
-    ]
-  }
-}
-```
+Defina no `.env`:
 
-| Campo | Significado |
-|---|---|
-| `time` | timestamp do snapshot, ISO 8601 — também a chave de obsolescência |
-| `srcid` | a instância do coletor |
-| `sesid` | uma *execução* do coletor; muda a cada reinício |
-| `nodes[].role` | `speaker` reporta; `peer` apenas foi reportado |
-| `edges[]` | uma **sessão** BGP, não um par de roteadores |
-| `networks[]` | uma **observação** de rota |
-| `networks[].type` / `subtype` | AFI como string, SAFI como número |
-| `networks[].data` | o registro original do coletor, para que nenhum atributo não promovido se perca |
+- `TOPOLOGRAPH_HOST`: o endereço IP do host Docker, não `localhost`, porque o Topolograph e o BMP Watcher rodam em suas próprias redes de contêineres; `topolograph.com` para a instância pública.
+- `TOPOLOGRAPH_PORT`: `8080` por padrão, `443` para topolograph.com.
+- `WEBHOOK_TLS_ON`: `off` para um Topolograph self-hosted, `on` para topolograph.com.
+- `TOPOLOGRAPH_API_TOKEN`: o token `sk-...`.
+- `SOURCE_ID`: o nome deste coletor no Topolograph, por exemplo `dc1-rr`. Mantenha-o estável: um contêiner recriado com o mesmo nome mantém seus dados juntos.
+- `BMPWATCHER_LOG_DIR`: onde o coletor grava seus arquivos, `/var/log/bmpwatcher` por padrão.
 
-**Resposta**
+Pare-o com o mesmo perfil: `docker compose --profile collector down`. Habilite o Docker na inicialização (`systemctl enable docker`): os contêineres voltam após uma falha e um reboot.
 
-```json
-{"graph_time": "17Aug2026_09h12m03s_6_hosts", "checkpoint": false, "routes": 1428}
-```
-
-`graph_time` é o identificador público usado por todos os endpoints de leitura
-abaixo — o mesmo formato dos grafos IGP.
-
-**Ordenação e reenvios.** O `sesid` é criado quando o coletor inicia, exatamente
-quando os speakers reenviam as suas tabelas. Dentro de um mesmo `sesid` vence o
-`time` mais recente; um mais antigo ou igual é rejeitado com
-`400 stale snapshot`. Um reenvio completo periódico sob o mesmo `sesid` é
-tratado como um **checkpoint de reconciliação**, não como um grafo novo — ele
-retorna `checkpoint: true`, comprova que a fonte está viva numa rede silenciosa
-e corrige a visão atual se ela tiver divergido. Um novo `sesid` substitui a
-execução anterior.
-
-Todos os Route Targets são extraídos de `data.base_attrs.ext_community_list`, e
-não apenas do campo `rt` promovido — uma rota com vários RTs continua visível
-numa busca por qualquer um deles.
-
-### `POST /api/watcher/bgp/events` — o fluxo de mudanças
-
-Aceita um objeto de evento ou uma lista deles.
+O primeiro snapshot sai quando cada roteador terminou de enviar sua tabela: cerca de 30 segundos depois que suas rotas param de chegar, no máximo 5 minutos após a primeira. Verifique se foi enviado:
 
 ```bash
-curl -sS -X POST https://topolograph.com/api/watcher/bgp/events \
-  -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '[{
-        "srcid": "pe1", "sesid": "b4f1c8e2", "seq": 41,
-        "watcher_time": "2026-08-17T09:14:11Z",
-        "event_name": "prefix", "event_status": "withdraw",
-        "event_object": "192.0.2.0/24", "event_detected_by": "10.0.0.2",
-        "bmp_source": "10.0.0.1", "policy": "post",
-        "afi": 1, "safi": 1, "prefix": "192.0.2.0", "prefix_len": 24,
-        "family_data": {"peer_ip": "10.0.0.2"}
-      }]'
+docker logs bmpwatcher 2>&1 | grep 'topology posted'
 ```
 
-| Campo | Significado |
-|---|---|
-| `event_name` | `prefix`, `l3vpn`, `evpn`, `peer` |
-| `event_status` | `add`, `change`, `withdraw` (rotas); `up`, `down` (peers) |
-| `event_detected_by` | o roteador a que a mudança se refere |
-| `bmp_source` | o speaker que reportou — um roteador diferente em qualquer sessão refletida |
-| `seq` | monotônico por `sesid`; usado para deduplicação exata e detecção de lacunas |
-| `watcher_time` | relógio do coletor — ordena o fluxo |
-| `bmp_timestamp` | relógio do roteador — apenas correlação, nunca ordenação |
-| `replay_suspect` | pode ser a cauda de um replay em vez de uma mudança ao vivo |
+### EVPN: primeiras mensagens
 
-```json
-{"accepted": 1, "duplicates": 0}
+*Topolograph v2.73 ou posterior, BMP Watcher v1.1.0 ou posterior. A exportação EVPN foi verificada no FRR.*
+
+As perguntas de EVPN são respondidas no seu grafo OSPF ou IS-IS, então o
+Topolograph precisa de um grafo cujos Router IDs coincidam com os BGP speakers.
+
+1. **Obtenha o grafo IGP.** Para a sua rede, faça upload do LSDB ou rode o
+   [OSPF Watcher](ospf-watcher.md) / [IS-IS Watcher](isis-watcher.md). Para o
+   laboratório [13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp), o underlay OSPF é o grafo de
+   demonstração de 13 roteadores que o Topolograph cria em toda conta no
+   primeiro login; para IS-IS, faça upload de [demo_isis_LSDB.txt](https://github.com/Vadims06/topolograph/blob/master/demo_isis_LSDB.txt) como
+   FRR IS-IS.
+2. **Ative o BMP nos route reflectors**: eles têm as rotas EVPN de todos os
+   leaves, enquanto um leaf exporta só o que aprendeu. O FRR carrega o BMP como
+   módulo, então adicione `-M bmp` a `bgpd_options` e reinicie o FRR:
+
+```
+# /etc/frr/daemons
+bgpd_options="   --daemon -M bmp -A 127.0.0.1"
 ```
 
-Um evento cujo `(srcid, sesid)` não corresponde a um snapshot armazenado é
-rejeitado — **envie a topologia antes de iniciar o feed de eventos**. Um `seq`
-repetido é contado como duplicata e descartado; uma lacuna no `seq` é registrada
-como mensagem perdida.
+```
+router bgp 65000
+ bmp targets topolograph
+  bmp connect 198.51.100.10 port 11019 min-retry 1000 max-retry 2000
+  bmp monitor l2vpn evpn pre-policy
+  bmp monitor l2vpn evpn post-policy
+```
 
-Um evento de peer up/down é apenas informativo. O coletor já emite um withdraw
-comum por prefixo para cada rota que o peer caído carregava, portanto o evento
-de peer em si nunca altera o estado das rotas.
+No containerlab, edite o arquivo `daemons` do laboratório e recrie o laboratório:
+reiniciar o FRR dentro de um contêiner em execução derruba os links dele. Em
+`bmp connect` use um endereço do host do coletor que os roteadores alcancem na porta
+TCP 11019; no containerlab é o gateway da rede de gerência do laboratório
+(`docker network inspect <mgmt-network>`).
 
-### `POST /api/watcher/vrfs` — inventário de VRFs
-
-Route Distinguishers identificam rotas VPN, mas apenas o dispositivo conhece o
-*nome* da VRF e os seus Route Targets de import/export. Enviar o inventário
-permite buscar pelo nome da VRF em vez do RD.
+3. **Inicie o coletor** como acima.
+4. **Confira a resposta no grafo IGP**: o grafo cujos `protocols` incluem
+   `bgp`, seus VNIs e VRFs, e os leaves de um VNI.
 
 ```bash
-curl -sS -X POST https://topolograph.com/api/watcher/vrfs \
-  -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "router_id": "10.0.0.1",
-        "observed_at": "2026-08-17T09:10:00Z",
-        "vrfs": [{
-          "name": "Red",
-          "families": [{
-            "afi": "ipv4", "safi": "unicast",
-            "route_distinguisher": "65001:100",
-            "import_route_targets": ["65001:100", "65001:999"],
-            "export_route_targets": ["65001:100"]
-          }]
-        }]
-      }'
+TOPOLOGRAPH_URL=http://<host-ip>:8080   # https://topolograph.com para a instância pública
+curl -sS "$TOPOLOGRAPH_URL/api/graph/?protocol=bgp" -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN"
+curl -sS "$TOPOLOGRAPH_URL/api/graph/<graph_time>/vpns" -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN"
+curl -sS "$TOPOLOGRAPH_URL/api/graph/<graph_time>/nodes?protocol=bgp&vni=<vni>" -H "Authorization: Bearer $TOPOLOGRAPH_API_TOKEN"
 ```
 
-Cada observação é armazenada com o seu próprio timestamp em vez de sobrescrever
-a anterior, de modo que um grafo mais antigo ainda consegue resolver o estado da
-VRF como ele era naquele momento. A unicidade é `(workspace, router_id, rd)`; um
-reenvio sem mudanças não escreve nada.
+Uma lista `?protocol=bgp` vazia significa que o grafo BGP ainda não foi
+vinculado: confira `GET /api/bgp-graph/<bgp_graph_time>/bindings`. A tabela
+inicial chega no snapshot; o fluxo de eventos traz só as mudanças posteriores.
+
+Toda conta tem um grafo BGP de demonstração capturado no
+laboratório 13-hosts-demo-bgp e vinculado ao mesmo grafo de demonstração, então nesse
+grafo as respostas incluem também as rotas de demonstração.
 
 ---
 
@@ -257,7 +172,14 @@ BGP que abrange dois domínios IGP se vincula aos dois.
 | Estado | Significado |
 |---|---|
 | `bound` | sobreposição de Router IDs ≥ 80 %, sem ambiguidade |
-| `needs_mapping` | abaixo do limiar, ou dois candidatos empatados — aguardando confirmação |
+| `needs_mapping` | abaixo do limiar, ou dois candidatos empatados - aguardando confirmação |
+
+Um grafo BGP se vincula primeiro ao grafo IGP que estava em vigor no seu
+próprio momento: o mais recente que não seja posterior ao grafo BGP. Snapshots
+IGP tirados depois, enquanto ele ainda é o grafo BGP mais recente da sua fonte,
+também são vinculados, desde que mantenham os roteadores encontrados na primeira
+correspondência. Um roteador que entrou depois do snapshot IGP é contado pelos
+seus eventos de adjacência OSPF.
 
 A sobreposição de Router IDs é **evidência, não requisito**. Um BGP Router ID e
 um OSPF Router ID normalmente coincidem, mas o Topolograph nunca exige isso:
@@ -278,14 +200,14 @@ curl -sS -X DELETE ".../api/bgp-graph/<bgp_graph_time>/<igp_graph_time>/binding"
     Internamente, um nó IS-IS é nomeado por um pseudo Router ID criado pelo
     parser, que não existe em lugar algum da rede. Apenas um **TE Router ID**
     anunciado pelo dispositivo conta como identidade. Um dispositivo que não
-    anuncia nenhum não contribui para a pontuação de sobreposição — o que é o
+    anuncia nenhum não contribui para a pontuação de sobreposição - o que é o
     resultado honesto, não um defeito. Habilite TE no dispositivo ou defina o
     Router ID à mão na página de **mapeamento de hostnames**; a partir daí ele
     migra para os grafos seguintes como um hostname.
 
 ---
 
-## Lendo os dados
+## Consultando os dados BGP
 
 ### Grafos, nós e sessões
 
@@ -305,7 +227,7 @@ Cada sessão é classificada assim que os vínculos são conhecidos:
 | `external` | pelo menos uma ponta não está em nenhum grafo vinculado |
 
 `bgp_session_type` é `ibgp` ou `ebgp`, derivado do ASN da sessão comparado ao do
-próprio speaker — e não de `AS_PATH[0]`, que uma rota refletida tornaria
+próprio speaker - e não de `AS_PATH[0]`, que uma rota refletida tornaria
 enganoso.
 
 ### Busca de rotas
@@ -318,8 +240,8 @@ GET /api/bgp-graph/{bgp_graph_time}/node/{router_id}/routes?evidence=loc_rib
 | Parâmetro | Comportamento |
 |---|---|
 | `prefix=192.0.2.0/24` | correspondência exata do prefixo completo |
-| `prefix=192.0.2.5` | contenção — todas as rotas que cobrem o endereço |
-| `prefix=192.0.2.0/24&lpm=1` | correspondência do prefixo mais longo, uma linha |
+| `prefix=192.0.2.5` | contenção: todas as rotas que cobrem o endereço, o prefixo mais longo primeiro |
+| `mac`, `vni` | só EVPN, veja [EVPN](#evpn) |
 | `afi` / `safi` | família numérica |
 | `rd` | Route Distinguisher |
 | `vrf` | nome da VRF, resolvido para os seus RDs via inventário |
@@ -358,7 +280,7 @@ instante. Os limites de tempo são inclusivos nas duas pontas.
 antes/depois.
 
 Na linha do tempo de monitoramento, `bgp_peer` recebe um marcador por subida ou
-queda de sessão — volume baixo, e cada flap importa — enquanto `bgp_route` é
+queda de sessão - volume baixo, e cada flap importa - enquanto `bgp_route` é
 agrupado, de modo que uma rajada de churn de rotas aparece como um único
 marcador com contagem, e não como milhares de pontos.
 
@@ -388,7 +310,7 @@ GET /api/graph/{graph_time}/route-lookup/{start_node}?destination=192.0.2.5&vrf=
 A ordem de decisão é deliberada:
 
 1. **Correspondência do prefixo mais longo** dentro da tabela ou VRF escolhida.
-2. **Seleção de melhor caminho BGP** — um caminho por prefixo, por LOCAL_PREF,
+2. **Seleção de melhor caminho BGP** - um caminho por prefixo, por LOCAL_PREF,
    comprimento de AS_PATH, ORIGIN e MED, antes que qualquer coisa compare
    protocolos. Uma observação de Loc-RIB encerra a comparação: é a escolha do
    próprio roteador.
@@ -409,7 +331,7 @@ A ordem de decisão é deliberada:
 | iBGP | 200 |
 
 A distância administrativa pertence às **rotas**, nunca às arestas da topologia.
-Métricas de OSPF, IS-IS e BGP nunca são comparadas entre si — uma métrica só faz
+Métricas de OSPF, IS-IS e BGP nunca são comparadas entre si - uma métrica só faz
 sentido dentro do seu próprio protocolo. iBGP versus eBGP é decidido pela sessão
 em que a rota foi aprendida, não por `AS_PATH[0]`.
 
@@ -417,26 +339,100 @@ As rotas candidatas são limitadas ao que o nó inicial realmente enxerga: a sua
 própria tabela reportada mais as tabelas dos seus vizinhos diretos de sessão. Um
 roteador que não roda BGP não herda nada.
 
----
+## EVPN
 
-## Retenção
+*Topolograph v2.73 ou posterior, BMP Watcher v1.1.0 ou posterior.*
 
-O Topolograph mantém os grafos BGP mais recentes **por fonte** (`srcid`), então
-uma instalação com dois coletores mantém uma janela completa para cada um.
-Quando uma época sai da janela, as suas rotas e vínculos vão junto. Reenvios
-periódicos sob o mesmo `sesid` são checkpoints e não consomem a janela.
+BGP EVPN sobre VXLAN (AFI 25 / SAFI 70) é lido do fluxo BMP dos route
+reflectors. Toda pergunta de EVPN é feita ao seu grafo OSPF ou IS-IS: o grafo
+BGP vinculado a ele responde, e cada VTEP é resolvido para o roteador dono do
+endereço, então um caminho até um host termina no leaf por trás dele.
+
+### Tipos de rota
+
+| Tipo de rota | RFC | Usado para |
+|---|---|---|
+| 1 Ethernet Auto-Discovery | [RFC 7432](https://datatracker.ietf.org/doc/html/rfc7432) | armazenada e pesquisável |
+| 2 MAC/IP Advertisement | RFC 7432 | onde está um host: MAC, IP, VNI, VTEP, ESI; movimentos de MAC |
+| 3 Inclusive Multicast Ethernet Tag | RFC 7432, [RFC 6514](https://datatracker.ietf.org/doc/html/rfc6514) | quais leaves são VTEPs de um VNI (o VNI vem do atributo PMSI Tunnel) |
+| 4 Ethernet Segment | RFC 7432 | armazenada e pesquisável |
+| 5 IP Prefix | [RFC 9136](https://datatracker.ietf.org/doc/html/rfc9136) | sub-redes de uma VRF e seu L3VNI |
+
+### Atributos da rota
+
+Uma rota EVPN traz os habituais RD, route targets, next hop e communities, além
+de um objeto `evpn`:
+
+| Campo | Significado |
+|---|---|
+| `route_type` | de 1 a 5 |
+| `mac` | MAC do host (RT-2) |
+| `ip`, `ip_len` | IP do host (RT-2), prefixo e seu comprimento (RT-5), roteador de origem (RT-3, RT-4) |
+| `vni` | L2VNI (RT-2, RT-3) |
+| `l3vni` | L3VNI da VRF (RT-5, e RT-2 com symmetric IRB) |
+| `esi` | Ethernet Segment ID; só zeros significa host ligado a um único leaf |
+| `eth_tag` | Ethernet Tag ID |
+| `vtep` | o VTEP: o roteador de origem para RT-3 e RT-4, o next hop para os demais |
+| `mm_seq` | número de sequência de MAC Mobility ([RFC 7432 §15](https://datatracker.ietf.org/doc/html/rfc7432#section-15)) |
+
+Em RT-2 e RT-5 `prefix` também é preenchido (o endereço do host em /32 ou /128,
+ou o prefixo RT-5), então `prefix=` encontra hosts e sub-redes EVPN como
+qualquer outra rota.
+
+```json
+{
+  "afi": 25, "safi": 70, "rd": "1:123.123.31.31:5",
+  "route_targets": ["65000:1020"], "nexthop": "123.123.31.31",
+  "evpn": {"route_type": 2, "mac": "00:c1:ab:00:00:03", "ip": null, "ip_len": null,
+           "vni": 1020, "l3vni": null, "esi": "00:00:00:00:00:00:00:00:00:00",
+           "eth_tag": 0, "vtep": "123.123.31.31", "mm_seq": null}
+}
+```
+
+### Perguntas que responde
+
+Todas são feitas ao grafo IGP (`{graph_time}`), sem o tempo do grafo BGP.
+
+| Pergunta | Requisição |
+|---|---|
+| Quais VNIs e VRFs a fabric tem? | `GET /api/graph/{graph_time}/vpns` |
+| Quais VPNs um roteador vê? | `GET /api/graph/{graph_time}/node/{router_id}/vpns` |
+| Quais leaves carregam o VNI 1020 ou a VRF tenant1? | `GET /api/graph/{graph_time}/nodes?protocol=bgp&vni=1020` (ou `vrf=tenant1`) |
+| Onde está um host: leaf, VNI, VRF, MAC? | `GET /api/graph/{graph_time}/routes?prefix=10.10.20.13` ou `?mac=00:c1:ab:00:00:03` |
+| O host é multihomed? | a mesma requisição: vários VTEPs com um mesmo `esi` diferente de zero |
+| O que uma VRF roteia? | `GET /api/graph/{graph_time}/routes?vrf=tenant1` |
+| O que um leaf tem para um VNI? | `GET /api/graph/{graph_time}/node/{router_id}/routes?vni=1010` |
+| Um MAC se moveu, de qual leaf para qual, quando? | `GET /api/events/{graph_time}/routes?mac=00:c1:ab:00:00:01&last_minutes=60` |
+| Como o underlay alcança todos os VTEPs de um VNI? | `GET /api/graph/{graph_time}/path/{node_a}/{vtep1},{vtep2}` |
+
+`routes` também aceita `at=` para um momento passado, e `vtep=`, `rt=`, `rd=`,
+`page`, `per_page`. No histórico de eventos, a linha em que um MAC aparece num
+novo VTEP traz `moved_from_vtep`. O mesmo MAC anunciado por vários VTEPs com um
+mesmo ESI é multihoming, não um movimento.
+
+Uma linha de VPN agrupa rotas pelo nome da VRF quando o inventário de VRFs o
+conhece, senão pelo route target; um bridge domain EVPN é uma linha por L2VNI:
+
+```json
+{"name": null, "vni": 1020, "l3vni": 5000,
+ "route_targets": ["65000:1020", "65000:5000"],
+ "route_distinguishers": ["1:123.123.30.30:5", "1:123.123.31.31:5"],
+ "prefix_count": 4}
+```
+
+Na interface, as mesmas respostas estão no formulário de caminho BGP / VPN e em
+Graph table, BGP Routes, que tem colunas para cada campo acima. Um passo a passo
+com os dados de demonstração está no [BGP how-to](https://topolograph.com/how-to/bgp#evpn), e o laboratório em
+que foram capturados é [containerlab/13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp).
 
 ---
 
 ## Limites atuais
 
-- O coletor ainda não anexa o token de API; envie o snapshot com `curl` por
-  enquanto.
-- Rode um coletor por speaker BMP e defina `--source-id`. Vários speakers em um
-  coletor misturam as suas observações.
-- Rotas EVPN são coletadas e armazenadas, mas a tabela de rotas e o route lookup
-  são orientados a prefixos; EVPN ainda não é um objeto de busca de primeira
-  classe.
+- EVPN assume VNIs globais em toda a fabric: VNIs de significado local
+  (RFC 8365) não são suportados.
+- Qual leaf é o designated forwarder de um Ethernet Segment é decidido nos
+  próprios leaves e não é transportado por BMP.
 - Um Router ID que legitimamente aparece em dois domínios IGP vinculados é
   resolvido para um deles na classificação de sessões.
 
@@ -447,5 +443,5 @@ periódicos sob o mesmo `sesid` são checkpoints e não consomem a janela.
 - [bmpwatcher no GitHub](https://github.com/Vadims06/bmpwatcher)
 - [OSPF Watcher](ospf-watcher.md) · [IS-IS Watcher](isis-watcher.md)
 - [Eventos, Linha do Tempo e Status](events-timeline.md)
-- [Sessão BGP-LS](../ingestion/bgp-ls.md) — BGP-LS transporta topologia *IGP*,
+- [Sessão BGP-LS](../ingestion/bgp-ls.md) - BGP-LS transporta topologia *IGP*,
   um assunto diferente do estado de roteamento BGP desta página
