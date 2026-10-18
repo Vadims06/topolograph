@@ -10,6 +10,75 @@ Topolograph builds a model of the network from what its routing protocols report
 
 ![Topolograph graph of the 13-router demo network](docs/static/ui/graph-overview.png)
 
+## Get the LSDB
+
+Topolograph builds the graph from the LSDB of one router per area or level. Run the commands for your vendor, save the output to one text file and upload it.
+
+| Vendor | OSPFv2 | OSPFv3 | IS-IS |
+|---|---|---|---|
+| Allied Telesis | `show ip ospf database {router\|network\|external}` |  |  |
+| Arista |  | `show ipv6 ospf database detail` |  |
+| Bird | `show ospf state all` |  |  |
+| Cisco | `show ip ospf database {router\|network\|external}` |  | `show isis database detail` |
+| Cisco NX-OS | `show ip ospf database {router\|network\|external} detail` |  |  |
+| Ericsson | `show ospf database {router\|network\|external} detail` |  |  |
+| Extreme | `show ospf lsdb detail lstype {router\|network\|as-external}` |  |  |
+| Fortinet | `get router info ospf database {router\|network\|external} lsa` | `get router info6 ospf database router`, `network`, `external`, `intra-prefix` | `get router info isis database detail` |
+| FRRouting | `show ip ospf database {router\|network\|external}` |  | `show isis database detail` |
+| Huawei | `display ospf lsdb {router\|network\|ase}` |  | `display isis lsdb verbose` |
+| IP Infusion OcNOS | `show ip ospf database {router\|network\|external}` | `show ipv6 ospf database router`, `network`, `external`, `intra-prefix` | `show isis database verbose` |
+| Juniper | `show ospf database {router\|network\|external} extensive \| no-more` |  | `show isis database extensive` |
+| MikroTik | `/routing ospf lsa print detail file=lsa.txt` | `/routing/ospf/lsa/print detail without-paging where instance=v3` | `/routing/isis/lsp/print detail without-paging` |
+| Nokia | `show router ospf database type {router\|network\|external} detail` |  | `show router isis database detail` |
+| Palo Alto | `show routing protocol ospf dumplsdb` |  |  |
+| Quagga | `show ip ospf database {router\|network\|external}` |  |  |
+| Ruckus | `show ip ospf database link-state router`, `show ip ospf database link-state network`, `show ip ospf database external-link-state` |  |  |
+| Ubiquiti | `show ip ospf database {router\|network\|external}` |  |  |
+| ZTE |  |  | `show isis database verbose` |
+
+For TE attributes (bandwidth, TE metric, admin groups), append `show ip ospf database opaque-area` (OSPF) or use the detail/verbose IS-IS output. Notes per vendor, TE attributes and supported RFCs: [supported vendors](https://docs.topolograph.com/reference/supported-vendors/).
+
+## Snapshot and analysis
+
+Upload the file in the UI (Add, LSDB), pick the vendor and the protocol, or send it through the API. The snapshot is analysed offline, without access to the routers.
+
+<img src="docs/static/ui/upload-lsdb.png" alt="Add graph: LSDB upload" width="48%"> <img src="docs/static/ui/upload-file-step.png" alt="LSDB upload: vendor, protocol and file" width="48%">
+
+On the snapshot: path calculation, search over network elements, maintenance planning. In the demo network (13 routers, 26 links) the pe15 to pe30 path has cost 41 and four equal-cost paths.
+
+![Four equal-cost paths from pe15 to pe30](docs/static/ui/paths.png)
+
+Switching off the core10 to core30 link on the model recalculates SPF: traffic moves to core11 to core31, the cost goes from 41 to 50, and there are still four paths. The real network is not touched.
+
+![Consequences of the core10 to core30 failure: changed paths and where the traffic went](docs/static/ui/failure.png)
+
+*Failure mode on the same link: how many paths changed, which pairs moved to a backup and how the load on each link changed.*
+
+## Continuous monitoring
+
+The collector (watcher) receives routing protocol updates and passes on events about topology changes. It joins the network through an IGP adjacency over GRE, or through BGP-LS (OSPF and IS-IS), or through BMP (BGP). Each event arrives in Topolograph with a timestamp, and the timeline replays the state of the network at any moment: the T0 snapshot and any later state can be compared.
+
+| Watcher | Protocols | Modes | Edition |
+|---|---|---|---|
+| [ospfwatcher](https://github.com/Vadims06/ospfwatcher) | OSPF | GRE adjacency, BGP-LS | Enterprise |
+| [isiswatcher](https://github.com/Vadims06/isiswatcher) | IS-IS | GRE adjacency, BGP-LS | Enterprise |
+| [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology only | Community |
+| [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology + events | Enterprise |
+
+![Collector events on the graph and on the timeline](docs/static/ui/events.png)
+
+![BGP sessions over the OSPF graph](docs/static/ui/bgp-sessions.png)
+
+*The 13-router demo network with the BGP sessions layer on (Highlight, BGP sessions): dashed green lines are iBGP sessions learned over BMP, the ringed rr1 and rr2 are route reflectors, grey lines are OSPF links.*
+
+A watcher is added from the Topolograph UI (Add, Watcher): pick the type and the mode, and the wizard issues a watcher token and one install command. The command downloads `install.sh` pinned to a release, checks its SHA-256 and installs.
+
+<img src="docs/static/ui/watcher-mode.png" alt="Watcher wizard: choice of GRE or BGP-LS mode" width="48%"> <img src="docs/static/ui/watcher-install.png" alt="Watcher wizard: one-command install with a token" width="48%">
+
+## Investigation with an AI agent
+
+The engineer asks a question in natural language. Agent 1.0 calls the Topolograph MCP server tools for events and failure calculation and answers with a reference to the data. Agent 2.0 runs incident diagnostics by a runbook agreed in advance, with read-only device commands, started manually or automatically from a ticket. See the [AI agent docs](https://docs.topolograph.com/automation/ai-agent/).
+
 ## Questions Topolograph answers
 
 | Question | How it is answered | Edition |
@@ -21,31 +90,29 @@ Topolograph builds a model of the network from what its routing protocols report
 | Where is the virtual machine with this MAC address now? | An EVPN MAC lookup shows which VTEP or PE advertises it and which path the traffic takes to it. | Enterprise (BMP collector) |
 | The interface is up, so why is the adjacency not Full? | The protocol shows that there is no adjacency, and Agent 2.0 checks the cause, for example MTU, with read-only commands from an approved runbook. | Agent |
 
-## How it works
+## Quick start
 
-### 1. Snapshot and analysis
+* **Try it:** open the [interactive demo](https://topolograph.com/graphs?demo=1), or paste an LSDB on [topolograph.com](https://topolograph.com).
+* **Self-hosted, Community:** run [topolograph-docker](https://github.com/Vadims06/topolograph-docker) in your infrastructure; the routing data stays under your control.
+* **Enterprise:** watchers, event history, SSO and teams. [Contact us](https://topolograph.com/#editions).
 
-The output of the LSDB commands from one router becomes a static snapshot of the network. You work with it offline, without access to the routers: path calculation, search over network elements, maintenance planning. In the demo network (13 routers, 26 links) the pe15 to pe30 path has cost 41 and four equal-cost paths.
+### Community and Enterprise
 
-![Four equal-cost paths from pe15 to pe30](docs/static/ui/paths.png)
-
-Switching off the core10 to core30 link on the model recalculates SPF: traffic moves to core11 to core31, the cost goes from 41 to 50, and there are still four paths. The real network is not touched.
-
-![Traffic moved after the core10 to core30 failure on the model](docs/static/ui/failure.png)
-
-### 2. Continuous monitoring
-
-The collector (watcher) receives routing protocol updates and passes on events about topology changes. It joins the network through an IGP adjacency over GRE, or through BGP-LS (OSPF and IS-IS), or through BMP (BGP). Each event arrives in Topolograph with a timestamp, and the timeline replays the state of the network at any moment: the T0 snapshot and any later state can be compared.
-
-![Collector events on the graph and on the timeline](docs/static/ui/events.png)
-
-![BGP sessions over the OSPF graph](docs/static/ui/bgp-sessions.png)
-
-*The 13-router demo network with the BGP sessions layer on (Highlight, BGP sessions): dashed green lines are iBGP sessions learned over BMP, the ringed rr1 and rr2 are route reflectors, grey lines are OSPF links.*
-
-### 3. Investigation with an AI agent
-
-The engineer asks a question in natural language. Agent 1.0 calls the Topolograph MCP server tools for events and failure calculation and answers with a reference to the data. Agent 2.0 runs incident diagnostics by a runbook agreed in advance, with read-only device commands, started manually or automatically from a ticket. See the [AI agent docs](https://docs.topolograph.com/automation/ai-agent/).
+| | Community | Enterprise |
+|---|---|---|
+| LSDB upload, graph, path calculation, failure scenarios | Yes | Yes |
+| API, SDK, MCP server | Yes | Yes |
+| BGP and EVPN over BMP: peers, sessions, routes | Yes, current state from bmpwatcher in Topology only mode; no events | Yes, with change events |
+| Watchers (OSPF / IS-IS) | No, static topology from the LSDB only; demo graph | Yes, many watchers, unified monitoring |
+| Network event monitoring | No, demo graph only | Yes, fast queries over a long period |
+| Users | One or shared | Teams, RBAC |
+| Sign-in | Login / password | SSO (OIDC / SAML / LDAP) |
+| Action audit log | No | Yes |
+| Alerts (webhook, Zabbix, e-mail) | Event export: Logstash to ELK, Zabbix, webhook; Fluent Bit to webhook | Alert rules and routing |
+| NetFlow: traffic graph | No | Yes |
+| Hardware watcher | No | Yes, a physical device with the watchers installed: plugs into the LAN, SSH access |
+| Stack | Flask, MongoDB | Reworked for heavy load |
+| Support | GitHub issues | Priority, best effort, N business days |
 
 ## Complements your monitoring
 
@@ -59,44 +126,6 @@ Zabbix, Prometheus, Cacti and Grafana watch devices and interfaces. Topolograph 
 | SPF and ECMP paths | Needs separate development | Built in (Community) |
 | What-if failures and links with no backup | Usually not available | Built in, on the model (Community) |
 | Routing changes over time | Logs and traps of single devices | Events and the topology at the time of the event (Enterprise) |
-
-## Install and connect
-
-* **Hosted:** [topolograph.com](https://topolograph.com). Paste an LSDB or open the [interactive demo](https://topolograph.com/graphs?demo=1).
-* **Self-hosted, Community:** run [topolograph-docker](https://github.com/Vadims06/topolograph-docker) in your infrastructure; the routing data stays under your control. Upload an LSDB as a text file, through the API or as YAML.
-
-![LSDB upload wizard](docs/static/ui/upload-lsdb.png)
-
-* **Watchers, Enterprise:** add a watcher from the Topolograph UI (Add, Watcher). Pick the type and the mode (GRE or BGP-LS for OSPF and IS-IS, BMP for BGP); the wizard issues a watcher token and shows one install command. The command downloads `install.sh` pinned to a release, checks its SHA-256 and installs.
-
-<img src="docs/static/ui/watcher-mode.png" alt="Watcher wizard: choice of GRE or BGP-LS mode" width="48%"> <img src="docs/static/ui/watcher-install.png" alt="Watcher wizard: one-command install with a token" width="48%">
-
-## Community and Enterprise
-
-| | Community | Enterprise |
-|---|---|---|
-| Price and hosting | Free; self-hosted (Docker) and topolograph.com | Self-hosted or hosted with an on-site collector |
-| LSDB upload (text, API, YAML), graph, shortest and backup paths | Yes | Yes |
-| Failure and cost what-if, MPLS TE CSPF | Yes | Yes |
-| BGP and EVPN over BMP: peers, sessions, routes | Yes, current state from bmpwatcher in Topology only mode; no events | Yes, with change events |
-| API, SDK, MCP server | Yes | Yes |
-| OSPF and IS-IS watchers feeding Topolograph | No, demo graph only | Yes |
-| Event history and timeline | No, demo graph only | Yes |
-| SSO, roles, audit log | No | Yes |
-| Alert routing | Event export to ELK, Zabbix, webhook | Alert rules and routing |
-| Support | GitHub issues | Priority support |
-
-Enterprise: [contact us](https://topolograph.com/#editions).
-
-## Protocols and vendors
-
-OSPFv2, OSPFv3, IS-IS, BGP-LS, BGP/EVPN over BMP, MPLS TE. LSDB parsers cover the following vendors:
-
-### Supported vendors
-
-Cisco, Cisco NX-OS, Juniper, Nokia, Huawei, ZTE, Arista, Extreme, Ericsson, Fortinet FortiOS, FRRouting, Quagga, Bird, Ruckus, MikroTik, Palo Alto, Ubiquiti, Allied Telesis, IP Infusion OcNOS.
-
-Commands per vendor, protocol and TE attributes: [supported vendors](https://docs.topolograph.com/reference/supported-vendors/).
 
 ## Integrations
 
