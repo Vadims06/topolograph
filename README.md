@@ -39,7 +39,9 @@ The collector (watcher) receives routing protocol updates and passes on events a
 
 ![Collector events on the graph and on the timeline](docs/static/ui/events.png)
 
-![BGP sessions collected over BMP](docs/static/ui/bgp-sessions.png)
+![BGP sessions over the OSPF graph](docs/static/ui/bgp-sessions.png)
+
+*The 13-router demo network with the BGP sessions layer on (Highlight, BGP sessions): dashed green lines are iBGP sessions learned over BMP, the ringed rr1 and rr2 are route reflectors, grey lines are OSPF links.*
 
 ### 3. Investigation with an AI agent
 
@@ -76,10 +78,10 @@ Zabbix, Prometheus, Cacti and Grafana watch devices and interfaces. Topolograph 
 | Price and hosting | Free; self-hosted (Docker) and topolograph.com | Self-hosted or hosted with an on-site collector |
 | LSDB upload (text, API, YAML), graph, shortest and backup paths | Yes | Yes |
 | Failure and cost what-if, MPLS TE CSPF | Yes | Yes |
-| BGP and EVPN over BMP | Current state: BGP peers, how they connect, routes (bmpwatcher in Topology only mode, no events) | Current state and change events |
+| BGP and EVPN over BMP: peers, sessions, routes | Yes, current state from bmpwatcher in Topology only mode; no events | Yes, with change events |
 | API, SDK, MCP server | Yes | Yes |
-| OSPF and IS-IS watchers feeding Topolograph | Demo graph only | Yes |
-| Event history and timeline | Demo graph only | Yes |
+| OSPF and IS-IS watchers feeding Topolograph | No, demo graph only | Yes |
+| Event history and timeline | No, demo graph only | Yes |
 | SSO, roles, audit log | No | Yes |
 | Alert routing | Event export to ELK, Zabbix, webhook | Alert rules and routing |
 | Support | GitHub issues | Priority support |
