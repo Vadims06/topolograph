@@ -24,7 +24,7 @@ distribuye como contenedores.
 
 Todo se agrupa por **nivel de IS-IS (L1/L2)** en la línea de tiempo:
 
-![Panel de Topolograph con eventos L1/L2 de IS-IS](../static/ui/monitoring.png)
+![La página Monitoring con eventos del watcher](../static/ui/monitoring-histogram.png)
 
 !!! example "Cómo se ven los niveles"
     Una captura típica podría mostrar: un cambio de métrica en un enlace que

@@ -24,7 +24,7 @@ Comme l'OSPF Watcher, il est livré sous forme de conteneurs.
 
 Tout est regroupé par **niveau IS-IS (L1/L2)** sur la chronologie :
 
-![Tableau de bord Topolograph avec événements IS-IS L1/L2](../static/ui/monitoring.png)
+![La page Monitoring avec les événements du watcher](../static/ui/monitoring-histogram.png)
 
 !!! example "À quoi ressemblent les niveaux"
     Une capture typique pourrait montrer : un changement de métrique sur un

@@ -35,6 +35,21 @@ Hay tres Watchers, uno por protocolo, construidos sobre la misma arquitectura:
 
 </div>
 
+
+## Qué se ve en Topolograph
+
+Los eventos de un watcher aparecen en el grafo y en su línea de tiempo, en la página Monitoring y en la pestaña Events de un grafo.
+
+![Eventos en el grafo y en la línea de tiempo](../static/ui/events-timeline.png)
+
+![Monitoring: eventos por categoría en el periodo](../static/ui/monitoring-histogram.png)
+
+![Búsqueda de eventos: la tabla filtrada por router, tipo de evento y periodo](../static/ui/event-search.png)
+
+![El grafo en el momento de un evento](../static/ui/graph-at-event.png)
+
+![Un cambio de coste de enlace resaltado en el grafo](../static/ui/cost-change-on-graph.png)
+
 ## Qué hace un Watcher
 
 Un Watcher escucha de forma pasiva el plano de control del IGP — mediante

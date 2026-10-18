@@ -25,11 +25,11 @@ starts fast.
   maximum metric to steer transit traffic away; the OSPF analog of the IS-IS
   overload bit)
 
-![OSPF monitoring — new subnet event](../static/ui/events.png)
+![Events on the graph and on the timeline](../static/ui/events-timeline.png)
 
-![OSPF monitoring — metric change, old and new cost](../static/ui/monitoring.png)
+![A link cost change highlighted on the graph](../static/ui/cost-change-on-graph.png)
 
-![OSPF monitoring — up/down link events on the timeline](../static/ui/events-by-router.png)
+![Events grouped by router on the timeline](../static/ui/events-by-router.png)
 
 ## Connecting it
 

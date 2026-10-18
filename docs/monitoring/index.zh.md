@@ -34,6 +34,21 @@
 
 </div>
 
+
+## 在 Topolograph 中看到什么
+
+watcher 的事件显示在图及其时间线上：Monitoring 页面和图的 Events 标签页中。
+
+![图和时间线上的事件](../static/ui/events-timeline.png)
+
+![Monitoring：按类别显示时间段内的事件](../static/ui/monitoring-histogram.png)
+
+![事件搜索：按路由器、事件类型和时间段筛选的表格](../static/ui/event-search.png)
+
+![事件发生时刻的图](../static/ui/graph-at-event.png)
+
+![图上高亮显示的链路开销变化](../static/ui/cost-change-on-graph.png)
+
 ## Watcher 做什么
 
 Watcher 通过 [GRE 邻接关系](../ingestion/gre.md)或 [BGP-LS 会话](../ingestion/bgp-ls.md)

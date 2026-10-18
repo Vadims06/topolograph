@@ -35,6 +35,21 @@ There are three Watchers, one per protocol, built on the same architecture:
 
 </div>
 
+
+## What you see in Topolograph
+
+A watcher's events land on the graph and on its timeline, in the Monitoring page and in the Events tab of a graph.
+
+![Events on the graph and on the timeline](../static/ui/events-timeline.png)
+
+![Monitoring: events by category over the period](../static/ui/monitoring-histogram.png)
+
+![Event search: the table filtered by router, event type and period](../static/ui/event-search.png)
+
+![The graph at the moment of an event](../static/ui/graph-at-event.png)
+
+![A link cost change highlighted on the graph](../static/ui/cost-change-on-graph.png)
+
 ## What a Watcher does
 
 A Watcher passively listens to the IGP control plane — over a

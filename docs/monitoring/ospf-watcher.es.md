@@ -27,11 +27,11 @@ rápido.
   de tránsito se anuncian con la métrica máxima para desviar el tráfico de
   tránsito; el equivalente en OSPF del overload bit de IS-IS)
 
-![Monitoreo OSPF — evento de nueva subred](../static/ui/events.png)
+![Eventos en el grafo y en la línea de tiempo](../static/ui/events-timeline.png)
 
-![Monitoreo OSPF — cambio de métrica, costo anterior y nuevo](../static/ui/monitoring.png)
+![Un cambio de coste de enlace resaltado en el grafo](../static/ui/cost-change-on-graph.png)
 
-![Monitoreo OSPF — eventos de enlace arriba/abajo en la línea de tiempo](../static/ui/events-by-router.png)
+![Eventos agrupados por router en la línea de tiempo](../static/ui/events-by-router.png)
 
 ## Conectarlo
 

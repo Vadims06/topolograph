@@ -36,6 +36,21 @@
 
 </div>
 
+
+## Что видно в Topolograph
+
+События watcher попадают на граф и на его шкалу времени: на странице Monitoring и во вкладке Events графа.
+
+![События на графе и на шкале времени](../static/ui/events-timeline.png)
+
+![Monitoring: события по категориям за период](../static/ui/monitoring-histogram.png)
+
+![Поиск по событиям: таблица с фильтром по роутеру, типу события и периоду](../static/ui/event-search.png)
+
+![Граф в момент события](../static/ui/graph-at-event.png)
+
+![Изменение стоимости линка, подсвеченное на графе](../static/ui/cost-change-on-graph.png)
+
 ## Что делает Watcher
 
 Watcher пассивно слушает control plane IGP - через
