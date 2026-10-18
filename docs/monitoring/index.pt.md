@@ -70,11 +70,9 @@ flowchart LR
     L --> H[WebHook / Slack<br/>instant notifications]
 ```
 
-![Watcher and Topolograph: history vs present/future](../assets/functional-watcher-role.png)
+![O Watcher coleta as mudanças; o Topolograph mostra o passado, o presente e o futuro](../assets/functional-watcher-role.png)
 
-O Watcher armazena o **histórico** de eventos (o que aconteceu e quando); o
-Topolograph mostra o estado **presente** e permite explorar resultados
-**futuros potenciais**.
+O Watcher coleta cada mudança do plano de controle. O Topolograph as guarda como histórico: mostra a topologia em qualquer momento passado, seu estado atual e o resultado de uma falha ou de uma mudança de custo antes que aconteça.
 
 ## Eventos detectados
 

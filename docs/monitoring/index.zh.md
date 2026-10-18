@@ -66,10 +66,9 @@ flowchart LR
     L --> H[WebHook / Slack<br/>即时通知]
 ```
 
-![Watcher 与 Topolograph：历史与当前/未来](../assets/functional-watcher-role.png)
+![Watcher 收集变化；Topolograph 展示过去、现在和未来](../assets/functional-watcher-role.png)
 
-Watcher 存储的是事件的**历史**（发生了什么，以及何时发生）；Topolograph 展示的是
-**当前**状态，并让您探索**潜在的未来**结果。
+Watcher 收集控制平面的每一次变化。Topolograph 将其保存为历史：显示任意过去时刻的拓扑、当前状态，以及故障或开销变化在发生之前的影响。
 
 ## 检测到的事件
 
