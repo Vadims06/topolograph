@@ -69,8 +69,6 @@ Zabbix, Prometheus, Cacti and Grafana watch devices and interfaces. Topolograph 
 
 <img src="docs/static/ui/watcher-mode.png" alt="Watcher wizard: choice of GRE or BGP-LS mode" width="48%"> <img src="docs/static/ui/watcher-install.png" alt="Watcher wizard: one-command install with a token" width="48%">
 
-A watcher can also run standalone, without Topolograph, exporting to ELK, Zabbix, webhooks and Loki. That stays open source: [OSPF Watcher](https://github.com/Vadims06/ospfwatcher), [IS-IS Watcher](https://github.com/Vadims06/isiswatcher), [BMP Watcher](https://github.com/Vadims06/bmpwatcher).
-
 ## Community and Enterprise
 
 | | Community | Enterprise |
