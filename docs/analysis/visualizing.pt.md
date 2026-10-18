@@ -11,12 +11,12 @@ Escolha um nó de origem e um de destino e o Topolograph constrói a **árvore
 de caminho mais curto** entre eles, destacando o(s) caminho(s) e mostrando o
 custo total do IGP.
 
-![Shortest path tree between two nodes](../static/SPT.png)
+![Shortest path tree between two nodes](../static/ui/paths.png)
 
 Quando existem múltiplos caminhos de custo igual, o **ECMP** é mostrado
 explicitamente para que você veja onde o tráfego é balanceado.
 
-![Topology with ECMP paths](../static/topology_with_ecmp.png)
+![Topology with ECMP paths](../static/ui/graph-overview.png)
 
 ## Caminhos de backup
 
@@ -25,7 +25,7 @@ O Topolograph não mostra apenas o caminho primário — ele calcula o
 incluindo backups **secundários**. Isso responde à pergunta que toda janela
 de mudança levanta: *"se este enlace cair, para onde vai o tráfego?"*
 
-![Backup shortest path tree](../static/backup_SPT.png)
+![Backup shortest path tree](../static/ui/seven-routers-backup.png)
 
 Ele também distingue os caminhos de backup que passam por ECMP daqueles que
 não passam, o que importa quando você raciocina sobre capacidade durante
@@ -40,21 +40,20 @@ Teste cenários hipotéticos sem tocar em nada ao vivo.
 Remova um enlace e o Topolograph recalcula os caminhos instantaneamente,
 mostrando como o tráfego é redirecionado ao redor dele.
 
-![Network reaction to removing a link](../static/network_reaction_rem_edge1.png)
+![Network reaction to removing a link](../static/ui/failure.png)
 
 Você pode ver o resultado junto com as estatísticas afetadas:
 
-![Network reaction to a removed edge, with stats](../static/network_reaction_rem_edge_with_stat.png)
+![Network reaction to a removed edge, with stats](../static/ui/failure-impact-table.png)
 
 ### Desligar um nó
 
 Simule a falha de um roteador inteiro e observe o tráfego fluir ao redor do
-nó com falha. Clique com o botão direito em um nó e escolha
-**Shutdown this node**.
+nó com falha. Clique com o botão direito em um nó e escolha **Fail the router**.
 
-![Network reaction to shutting a node](../static/network_reaction_shut_node.png)
+![Network reaction to shutting a node](../static/ui/failure-node-menu.png)
 
-![Result after shutting a node](../static/network_reaction_result_on_shut_node.png)
+![Result after shutting a node](../static/ui/failure-node-result.png)
 
 ## Planejando custos de enlace
 
@@ -62,40 +61,34 @@ Altere uma métrica do IGP em tempo real e veja imediatamente o efeito na
 escolha de caminhos — ideal para planejar uma manutenção, deslocar tráfego
 para fora de um enlace ou validar um design de custo antes de aplicá-lo.
 
-Verifique se você ainda está na aba **Reação da rede a falhas**. Clique com o
-botão direito em um enlace: aparece um formulário com a lista de enlaces.
-Defina um novo valor de métrica ao lado do enlace desejado; o resultado do
-recálculo das rotas aparece no grafo imediatamente.
+Verifique se você ainda está no modo **Failure**. Clique com o botão direito em um enlace e escolha **Change the cost…**: um formulário é aberto. Informe o novo custo e clique em **Apply**; o resultado do recálculo das rotas aparece no grafo imediatamente.
 
-![Network reaction to an OSPF cost change](../static/network_reaction_ospf_cost_change.png)
+![Network reaction to an OSPF cost change](../static/ui/link-cost-change.png)
 
 ## Mapa de Calor da Rede { #network-heatmap }
 
-O **Mapa de Calor da Rede** (em Analytics) revela propriedades estruturais
+O **Mapa de Calor da Rede** (em **Analysis**) revela propriedades estruturais
 da topologia rapidamente — quais enlaces e nós carregam mais caminhos, onde
 estão seus pontos únicos de falha e quais redes **não têm caminho de
 backup**.
 
-![Network heatmap with networks](../static/network_heatmap_with_networks.png)
+![Network heatmap with networks](../static/ui/network-heatmap.png)
 
 Os nós marcados em vermelho concentram a maior quantidade de redes sem
 caminho de backup.
 
-Filtre para as redes que **não têm backup** para encontrar exatamente onde
-uma única falha causaria perda de alcançabilidade:
-
-![Heatmap highlighting non-backed-up networks](../static/network_heatmap_with_not_backuped_networks.png)
+As colunas **Not backed up** do relatório contam, por roteador, as redes sem backup, mostrando exatamente onde uma única falha causaria perda de alcançabilidade.
 
 ## Detectando caminhos assimétricos
 
 Um roteamento que segue um caminho na ida e um caminho diferente na volta
 pode complicar firewalls, QoS e a solução de problemas. O relatório
-**Analytics → Asymmetric paths** do Topolograph encontra esses pares para
+**Analysis → Asymmetric paths** do Topolograph encontra esses pares para
 você.
 
-![Analytics menu — asymmetric paths](../static/analytics_menu_asym_paths.png)
+![Analysis menu — asymmetric paths](../static/ui/analysis-menu.png)
 
-![A real asymmetric path example](../static/asymmetric_path_real_example.png)
+![A real asymmetric path example](../static/ui/asymmetric-paths.png)
 
 ## Para onde ir a seguir
 

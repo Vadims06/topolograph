@@ -26,7 +26,7 @@ identifiants ni mots de passe.
 
 </div>
 <div class="tg-hero__media" markdown>
-![Topolograph — importez une LSDB et construisez les chemins les plus courts](assets/text_file_and_short_paths.gif)
+![Topolograph — importez une LSDB et construisez les chemins les plus courts](static/ui/paths.png)
 </div>
 </div>
 

@@ -28,11 +28,11 @@ rapidamente.
   desviar o tráfego de trânsito; o equivalente do OSPF ao overload bit do
   IS-IS)
 
-![OSPF monitoring — new subnet event](../assets/ospf_monitoring_new_subnet.png)
+![OSPF monitoring — new subnet event](../static/ui/events.png)
 
-![OSPF monitoring — metric change, old and new cost](../assets/ospf_monitoring_change_metric.png)
+![OSPF monitoring — metric change, old and new cost](../static/ui/monitoring.png)
 
-![OSPF monitoring — up/down link events on the timeline](../assets/ospf_monitoring_down_link.png)
+![OSPF monitoring — up/down link events on the timeline](../static/ui/events-by-router.png)
 
 ## Conectando-o
 

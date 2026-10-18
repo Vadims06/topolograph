@@ -21,7 +21,7 @@ IS-IS 控制平面——记录并/或导出每一次变化到 **ELK**、**Zabbix
 
 在时间线上，所有内容都按 **IS-IS 级别（L1/L2）**分组：
 
-![带有 L1/L2 IS-IS 事件的 Topolograph 仪表盘](../assets/dashboard_l1_l2_events.png)
+![带有 L1/L2 IS-IS 事件的 Topolograph 仪表盘](../static/ui/monitoring.png)
 
 !!! example "各级别看起来是什么样子"
     一次典型的采集可能会显示：某条链路上的度量变化在 **L1 和 L2 上都出现了

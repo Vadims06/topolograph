@@ -8,7 +8,7 @@ de nivel superior `lsps:`. Topolograph ejecuta la colocación CSPF
 ancho de banda/afinidad/SRLG que un router real, sin ninguna señalización —
 y visualiza el resultado.
 
-![Túneles MPLS TE: tabla de LSP y rutas colocadas en el grafo](../static/mpls-lsp-graph-and-table.png)
+![Túneles MPLS TE: tabla de LSP y rutas colocadas en el grafo](../static/ui/lsp-tunnels.png)
 
 La pestaña **LSP tunnels** lista cada ruta con su estado de colocación,
 motivo de fallo, ancho de banda y prioridades; seleccionar un nodo muestra

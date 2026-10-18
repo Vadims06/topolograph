@@ -63,7 +63,7 @@ LSA 1 / 2 / 5 en un único archivo.
    captura.
 4. Envíe — Topolograph analiza la LSDB y renderiza el grafo.
 
-![Subir una LSDB y obtener un grafo](../assets/text_file_and_short_paths.gif)
+![Subir una LSDB y obtener un grafo](../static/ui/upload-file-step.png)
 
 El resultado es una **instantánea**: una imagen congelada del estado de la
 red en el momento en que capturó la base de datos. Todo análisis que
@@ -76,7 +76,7 @@ Con el grafo en pantalla, elija un nodo de origen y otro de destino y
 construya la ruta más corta entre ellos. Topolograph resalta la ruta y
 muestra su costo total.
 
-![Construir un árbol de ruta más corta](../assets/build-spt.gif)
+![Construir un árbol de ruta más corta](../static/ui/paths.png)
 
 Desde aquí puede de inmediato:
 

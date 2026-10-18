@@ -59,7 +59,7 @@ into one file.
 3. Pick the **vendor** and **protocol** that match your capture.
 4. Submit — Topolograph parses the LSDB and renders the graph.
 
-![Uploading an LSDB and getting a graph](../assets/text_file_and_short_paths.gif)
+![Uploading an LSDB and getting a graph](../static/ui/upload-file-step.png)
 
 The result is a **snapshot**: a frozen picture of the network state at the moment
 you captured the database. Every analysis you run happens against this snapshot,
@@ -71,7 +71,7 @@ With the graph on screen, pick a source and destination node and build the
 shortest path between them. Topolograph highlights the path and shows its total
 cost.
 
-![Building a shortest path tree](../assets/build-spt.gif)
+![Building a shortest path tree](../static/ui/paths.png)
 
 From here you can immediately:
 

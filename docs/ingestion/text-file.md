@@ -4,7 +4,7 @@ The simplest way to get a topology into Topolograph: copy the Link-State
 Database from **one** router and paste (or upload) it. No agents, no tunnels,
 nothing that touches the live network.
 
-![Upload an LSDB text file and build short paths](../assets/text_file_and_short_paths.gif)
+![Upload an LSDB text file and build short paths](../static/ui/upload-lsdb.png)
 
 ## Why one router is enough
 
@@ -82,9 +82,9 @@ parses them together.
 3. Select the matching **vendor** and **protocol** (OSPF / IS-IS).
 4. Optionally, give the upload a **name** (e.g. `before router upgrade` or
    `before maintenance`) so you can find the snapshot later.
-5. Click **Upload hosts**. Topolograph parses the database and renders the graph.
+5. Click **Upload**. Topolograph parses the database and renders the graph.
 
-![Uploading an LSDB text file and building short paths](../assets/text_file_and_short_paths.gif)
+![Uploading an LSDB text file and building short paths](../static/ui/upload-lsdb.png)
 
 The result is a **snapshot** — a frozen picture of the network at upload time.
 Every analysis runs against the snapshot, so nothing you try affects production.

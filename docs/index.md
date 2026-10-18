@@ -25,7 +25,7 @@ offline, no logins or passwords required.
 
 </div>
 <div class="tg-hero__media" markdown>
-![Topolograph — upload an LSDB and build shortest paths](assets/text_file_and_short_paths.gif)
+![Topolograph — upload an LSDB and build shortest paths](static/ui/paths.png)
 </div>
 </div>
 

@@ -53,7 +53,7 @@ virem do OSPF ou do IS-IS.
 Quando os dados de TE chegam via BGP-LS, a página de monitoramento mostra
 os atributos do enlace conforme as atualizações chegam:
 
-![TE link attributes on the monitoring page via BGP-LS](../static/te_link_attributes_on_monitoring_page_full_with_bgpls_1.png)
+![TE link attributes on the monitoring page via BGP-LS](../static/ui/monitoring.png)
 
 ## Filtrando enlaces por atributos de TE
 

@@ -111,7 +111,7 @@ graph.paths.shortest("1.1.1.1", "2.2.2.2",
 
 Test case: power off nodes `10.1.1.2` and `10.1.1.4` on a 7-router topology.
 
-![Test topology of 7 routers](https://user-images.githubusercontent.com/20796986/144145217-454c1442-ba6c-4337-a6f2-8dde5d337f1e.png)
+![Test topology of 7 routers](../static/ui/seven-routers-two-failed.png)
 
 What the test answers:
 

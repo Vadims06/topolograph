@@ -24,7 +24,7 @@ ele é distribuído como contêineres.
 
 Tudo é agrupado por **nível do IS-IS (L1/L2)** na linha do tempo:
 
-![Topolograph dashboard with L1/L2 IS-IS events](../assets/dashboard_l1_l2_events.png)
+![Topolograph dashboard with L1/L2 IS-IS events](../static/ui/monitoring.png)
 
 !!! example "Como os níveis aparecem"
     Uma captura típica pode mostrar: uma mudança de métrica em um enlace

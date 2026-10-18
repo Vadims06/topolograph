@@ -92,7 +92,9 @@ admin group), which you can then filter on through the diagram edges API.
 
 Add a link with `cost` 1 between R3 (10.10.10.3) and R4 (10.10.10.4) and see how the network reacts: traffic increases on the direct R3-R4 link and decreases towards R2 (10.10.10.2) and R5 (10.10.10.5).
 
-![Network reaction on adding the R3-R4 link](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/yaml_diagram_network_reaction_on_adding_r3_r4.PNG)
+In the screenshot the R3-R4 link is already in the diagram at cost 100; its cost is changed to 1 in the **Failure** mode (**Change the cost…**).
+
+![Network reaction on adding the R3-R4 link](../static/ui/six-routers-cost.png)
 
 ## Network attributes
 

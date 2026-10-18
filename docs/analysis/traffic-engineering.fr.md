@@ -55,7 +55,7 @@ d'OSPF ou d'IS-IS.
 Lorsque les données TE arrivent via BGP-LS, la page de surveillance affiche
 les attributs de lien à mesure que les mises à jour arrivent :
 
-![Attributs de lien TE sur la page de surveillance via BGP-LS](../static/te_link_attributes_on_monitoring_page_full_with_bgpls_1.png)
+![Attributs de lien TE sur la page de surveillance via BGP-LS](../static/ui/monitoring.png)
 
 ## Filtrer les liens par attributs TE
 

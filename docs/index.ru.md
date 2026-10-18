@@ -25,7 +25,7 @@ Topolograph строит топологию OSPF/IS-IS по LSDB с одного
 
 </div>
 <div class="tg-hero__media" markdown>
-![Topolograph - загрузите LSDB и постройте кратчайшие пути](assets/text_file_and_short_paths.gif)
+![Topolograph - загрузите LSDB и постройте кратчайшие пути](static/ui/paths.png)
 </div>
 </div>
 

@@ -24,7 +24,7 @@ Topolograph 通过单台设备的链路状态数据库（LSDB）构建您的 OSP
 
 </div>
 <div class="tg-hero__media" markdown>
-![Topolograph — 上传 LSDB 并构建最短路径](assets/text_file_and_short_paths.gif)
+![Topolograph — 上传 LSDB 并构建最短路径](static/ui/paths.png)
 </div>
 </div>
 

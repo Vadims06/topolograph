@@ -24,7 +24,7 @@ containers.
 
 Everything is grouped by **IS-IS level (L1/L2)** on the timeline:
 
-![Topolograph dashboard with L1/L2 IS-IS events](../assets/dashboard_l1_l2_events.png)
+![Topolograph dashboard with L1/L2 IS-IS events](../static/ui/monitoring.png)
 
 !!! example "What the levels look like"
     A typical capture might show: a metric change on a link appearing as

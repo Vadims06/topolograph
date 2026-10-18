@@ -27,11 +27,11 @@ donc le démarrage est rapide.
   tous les liens de transit annoncés à la métrique maximale pour détourner
   le trafic de transit ; l'équivalent OSPF du bit overload d'IS-IS)
 
-![Surveillance OSPF — événement de nouveau sous-réseau](../assets/ospf_monitoring_new_subnet.png)
+![Surveillance OSPF — événement de nouveau sous-réseau](../static/ui/events.png)
 
-![Surveillance OSPF — changement de métrique, ancien et nouveau coût](../assets/ospf_monitoring_change_metric.png)
+![Surveillance OSPF — changement de métrique, ancien et nouveau coût](../static/ui/monitoring.png)
 
-![Surveillance OSPF — événements de lien en service/hors service sur la chronologie](../assets/ospf_monitoring_down_link.png)
+![Surveillance OSPF — événements de lien en service/hors service sur la chronologie](../static/ui/events-by-router.png)
 
 ## Le connecter
 

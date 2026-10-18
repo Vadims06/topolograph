@@ -109,7 +109,7 @@ r_post.json()
 
 The `'192.168.100.100' - '10.1.1.4'` link is shown as nonbackuped.
 
-![Shortest path on the graph](https://github.com/Vadims06/topolograph/blob/aaabbef7bcbf5666024702aa1419599e9b9cd617/docs/release-notes/v2.28/shortest_path_graph.png)
+![Shortest path on the graph](../static/ui/seven-routers-paths.png)
 
 ### Backup path
 
@@ -130,7 +130,7 @@ r_post.json()
 'unbackup_paths_nodes_name_as_ll_in_ll': [['192.168.100.100', '10.1.1.4']]}
 ```
 
-![Backup path on the graph](https://github.com/Vadims06/topolograph/blob/aaabbef7bcbf5666024702aa1419599e9b9cd617/docs/release-notes/v2.28/backup_path_graph.png)
+![Backup path on the graph](../static/ui/seven-routers-backup.png)
 
 ### Shortest path between networks
 
@@ -150,7 +150,7 @@ r_post.json()
 'unbackup_paths_nodes_name_as_ll_in_ll': []}
 ```
 
-![Shortest path between networks](https://github.com/Vadims06/topolograph/blob/921fcf316f63f3ff6fafc1f6c899031952ad0bc4/docs/release-notes/v2.28/shortest_path_between_networks.png)
+![Shortest path between networks](../static/ui/seven-routers-networks.png)
 
 For anything beyond a one-off call, the [Python SDK](python-sdk.md) gives you a
 much friendlier interface over the same endpoints.

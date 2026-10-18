@@ -5,7 +5,7 @@
 
 这是**手动**导入方式。
 
-![上传 LSDB 文本文件并构建最短路径](../assets/text_file_and_short_paths.gif)
+![上传 LSDB 文本文件并构建最短路径](../static/ui/upload-lsdb.png)
 
 ## 为什么一台路由器就够了
 
@@ -76,7 +76,7 @@ OSPF 和 IS-IS 都是链路状态协议：区域/级别内的每台路由器都�
 3. 选择匹配的**厂商**和**协议**（OSPF / IS-IS）。
 4. 提交。Topolograph 会解析数据库并渲染图。
 
-![上传 LSDB 文本文件并构建最短路径](../assets/text_file_and_short_paths.gif)
+![上传 LSDB 文本文件并构建最短路径](../static/ui/upload-lsdb.png)
 
 结果是一个**快照**——采集时刻网络的一张定格图片。所有分析都是针对该快照运行的，
 因此您在这里所做的任何尝试都不会影响生产环境。

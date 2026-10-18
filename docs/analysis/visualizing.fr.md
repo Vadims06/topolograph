@@ -11,12 +11,12 @@ Choisissez un nœud source et un nœud destination et Topolograph construit
 l'**arbre des chemins les plus courts** entre eux, en mettant en
 surbrillance le(s) chemin(s) et en affichant le coût IGP total.
 
-![Arbre des chemins les plus courts entre deux nœuds](../static/SPT.png)
+![Arbre des chemins les plus courts entre deux nœuds](../static/ui/paths.png)
 
 Lorsque plusieurs chemins à coût égal existent, l'**ECMP** est affiché
 explicitement afin que vous puissiez voir où le trafic se répartit.
 
-![Topologie avec chemins ECMP](../static/topology_with_ecmp.png)
+![Topologie avec chemins ECMP](../static/ui/graph-overview.png)
 
 ## Chemins de secours
 
@@ -26,7 +26,7 @@ du chemin principal, y compris les secours **secondaires**. Cela répond à
 la question que soulève chaque fenêtre de changement : *« si ce lien tombe,
 où va le trafic ? »*
 
-![Arbre des chemins de secours les plus courts](../static/backup_SPT.png)
+![Arbre des chemins de secours les plus courts](../static/ui/seven-routers-backup.png)
 
 Il distingue aussi les chemins de secours qui empruntent l'ECMP de ceux qui
 ne le font pas, ce qui compte lorsque vous raisonnez sur la capacité
@@ -41,21 +41,20 @@ Testez des scénarios « et si » sans rien toucher en production.
 Supprimez un lien et Topolograph recalcule instantanément les chemins, en
 montrant comment le trafic se réachemine autour de celui-ci.
 
-![Réaction du réseau à la suppression d'un lien](../static/network_reaction_rem_edge1.png)
+![Réaction du réseau à la suppression d'un lien](../static/ui/failure.png)
 
 Vous pouvez voir le résultat avec les statistiques concernées :
 
-![Réaction du réseau à un lien supprimé, avec statistiques](../static/network_reaction_rem_edge_with_stat.png)
+![Réaction du réseau à un lien supprimé, avec statistiques](../static/ui/failure-impact-table.png)
 
 ### Couper un nœud
 
 Simulez la panne d'un routeur entier et observez le trafic contourner le
-nœud en panne. Faites un clic droit sur un nœud et choisissez
-**Shutdown this node**.
+nœud en panne. Faites un clic droit sur un nœud et choisissez **Fail the router**.
 
-![Réaction du réseau à la coupure d'un nœud](../static/network_reaction_shut_node.png)
+![Réaction du réseau à la coupure d'un nœud](../static/ui/failure-node-menu.png)
 
-![Résultat après la coupure d'un nœud](../static/network_reaction_result_on_shut_node.png)
+![Résultat après la coupure d'un nœud](../static/ui/failure-node-result.png)
 
 ## Planifier les coûts de liens
 
@@ -64,40 +63,33 @@ le choix des chemins — idéal pour planifier une maintenance, déplacer du
 trafic hors d'un lien, ou valider une conception de coûts avant de la
 déployer.
 
-Assurez-vous d'être toujours sur l'onglet **Réaction du réseau aux pannes**.
-Faites un clic droit sur un lien : un formulaire listant les liens apparaît.
-Définissez une nouvelle valeur de métrique en face du lien voulu ; le
-résultat du recalcul des chemins s'affiche immédiatement sur le graphe.
+Assurez-vous d'être toujours en mode **Failure**. Faites un clic droit sur un lien et choisissez **Change the cost…** : un formulaire s'ouvre. Saisissez le nouveau coût et cliquez sur **Apply** ; le résultat du recalcul des chemins s'affiche immédiatement sur le graphe.
 
-![Réaction du réseau à un changement de coût OSPF](../static/network_reaction_ospf_cost_change.png)
+![Réaction du réseau à un changement de coût OSPF](../static/ui/link-cost-change.png)
 
 ## Carte de chaleur du réseau { #network-heatmap }
 
-La **carte de chaleur du réseau** (sous Analytics) révèle en un coup d'œil
+La **carte de chaleur du réseau** (sous **Analysis**) révèle en un coup d'œil
 les propriétés structurelles de la topologie — quels liens et nœuds portent
 le plus de chemins, où se trouvent vos points de défaillance uniques, et
 quels réseaux n'ont **aucun chemin de secours**.
 
-![Carte de chaleur du réseau avec les réseaux](../static/network_heatmap_with_networks.png)
+![Carte de chaleur du réseau avec les réseaux](../static/ui/network-heatmap.png)
 
 Les nœuds marqués en rouge portent le plus de réseaux sans chemin de secours.
 
-Filtrez sur les réseaux qui **ne sont pas protégés par un secours** pour
-trouver exactement où une panne unique provoquerait une perte
-d'accessibilité :
-
-![Carte de chaleur mettant en évidence les réseaux non protégés](../static/network_heatmap_with_not_backuped_networks.png)
+Les colonnes **Not backed up** du rapport comptent, par routeur, les réseaux sans secours et montrent exactement où une panne unique provoquerait une perte d'accessibilité.
 
 ## Détecter le routage asymétrique
 
 Un routage qui emprunte un chemin à l'aller et un chemin différent au
 retour peut compliquer les pare-feux, la QoS et le dépannage. Le rapport
-**Analytics → Asymmetric paths** de Topolograph trouve ces paires pour
+**Analysis → Asymmetric paths** de Topolograph trouve ces paires pour
 vous.
 
-![Menu Analytics — chemins asymétriques](../static/analytics_menu_asym_paths.png)
+![Menu Analysis — chemins asymétriques](../static/ui/analysis-menu.png)
 
-![Exemple réel de chemin asymétrique](../static/asymmetric_path_real_example.png)
+![Exemple réel de chemin asymétrique](../static/ui/asymmetric-paths.png)
 
 ## Et ensuite ?
 

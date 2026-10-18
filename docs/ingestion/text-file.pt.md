@@ -4,7 +4,7 @@ A forma mais simples de trazer uma topologia para o Topolograph: copie o
 banco de dados de estado de enlace de **um** roteador e cole-o (ou envie-o).
 Sem agentes, sem túneis, nada que toque a rede em produção.
 
-![Upload an LSDB text file and build short paths](../assets/text_file_and_short_paths.gif)
+![Upload an LSDB text file and build short paths](../static/ui/upload-lsdb.png)
 
 ## Por que um roteador é suficiente
 
@@ -80,7 +80,7 @@ Topolograph as analisa em conjunto.
 3. Selecione o **fornecedor** e o **protocolo** correspondentes (OSPF / IS-IS).
 4. Envie. O Topolograph analisa o banco de dados e renderiza o grafo.
 
-![Uploading an LSDB text file and building short paths](../assets/text_file_and_short_paths.gif)
+![Uploading an LSDB text file and building short paths](../static/ui/upload-lsdb.png)
 
 O resultado é um **snapshot** — uma imagem congelada da rede no momento da
 captura. Toda análise é executada sobre o snapshot, então nada do que você
