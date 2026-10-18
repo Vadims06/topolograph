@@ -112,7 +112,7 @@ The engineer asks a question in natural language. Agent 1.0 calls the Topolograp
 | NetFlow: traffic graph | No | Yes |
 | Hardware watcher | No | Yes, a physical device with the watchers installed: plugs into the LAN, SSH access |
 | Stack | Flask, MongoDB | Reworked for heavy load |
-| Support | GitHub issues | Priority, best effort, N business days |
+| Support | GitHub issues | Priority support |
 
 ## Complements your monitoring
 
