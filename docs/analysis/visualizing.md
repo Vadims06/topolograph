@@ -16,6 +16,10 @@ where traffic load-balances.
 
 ![Topology with ECMP paths](../static/topology_with_ecmp.png)
 
+To find the node that terminates a network, start typing the network in the
+**Focus/Source** field: a dropdown lists all nodes with this network, and
+choosing one focuses the graph on that node.
+
 ## Backup paths
 
 Topolograph doesn't just show the primary path — it computes the **backup path**
@@ -92,6 +96,19 @@ paths** report finds these pairs for you.
 ![Analytics menu — asymmetric paths](../static/analytics_menu_asym_paths.png)
 
 ![A real asymmetric path example](../static/asymmetric_path_real_example.png)
+
+## ECMP backup paths
+
+If several links are bundled into an ECMP set and the main link of the set goes
+down, the backup path is expected to go through the second link of the same set.
+
+* The backup path goes through the second ECMP link: the report passes.
+
+![Passed ECMP backup path report](https://github.com/Vadims06/topolograph/blob/471b545720378598d550b448ff6c7e82fa7c677c/ospf_ecmp_backup_path_via_ecmp.png "passed report")
+
+* The backup path goes not through ECMP and chooses a completely different path: the report fails.
+
+![Failed ECMP backup path report](https://github.com/Vadims06/topolograph/blob/471b545720378598d550b448ff6c7e82fa7c677c/ospf_ecmp_backup_path_not_via_ecmp.png "failed report")
 
 ## Where to go next
 
