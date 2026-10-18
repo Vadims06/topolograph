@@ -76,9 +76,9 @@ Zabbix, Prometheus, Cacti and Grafana watch devices and interfaces. Topolograph 
 | Price and hosting | Free; self-hosted (Docker) and topolograph.com | Self-hosted or hosted with an on-site collector |
 | LSDB upload (text, API, YAML), graph, shortest and backup paths | Yes | Yes |
 | Failure and cost what-if, MPLS TE CSPF | Yes | Yes |
-| BGP and EVPN routes over BMP | Demo graph only | Yes |
+| BGP and EVPN over BMP | Current state: BGP peers, how they connect, routes (bmpwatcher in Topology only mode, no events) | Current state and change events |
 | API, SDK, MCP server | Yes | Yes |
-| Collectors (OSPF, IS-IS, BMP watchers) feeding Topolograph | Demo graph only | Yes |
+| OSPF and IS-IS watchers feeding Topolograph | Demo graph only | Yes |
 | Event history and timeline | Demo graph only | Yes |
 | SSO, roles, audit log | No | Yes |
 | Alert routing | Event export to ELK, Zabbix, webhook | Alert rules and routing |
