@@ -50,6 +50,10 @@ On the snapshot: path calculation, search over network elements, maintenance pla
 
 Switching off the core10 to core30 link on the model recalculates SPF: traffic moves to core11 to core31, the cost goes from 41 to 50, and there are still four paths. The real network is not touched.
 
+![SPF recalculated after the core10 to core30 failure: the path moves to core11 and core31, cost 50](docs/static/ui/path-failure.png)
+
+*Paths mode: Fail on a link of the path recalculates SPF without it. The failed link is red dashed.*
+
 ![Consequences of the core10 to core30 failure: changed paths and where the traffic went](docs/static/ui/failure.png)
 
 *Failure mode on the same link: how many paths changed, which pairs moved to a backup and how the load on each link changed.*
