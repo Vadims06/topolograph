@@ -46,7 +46,7 @@ import requests
 r = requests.post(
     'https://topolograph.com/api/graph',
     auth=('youraccount@domain.com', 'your-pass'),
-    json={'ospf_data': '<your LSDB text>'},
+    json={'lsdb_output': '<your LSDB text>', 'vendor_device': 'Cisco', 'igp_protocol': 'ospf'},
 )
 ```
 

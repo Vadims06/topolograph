@@ -18,7 +18,7 @@ Topolograph builds a model of the network from what its routing protocols report
 | Can a link or a device be taken out of service? | Simulating the failure on the graph shows where the traffic goes and which segments are left without a backup, before the work starts. | Community |
 | Where will a new MPLS TE LSP with the required bandwidth go? | CSPF over the TE attributes from the LSDB shows the LSP path for the requested bandwidth and how it behaves when a link fails. | Community |
 | What changed before the incident? | The collector event history and the graph at the time of the incident show what changed and in which order. | Enterprise |
-| Where is the virtual machine with this MAC address now? | An EVPN MAC lookup shows which VTEP or PE advertises it and which path the traffic takes to it. | Community (uploaded data), Enterprise (collector) |
+| Where is the virtual machine with this MAC address now? | An EVPN MAC lookup shows which VTEP or PE advertises it and which path the traffic takes to it. | Enterprise (BMP collector) |
 | The interface is up, so why is the adjacency not Full? | The protocol shows that there is no adjacency, and Agent 2.0 checks the cause, for example MTU, with read-only commands from an approved runbook. | Agent |
 
 ## How it works
@@ -77,7 +77,8 @@ A watcher can also run standalone, without Topolograph, exporting to ELK, Zabbix
 |---|---|---|
 | Price and hosting | Free; self-hosted (Docker) and topolograph.com | Self-hosted or hosted with an on-site collector |
 | LSDB upload (text, API, YAML), graph, shortest and backup paths | Yes | Yes |
-| Failure and cost what-if, MPLS TE CSPF, BGP/EVPN analysis from uploaded data | Yes | Yes |
+| Failure and cost what-if, MPLS TE CSPF | Yes | Yes |
+| BGP and EVPN routes over BMP | Demo graph only | Yes |
 | API, SDK, MCP server | Yes | Yes |
 | Collectors (OSPF, IS-IS, BMP watchers) feeding Topolograph | Demo graph only | Yes |
 | Event history and timeline | Demo graph only | Yes |
