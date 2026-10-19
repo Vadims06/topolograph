@@ -4,7 +4,7 @@
 
 ## Your network, as its protocols see it
 
-Topolograph builds a model of the network from what its routing protocols report: OSPF, OSPFv3, IS-IS and BGP/EVPN. Primary and backup paths, links with no backup, search over network elements (prefixes, MAC addresses and more), and link or node failures simulated before maintenance starts are all computed on that model.
+Topolograph is a routing analysis tool for OSPF, OSPFv3, IS-IS and BGP/EVPN networks. It builds a model of the network from what its routing protocols report: the LSDB of one router per area or level is enough, because OSPF and IS-IS flood the same topology to every router in it. BGP sessions and IPv4/IPv6, VPNv4/VPNv6 and EVPN routes arrive over BMP and sit on top of the IGP graph, so a BGP next hop resolves down to the IGP or MPLS path that carries it. On that model Topolograph computes primary and backup paths, finds links and nodes with no backup, searches network elements (prefixes, MAC addresses and more), simulates link or node failures and cost changes before maintenance starts, and compares snapshots to show what changed.
 
 [Interactive demo](https://topolograph.com/graphs?demo=1) · [Self-host with Docker](https://github.com/Vadims06/topolograph-docker) · [Docs](https://docs.topolograph.com)
 
@@ -12,7 +12,7 @@ Topolograph builds a model of the network from what its routing protocols report
 
 ## Get the LSDB
 
-Topolograph builds the graph from the LSDB of one router per area or level. Run the commands for your vendor, save the output to one text file and upload it.
+Run the commands for your vendor on one router per area or level, save the output to one text file and upload it.
 
 | Vendor | OSPFv2 | OSPFv3 | IS-IS |
 |---|---|---|---|
@@ -44,7 +44,7 @@ Upload the file in the UI (Add, LSDB), pick the vendor and the protocol, or send
 
 <img src="docs/static/ui/upload-lsdb.png" alt="Add graph: LSDB upload" width="48%"> <img src="docs/static/ui/upload-file-step.png" alt="LSDB upload: vendor, protocol and file" width="48%">
 
-On the snapshot: path calculation, search over network elements, maintenance planning. In the demo network (13 routers, 26 links) the pe15 to pe30 path has cost 41 and four equal-cost paths.
+In the demo network (13 routers, 26 links) the pe15 to pe30 path has cost 41 and four equal-cost paths.
 
 ![Four equal-cost paths from pe15 to pe30](docs/static/ui/paths.png)
 
