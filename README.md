@@ -17,7 +17,7 @@ Topolograph builds the graph from the LSDB of one router per area or level. Run 
 | Vendor | OSPFv2 | OSPFv3 | IS-IS |
 |---|---|---|---|
 | Allied Telesis | `show ip ospf database {router\|network\|external}` |  |  |
-| Arista |  | `show ipv6 ospf database detail` |  |
+| Arista | `show ip ospf database detail` | `show ospfv3 database detail` | `show isis database traffic-engineering` |
 | Bird | `show ospf state all` |  |  |
 | Cisco | `show ip ospf database {router\|network\|external}` |  | `show isis database detail` |
 | Cisco NX-OS | `show ip ospf database {router\|network\|external} detail` |  |  |
@@ -120,7 +120,7 @@ The engineer asks a question in natural language. Agent 1.0 calls the Topolograp
 
 ## Complements your monitoring
 
-Zabbix, Prometheus, Cacti and Grafana watch devices and interfaces. Topolograph shows how the network routes traffic and works alongside them.
+Zabbix, Prometheus, Cacti, etc. watch devices and interfaces. Topolograph shows how the network routes traffic and works alongside them.
 
 | Capability | Classic monitoring (SNMP/NMS) | Topolograph |
 |---|---|---|
