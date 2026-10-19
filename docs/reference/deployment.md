@@ -51,6 +51,8 @@ When you also run a [Watcher](../monitoring/index.md), its `.env` adds a few mor
 
 ## Create default credentials
 
+Default credentials are set through environment variables in the Docker version; the procedure is described in [issue 26](https://github.com/Vadims06/topolograph/issues/26).
+
 Run once to create the API user from your `.env` and load the allowed networks:
 
 ```python

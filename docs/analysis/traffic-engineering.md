@@ -49,7 +49,7 @@ OSPF or IS-IS.
 When TE data arrives over BGP-LS, the monitoring page shows the link attributes
 as updates come in:
 
-![TE link attributes on the monitoring page via BGP-LS](../static/te_link_attributes_on_monitoring_page_full_with_bgpls_1.png)
+![TE link attributes on the monitoring page via BGP-LS](../static/ui/monitoring.png)
 
 ## Filtering links by TE attributes
 

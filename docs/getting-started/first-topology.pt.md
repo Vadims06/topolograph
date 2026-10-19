@@ -62,7 +62,7 @@ Salve a saída em um arquivo de texto simples. Você pode colar as seções LSA
 3. Escolha o **fornecedor** e o **protocolo** que correspondem à sua captura.
 4. Envie — o Topolograph analisa a LSDB e renderiza o grafo.
 
-![Uploading an LSDB and getting a graph](../assets/text_file_and_short_paths.gif)
+![Uploading an LSDB and getting a graph](../static/ui/upload-file-step.png)
 
 O resultado é um **snapshot**: uma imagem congelada do estado da rede no
 momento em que você capturou o banco de dados. Toda análise que você executa
@@ -75,7 +75,7 @@ Com o grafo na tela, escolha um nó de origem e um de destino e construa o
 caminho mais curto entre eles. O Topolograph destaca o caminho e mostra seu
 custo total.
 
-![Building a shortest path tree](../assets/build-spt.gif)
+![Building a shortest path tree](../static/ui/paths.png)
 
 A partir daqui você pode imediatamente:
 

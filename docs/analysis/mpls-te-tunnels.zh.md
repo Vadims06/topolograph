@@ -6,7 +6,7 @@ SR-TE 风格）。Topolograph 会对它们运行 CSPF（Constrained Shortest Pat
 约束最短路径优先）放置计算——与真实路由器相同的带宽/affinity/SRLG 约束，
 无需任何信令——并将结果可视化。
 
-![MPLS TE 隧道：LSP 表格与图上已放置的路径](../static/mpls-lsp-graph-and-table.png)
+![MPLS TE 隧道：LSP 表格与图上已放置的路径](../static/ui/lsp-tunnels.png)
 
 **LSP tunnels** 标签页列出每条路径的放置状态、失败原因、带宽和优先级；
 选择一个节点会显示以该节点为 ingress、transit 或 egress 的隧道，已放置的路径

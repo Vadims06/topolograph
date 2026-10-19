@@ -45,7 +45,7 @@
 
 当 TE 数据通过 BGP-LS 到达时，监控页面会随着更新的到来展示链路属性：
 
-![通过 BGP-LS 在监控页面上显示的 TE 链路属性](../static/te_link_attributes_on_monitoring_page_full_with_bgpls_1.png)
+![通过 BGP-LS 在监控页面上显示的 TE 链路属性](../static/ui/monitoring.png)
 
 ## 按 TE 属性筛选链路
 

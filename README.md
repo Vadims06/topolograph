@@ -1,724 +1,158 @@
 # Topolograph
 
-Topolograph is a web-based Python tool designed to visualize OSPF and IS-IS network topologies and analyze them offline — with no logins or passwords required.
+*Topolograph · routing analysis for network operations*
 
-Topolograph builds OSPF/IS-IS network topology based on Link-State Database (LSDB) data collected from a single network device (thanks to the distributed nature of OSPF and IS-IS 🙂).
-You can upload LSDB output as a text file, or establish a GRE or **BGP-LS** session using [OSPF Watcher](https://github.com/Vadims06/ospfwatcher) or [IS-IS Watcher](https://github.com/Vadims06/isiswatcher). **BGP-LS** carries link-state from either **OSPF** or **IS-IS** into Topolograph, depending on which Watcher you use; visualize the topology in a local, Dockerized Topolograph UI.
+## Your network, as its protocols see it
 
-Once uploaded, the topology represents a snapshot of your network state.
-After making changes — for example, redistributing routes from BGP into OSPF using route-maps and prefix-lists — you can upload the updated topology and compare it with the previous one to clearly see what has changed.
+Topolograph is a routing analysis tool for OSPF, OSPFv3, IS-IS and BGP/EVPN networks. It builds a model of the network from what its routing protocols report: the LSDB of one router per area or level is enough, because OSPF and IS-IS flood the same topology to every router in it. BGP sessions and IPv4/IPv6, VPNv4/VPNv6 and EVPN routes arrive over BMP and sit on top of the IGP graph, so a BGP next hop resolves down to the IGP or MPLS path that carries it. On that model Topolograph computes primary and backup paths, finds links and nodes with no backup, searches network elements (prefixes, MAC addresses and more), simulates link or node failures and cost changes before maintenance starts, and compares snapshots to show what changed.
 
-![](https://github.com/Vadims06/topolograph/blob/5bd6912d90260da6c412cae7b78e5b1024e61131/functional-topolograph-role.png)
+[Interactive demo](https://topolograph.com/graphs?demo=1) · [Self-host with Docker](https://github.com/Vadims06/topolograph-docker) · [Docs](https://docs.topolograph.com)
 
-## Key Features
+![Topolograph graph of the 13-router demo network](docs/static/ui/graph-overview.png)
 
-- No logins or passwords required — accept LSDB data from text files or via REST API
-- Docker version available — run a local instance of Topolograph on your PC
-- Visualize OSPF and IS-IS network topologies
-- Build shortest paths between any nodes
-- Discover backup paths, including secondary backup paths
-- Simulate link failures and analyze network reaction
-- Simulate router failures and observe traffic flow around failed nodes
-- Analyze network behavior when IGP link costs change
-- Identify the most loaded nodes and links, as well as fault-tolerant elements
-- Compare network states across different points in time
-- Ingest topology over **BGP-LS** from **OSPF** or **IS-IS** domains (via OSPF Watcher or IS-IS Watcher)
-- Ingest the **BGP** control plane over **BMP**: sessions, IPv4/IPv6/VPNv4/VPNv6 and **EVPN** routes, VRF context, bound to your OSPF/IS-IS graphs (via BMP Watcher)
-- Find where a host sits in an **EVPN/VXLAN** fabric, which leaves carry a VNI or VRF, and when a MAC moved between VTEPs
-- Look up what a router actually does with a destination: longest-prefix match, BGP best path, administrative distance, recursive next hop and the resulting IGP/LSP transport
-- Detect asymmetric routing paths
-- Discover backed-up and non-backed-up networks using the Analytics / Network Heatmap
-- Build and visualize arbitrary topologies using YAML-based definitions
+## Get the LSDB
 
-## Real-Time Monitoring
+Run the commands for your vendor on one router per area or level, save the output to one text file and upload it.
 
-Topolograph supports real-time monitoring of changes in OSPF, IS-IS and BGP domains using Watcher agents:
+| Vendor | OSPFv2 | OSPFv3 | IS-IS |
+|---|---|---|---|
+| Allied Telesis | `show ip ospf database {router\|network\|external}` |  |  |
+| Arista | `show ip ospf database detail` | `show ipv6 ospf database detail` | `show isis database traffic-engineering` |
+| Bird | `show ospf state all` |  |  |
+| Cisco | `show ip ospf database {router\|network\|external}` |  | `show isis database detail` |
+| Cisco NX-OS | `show ip ospf database {router\|network\|external} detail` |  |  |
+| Ericsson | `show ospf database {router\|network\|external} detail` |  |  |
+| Extreme | `show ospf lsdb detail lstype {router\|network\|as-external}` |  |  |
+| Fortinet | `get router info ospf database {router\|network\|external} lsa` | `get router info6 ospf database router`, `network`, `external`, `intra-prefix` | `get router info isis database detail` |
+| FRRouting | `show ip ospf database {router\|network\|external}` |  | `show isis database detail` |
+| Huawei | `display ospf lsdb {router\|network\|ase}` |  | `display isis lsdb verbose` |
+| IP Infusion OcNOS | `show ip ospf database {router\|network\|external}` | `show ipv6 ospf database router`, `network`, `external`, `intra-prefix` | `show isis database verbose` |
+| Juniper | `show ospf database {router\|network\|external} extensive \| no-more` |  | `show isis database extensive` |
+| MikroTik | `/routing ospf lsa print detail file=lsa.txt` | `/routing/ospf/lsa/print detail without-paging where instance=v3` | `/routing/isis/lsp/print detail without-paging` |
+| Nokia | `show router ospf database type {router\|network\|external} detail` |  | `show router isis database detail` |
+| Palo Alto | `show routing protocol ospf dumplsdb` |  |  |
+| Quagga | `show ip ospf database {router\|network\|external}` |  |  |
+| Ruckus | `show ip ospf database link-state router`, `show ip ospf database link-state network`, `show ip ospf database external-link-state` |  |  |
+| Ubiquiti | `show ip ospf database {router\|network\|external}` |  |  |
+| ZTE |  |  | `show isis database verbose` |
 
-- [OSPF Watcher](https://github.com/Vadims06/ospfwatcher)
-- [IS-IS Watcher](https://github.com/Vadims06/isiswatcher)
-- [BMP Watcher](https://github.com/Vadims06/bmpwatcher) — a passive BMP station for the BGP control plane. Routers stream their Adj-RIB-In to it; Topolograph stores the BGP graph beside your IGP graphs, binds the two by Router ID, and keeps pre-policy, post-policy and Loc-RIB observations apart so a candidate route is never shown as installed. See the [BMP Watcher guide](https://docs.topolograph.com/monitoring/bmp-watcher/).
+For TE attributes (bandwidth, TE metric, admin groups), append `show ip ospf database opaque-area` (OSPF) or use the detail/verbose IS-IS output. Notes per vendor, TE attributes and supported RFCs: [supported vendors](https://docs.topolograph.com/reference/supported-vendors/).
 
+## Snapshot and analysis
 
-# BGP control plane over BMP
+Upload the file in the UI (Add, LSDB), pick the vendor and the protocol, or send it through the API. The snapshot is analysed offline, without access to the routers.
 
-Topolograph ingests the **BGP control plane** from your routers over **BMP**
-(RFC 7854; Adj-RIB-In/-Out pre/post-policy per RFC 8671, Loc-RIB per RFC 9069)
-and stores it as a BGP graph beside your OSPF/IS-IS graphs.
+<img src="docs/static/ui/upload-lsdb.png" alt="Add graph: LSDB upload" width="48%"> <img src="docs/static/ui/upload-file-step.png" alt="LSDB upload: vendor, protocol and file" width="48%">
 
-- **Peering** - BGP sessions with state, and which RIB view each feed observes.
-- **Route storage** - IPv4, IPv6, VPNv4, VPNv6 and EVPN, with VRF / RD / RT context.
-- **Best-path calculation** - RFC 4271 §9.1, RFC 4456 for reflected routes,
-  RFC 4364 for VPNs, over the attributes a collector feed carries:
-  1. highest `LOCAL_PREF`
-  2. shortest `AS_PATH`
-  3. lowest `ORIGIN` (IGP < EGP < incomplete)
-  4. lowest `MED` (compared only within the same neighbouring AS)
-  5. eBGP-learned over iBGP-learned
-  6. lowest `ORIGINATOR_ID` / BGP Identifier
-- **Path over IGP** - in BGP / VPN path mode the selected BGP next hop is
-  recursively resolved through the IGP shortest path, so the route is shown
-  with its real forwarding path and transport.
-- **EVPN** (RFC 7432, RFC 9136) - route types 1 to 5 with MAC, IP, VNI, L3VNI,
-  ESI, Ethernet Tag, VTEP and MAC Mobility sequence. Asked on the IGP graph:
-  where a host is, which leaves are VTEPs of a VNI or VRF, whether a MAC moved
-  and from which VTEP, whether a host is multihomed, and the underlay path to
-  every VTEP. Field reference and API: [EVPN](https://docs.topolograph.com/monitoring/bmp-watcher/#evpn).
-  Demo lab: [13-hosts-demo-bgp](https://github.com/Vadims06/bmpwatcher/tree/master/containerlab/13-hosts-demo-bgp).
+In the demo network (13 routers, 26 links) the pe15 to pe30 path has cost 41 and four equal-cost paths.
 
-Set-up: [BMP Watcher](https://github.com/Vadims06/bmpwatcher) ·
-[install guide](https://docs.topolograph.com/monitoring/bmp-watcher/).
-For network engineers, a route-analysis walk-through on the built-in demo:
-[topolograph.com/how-to/bgp](https://topolograph.com/how-to/bgp).
+![Four equal-cost paths from pe15 to pe30](docs/static/ui/paths.png)
 
+Switching off the core10 to core30 link on the model recalculates SPF: traffic moves to core11 to core31, the cost goes from 41 to 50, and there are still four paths. The real network is not touched.
 
-# Supported vendors for OSPF visualization
-| Vendor         | LSA1                                           | LSA2                                            | LSA5                                             | SDK nornir driver support |
-| -------------- | ---------------------------------------------- | ----------------------------------------------- | ------------------------------------------------ | ------------------------- |
-| Cisco          | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
-| Cisco NX-OS    | show ip ospf database router detail            | show ip ospf database network detail            | show ip ospf database external detail            | YES                       |
-| Quagga         | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
-| Ruckus         | show ip ospf database link-state router        | show ip ospf database link-state network        | show ip ospf database external-link-state        | YES                       |
-| Juniper        | show ospf database router extensive \| no-more | show ospf database network extensive \| no-more | show ospf database external extensive \| no-more | YES                       |
-| Bird           | show ospf state all                            | show ospf state all                             | show ospf state all                              | YES                       |
-| Nokia          | show router ospf database type router detail   | show router ospf database type network detail   | show router ospf database type external detail   | YES                       |
-| Mikrotik       | /routing ospf lsa print detail file=lsa.txt    | /routing ospf lsa print detail file=lsa.txt     | /routing ospf lsa print detail file=lsa.txt      | YES                       |
-| Huawei         | display ospf lsdb router                       | display ospf lsdb network                       | display ospf lsdb ase                            | YES                       |
-| Paloalto       | show routing protocol ospf dumplsdb            | show routing protocol ospf dumplsdb             | show routing protocol ospf dumplsdb              | YES                       |
-| Ubiquiti[^1]   | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
-| Allied Telesis | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
-| Extreme        | show ospf lsdb detail lstype router            | show ospf lsdb detail lstype network            | show ospf lsdb detail lstype as-external         | YES                       |
-| Ericsson       | show ospf database router detail               | show ospf database network detail               | show ospf database external detail               | YES                       |
-| Fortinet       | get router info ospf database router lsa       | get router info ospf database network lsa       | get router info ospf database external lsa       | YES                       |
-| FRRouting      | show ip ospf database router                   | show ip ospf database network                   | show ip ospf database external                   | YES                       |
+![SPF recalculated after the core10 to core30 failure: the path moves to core11 and core31, cost 50](docs/static/ui/path-failure.png)
 
-[^1]:This command applies to the EdgeRouter line and older Unifi USG Gateways. New Unifi Gateway products use the [FRRouting Project](https://frrouting.org).
+*Paths mode: Fail on a link of the path recalculates SPF without it. The failed link is red dashed.*
 
-**FRRouting (TE):** For richer link data (bandwidth, TE metric, admin group), append the output of **show ip ospf database opaque-area** to the same file. This is optional; the graph still builds from LSA 1/2/5 alone.
-  
-LSA 1 and LSA 2 is mandatory and have to exist in the same file. LSA 5 is optional. The output from all commands should be placed in a single file and then be uploaded to Topolograph.
+![Consequences of the core10 to core30 failure: changed paths and where the traffic went](docs/static/ui/failure.png)
 
-# Supported vendors for OSPFv3 visualization
-| Vendor  | Command                                     | Stub network included                       | External (redistributed) network          | 
-|---------|---------------------------------------------|---------------------------------------------|--------------------------------------------------|
-| Arista  | show ipv6 ospf database detail              | YES                     | YES                   |
-| IP Infusion OcNOS | show ipv6 ospf database router / network / external / intra-prefix | YES | YES |
-| Fortinet FortiOS  | get router info6 ospf database router / network / external / intra-prefix | YES | YES |
-| MikroTik RouterOS | /routing/ospf/lsa/print detail without-paging where instance=v3 | YES | YES |
+*Failure mode on the same link: how many paths changed, which pairs moved to a backup and how the load on each link changed.*
 
-OcNOS and FortiOS OSPFv3: the per-LSA-type forms are required (the bare `show ipv6 ospf database` / `get router info6 ospf database` is an index table only), and `intra-prefix` is mandatory: OSPFv3 carries prefixes only in that LSA.
+## Continuous monitoring
 
+The collector (watcher) receives routing protocol updates and passes on events about topology changes. It joins the network through an IGP adjacency over GRE, or through BGP-LS (OSPF and IS-IS), or through BMP (BGP). Each event arrives in Topolograph with a timestamp, and the timeline replays the state of the network at any moment: the T0 snapshot and any later state can be compared.
 
-# Supported vendors for ISIS visualization
-| Vendor  | Command                                     | Stub network included                       | External (redistributed) network          | 
-|---------|---------------------------------------------|---------------------------------------------|--------------------------------------------------|
-| Cisco   | show isis database detail                   | YES                     | No, (need an LSDB sample for adding it)                   |
-| Juniper  | show isis database extensive               | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
-| Nokia   | show router isis database detail            | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
-| FRR     | show isis database detail                   | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
-| Huawei   | display isis lsdb verbose                  | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
-| ZTE     | show isis database verbose                  | YES, but need an LSDB sample for checking it    | No, (need an LSDB sample for adding it)                   |
-| IP Infusion OcNOS | show isis database verbose (use `verbose`, not `detail`; only `verbose` prints the TE sub-TLVs) | YES | YES |
-| Fortinet FortiOS  | get router info isis database detail        | YES                     | YES                   |
-| MikroTik RouterOS | /routing/isis/lsp/print detail without-paging | YES                   | No, (need an LSDB sample for adding it)                   |
-  
-# Visualization via BGP-LS
+| Watcher | Protocols | Modes | Edition |
+|---|---|---|---|
+| [ospfwatcher](https://github.com/Vadims06/ospfwatcher) | OSPF | GRE adjacency, BGP-LS | Enterprise |
+| [isiswatcher](https://github.com/Vadims06/isiswatcher) | IS-IS | GRE adjacency, BGP-LS | Enterprise |
+| [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology only | Community |
+| [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology + events | Enterprise |
 
-**BGP Link-State (BGP-LS)** lets a BGP speaker advertise IGP link-state to Topolograph. Topolograph accepts BGP-LS for **both** **OSPF** and **IS-IS**: use **OSPF Watcher** when your IGP is OSPF, and **IS-IS Watcher** when it is IS-IS. Setup details are in each project’s README:
+![Collector events on the graph and on the timeline](docs/static/ui/events.png)
 
-- [OSPF Watcher — BGP-LS](https://github.com/Vadims06/ospfwatcher)
-- [IS-IS Watcher — BGP-LS](https://github.com/Vadims06/isiswatcher)
+![BGP sessions over the OSPF graph](docs/static/ui/bgp-sessions.png)
 
-Real-time monitoring (including TE link attributes delivered over BGP-LS) appears in the Topolograph UI as updates stream in:
+*The 13-router demo network with the BGP sessions layer on (Highlight, BGP sessions): dashed green lines are iBGP sessions learned over BMP, the ringed rr1 and rr2 are route reflectors, grey lines are OSPF links.*
 
-![](docs/static/te_link_attributes_on_monitoring_page_full_with_bgpls_1.png)
+A watcher is added from the Topolograph UI (Add, Watcher): pick the type and the mode, and the wizard issues a watcher token and one install command. The command downloads `install.sh` pinned to a release, checks its SHA-256 and installs.
 
-## Traffic Engineering (TE) link attributes
-Topolograph can use **Traffic Engineering (TE)** link attributes from your LSDB for better visibility and filtering.
+<img src="docs/static/ui/watcher-mode.png" alt="Watcher wizard: choice of GRE or BGP-LS mode" width="48%"> <img src="docs/static/ui/watcher-install.png" alt="Watcher wizard: one-command install with a token" width="48%">
 
-- **Parsed values:** Link-level TE metric (`temetric`), administrative group (`admin_group`), maximum and reservable bandwidth (`max_link_bw`, `max_rsrv_link_bw`), unreserved bandwidth per priority (`unreserved_bw_0` … `unreserved_bw_7`), shared risk link group (`srlg`), interface and neighbor addresses, and link local/remote IDs. Useful for capacity planning, path analysis, and finding links that meet or exceed certain TE constraints. Which vendor's output provides which attribute, with the RFC section and sub-TLV number of each, is in [TE attributes by vendor](https://docs.topolograph.com/reference/supported-vendors/#te-attributes-by-vendor).
-- **OSPF:** Include **show ip ospf database opaque-area** in the same upload file as your router/network/external LSDB. Type 10 (opaque-area) LSAs carry the TE data; the rest of the graph is built from LSA 1, 2, and 5 as before. Supported: FRRouting and IP Infusion OcNOS.
-- **IS-IS:** TE attributes are taken from the IS-IS LSDB when using supported commands (FRR **show isis database detail**, Nokia SR OS **show router isis database detail**, ZTE **show isis database verbose**, IP Infusion OcNOS **show isis database verbose**, TE metric only). No extra command is required beyond your normal IS-IS capture. FRR prints SRLG only in builds that include [FRRouting/frr#22392](https://github.com/FRRouting/frr/pull/22392).
-- **Using TE in Topolograph:** Once a diagram is built with TE data, you can filter edges by TE metric or bandwidth via the diagram edges API (e.g. links with TE metric above a threshold or unreserved bandwidth below a value). The same TE attribute names are used for both OSPF and IS-IS.
+## Investigation with an AI agent
 
-**Filtering TE links via SDK ([topolograph-sdk](https://github.com/Vadims06/topolograph-sdk)):** Use `graph.edges_list()` with range operators `__gt`, `__lt`, `__gte`, `__lte` on TE attributes:
+The engineer asks a question in natural language. Agent 1.0 calls the Topolograph MCP server tools for events and failure calculation and answers with a reference to the data. Agent 2.0 runs incident diagnostics by a runbook agreed in advance, with read-only device commands, started manually or automatically from a ticket. See the [AI agent docs](https://docs.topolograph.com/automation/ai-agent/).
 
-```python
-# Edges with TE metric >= 100
-edges = graph.edges_list(temetric__gte=100)
+## Questions Topolograph answers
 
-# Edges with unreserved bandwidth (priority 0) below 1 Gbps
-edges = graph.edges_list(unreserved_bw_0__lt=1e9)
-
-# Edges between two nodes with max link bandwidth above 10 Gbps
-edges = graph.edges_list(src_node="1.1.1.1", dst_node="2.2.2.2", max_link_bw__gt=1e10)
-```
-
-TE attributes: `temetric`, `admin_group`, `max_link_bw`, `max_rsrv_link_bw`, `unreserved_bw_0` … `unreserved_bw_7`.
-
-## MPLS TE tunnels
-On top of the TE link attributes, a diagram can declare **MPLS TE tunnels** (RSVP-TE or SR-TE style) in an `lsps:` section. Topolograph runs CSPF placement over them — the same bandwidth, setup/hold priority, affinity and SRLG constraints a real router applies — without any signaling, and shows where each LSP landed and why an LSP failed to place.
-
-![MPLS TE tunnels: LSP table and placed paths on the graph](docs/static/mpls-lsp-graph-and-table.png)
-
-```yaml
-lsps:
-  TUN_R1_R3:
-    src: 10.10.10.1
-    dst: 10.10.10.3
-    metric_type: te
-    bandwidth: 2G
-    setup_priority: 7
-    admin_groups:
-      exclude-any: [red]
-    paths:
-      primary:
-        ero:
-          - 10.10.10.2
-      secondary:
-        role: standby
-        srlg_exclude: [1001]
-```
-
-```python
-# Which tunnels failed to place, and why
-graph.lsps_list(status="unplaced")
-
-# Which tunnels cross a link (pre-maintenance impact check)
-graph.lsps_list(via_edge="10.10.10.1,10.10.10.2")
-
-# Which path satisfies these constraints, without declaring a tunnel
-graph.cspf_path("10.10.10.1", "10.10.10.7", bandwidth="5G", admin_exclude_any=["red"])
-```
-
-Full key reference and CSPF placement rules: [MPLS TE Tunnels](https://docs.topolograph.com/analysis/mpls-te-tunnels/).
-
-### How to start
-- run commands specifically to your vendor (from Supported vendors table) on a single device ( if you have multiple areas - do it on ABR) save all commands output in a single file with .txt or .log extension and upload the file to Topolograph
-- upload programmatically via Rest API. Multi devices LSDBs are supported via API only (v2.34).
-- get topology via [OSPF Watcher](https://github.com/Vadims06/ospfwatcher) or [IS-IS Watcher](https://github.com/Vadims06/isiswatcher)  
-
-### Expected file's extension
-- .txt
-- .log
-
-# Demo
-**YouTube**
-* OSPF Watcher. Real time Monitoring with instant notification. https://youtu.be/2IHbxmDVMA0
-* IS-IS Watcher. Track the whole IS-IS domain from a single router https://youtu.be/7ZQFSe1szk8
-* OSPF/IS-IS AI Agent: MCP for Network Protocols, https://youtu.be/92YBRXqZWUo
-* BGP-LS in Action: Monitoring IS-IS networks via IS-IS Watcher and Topolograph, https://youtu.be/gL0iqXgPJlE
-
-## Upload OSPF LSDB to the Topolograph and Building the shortest paths
-This demo shows how to get OSPF topology visual and interact with it.
-1. Upload the file to Topolograph from exicuted commands previously.
-2. Build the shortest paths
-3. Emulate a link outage and see backup paths
-
-![](https://github.com/Vadims06/topolograph/blob/master/short_demo_text_file_and_short_paths.gif)   
-
-## Network reaction on the link failure. Backup paths
-Pressing on edge we simulate the link outage and can see backup paths  
-![pressing on edge we simulate the link outage and can see backup paths](https://github.com/Vadims06/topolograph/blob/master/backup_SPT.png)
-and we can see backup of backup paths as well  
-
-
-### OSPF cost changes on the fly. OSPF cost planning.
-It's feasible to change OSPF cost on any edge and get network reaction on the fly!  
-Build the shortest path under General View and set new OSPF cost in new pop-up-ed form - new path will be repainted  
-This pop-uped form is available under NetworkReactionOnFailure and shows network traffic pattern changes!  
-On the demo below we changed OSPF cost from 1 to 22 and OSPF rebuilt the shortest path via bottom link.  
-![](https://github.com/Vadims06/topolograph/blob/master/ospf-cost-change-on-the-fly.gif)
-
-Sum it up, available features under GeneralView Tab:  
-
-* **Build the shortest path**, right click on a node and set it as a source or destination.
-* **Find backup paths**, just press on a colored SPT edge and you will simulate link outage. The network reaction will be showed with using different colors.
-* **OSPF edge cost planning** right click on an edge and you can change edge's OSPF cost you see new path of your SPT.
-* **Find termination node of a network** start typing a network in Focus/Source tab and you get a dropdown list with all nodes with this network. Once you choose it - you will be focused on the node.  
-
-### NetworkReactionOnFailure is covered in [how-to](https://topolograph.com/how-to)
-It's possible to simulate a link or router shutdown/outage. The topology will be re-pained with expected changed traffic flow avoiding failed link or router.
-![](https://github.com/Vadims06/topolograph/blob/master/network_reaction_rem_edge1.png)
-* Blue lines show traffic increasing over the link
-* Grey lines show traffic decreasing over the link
-
-Try to shutdown backup router and see the graph reaction. If this is a true backup router - there shoudn't be network rebuilding too much
-![](https://github.com/Vadims06/topolograph/blob/master/network_reaction_shut_node.png)
-
-## LLM friendly
-Topolograph AI agent for network assistance with OSPF/IS-IS capabilities. Works with Topolograph MCP.  
-Interact naturally with OSPF/IS-IS protocols, for instance you can ask:
-* Which graphs are currently connected?
-* What nodes are in the latest OSPF area 0 graph?
-* Which networks are assigned to a specific host?
-* What is the route between two IP addresses?
-* What happened to the links after topology changes?
-
-![](https://github.com/Vadims06/network-ai-assistant/blob/738acd2725568d3baf8a0d8077716ee6db0a722d/docs/network_ai_assistant_all_nodes_in_ospf.png)   
-
-## Reports
-### Asymmetric paths
-When different costs are configured on different links - asymmetric paths could be in the network. The incoming path from W to F is going via C-D, but the outgoing path is via B-A. Paths can go via different ISPs and come with different delays and, probably, losses. The report is aimed at discovering such cases in order to eliminate it.  
-![](https://github.com/Vadims06/topolograph/blob/master/asymmetric_horizontal_2x.png)
-
-### Network heatmap
-The topolograph knows what networks are advertised by nodes. When the network is terminated on both routers, using VRRP, both nodes advertise the network. The node is marked by red if it has a lot of unbackuped networks, and vise versa.
-![](https://github.com/Vadims06/topolograph/blob/master/heatmap.png)
-
-### ECMP backup paths
-* We suggest that if we have multiple links bounded to ECMP and if the main link in ECMP goes down, the backup path should go via the second link in ECMP.  passed report  
-![passed report](https://github.com/Vadims06/topolograph/blob/471b545720378598d550b448ff6c7e82fa7c677c/ospf_ecmp_backup_path_via_ecmp.png "passed report")
-* If backup path goes not via ECMP and chooses completely different path - the report will be treated as failed.  failed report  
-![passed report](https://github.com/Vadims06/topolograph/blob/471b545720378598d550b448ff6c7e82fa7c677c/ospf_ecmp_backup_path_not_via_ecmp.png "failed report")
-
-## Private
-Keep your network inside your organization.
-Run your local copy of Topolograph inside your on-premises network using the docker image.  
-![](https://github.com/Vadims06/topolograph/blob/master/topolograph_docker.png)
-
-## API
-### Schema
-Full schema description is [here](https://topolograph.com/api/ui/)   
-### Default credentials
-Default credentials are available via environment variables in case of using docker-based version. How to set it described in this [case](https://github.com/Vadims06/topolograph/issues/26).
-
-### Python SDK
-For a more Pythonic interface to the Topolograph API, use the [Topolograph Python SDK](https://github.com/Vadims06/topolograph-sdk):
-
-```bash
-pip install topolograph-sdk
-```
-
-The SDK provides an object-oriented interface that simplifies working with Topolograph. All examples below show both REST API and SDK usage.
-
-### Details
-Started from v2.19. Scrab your LSDB using your favourite tools like Ansible, netmiko, Nornir, etc and upload your OSPF network graph to Topolograph via a POST request. The response returns:
-* diff comparison with previously uploaded graphs
-* link to get all networks
-* status about passed checks (are there are asymmetric links in the network, etc)
-
-```
-{'diff': {'compared_with_graph_time': '08Jun2021_20h15m26s_13_hosts',
-          'graphs_diff': {'all_edges_stats_ll': [{'dst_node': '123.123.110.110',
-                                                  'link_cost': 10,
-                                                  'link_status': 'old',
-                                                  'src_node': '123.123.100.100'],
-                          'new_nodes': [],
-                          'old_nodes': []},
-          'networks_diff': {'new_subnets_attr_dd_ll': [{'rid': '123.30.30.30',
-                                                        'subnet': '30.30.30.30/32'}],
-                            'old_subnets_attr_dd_ll': []}},
- 'graph_time': '08Jun2021_20h15m51s_13_hosts',
- 'hosts': {'count': 13},
- 'networks': {'backuped': 17,
-              'count': 39,
-              'notbackuped': 22,
-              'url_link': 'https://topolograph.com/api/network/08Jun2021_20h15m51s_13_hosts'},
- 'reports': {'ansym_edges_pass_status': False},
- 'timestamp': '2021-06-08T20:15:51.724000'}
-```
-### API graph upload
-
-**REST API:**
-```
-import requests
-from pprint import pprint as pp
-with open('cisco_lsdb_output.txt') as f:
-  lsdb_output = f.read()
-  r_post = requests.post('https://topolograph.com/api/graph', auth=('youraccount@domain.com', 'your-pass'), 
-                          json={'lsdb_output': lsdb_output, 'vendor_device': 'Cisco', 'igp_protocol': 'ospf'})
-  pp(r_post.json())
-```  
-`igp_protocol` may include `ospf` or `isis`
-
-**SDK:**
-```python
-from topolograph import Topolograph
-
-# Initialize client
-topo = Topolograph(
-    url="topolograph-url",
-    token="your-api-token"
-)
-
-# Upload LSDB file
-with open('cisco_lsdb_output.txt') as f:
-    lsdb_output = f.read()
-
-graph = topo.graphs.upload(
-    lsdb_data=lsdb_output,
-    vendor="Cisco",
-    protocol="ospf"
-)
-
-print(f"Graph uploaded: {graph.graph_time}")
-print(f"Hosts: {graph.hosts['count']}")
-print(f"Networks: {graph.networks_data.get('count', 0)}")
-```
-
-**SDK with FRR lab (collecting real data):**
-```python
-from topolograph import Topolograph, TopologyCollector
-
-# Initialize client
-topo = Topolograph(
-    url="topolograph-url",
-    token="your-api-token"
-)
-
-# Collect LSDB from FRR routers
-collector = TopologyCollector("inventory.yaml")  # Contains FRR router credentials
-result = collector.collect()
-
-# Upload collected data
-graph = topo.uploader.upload_raw(
-    lsdb_text=result.raw_lsdb_text,
-    vendor="FRR",
-    protocol="isis"
-)
-
-print(f"Graph uploaded: {graph.graph_time}")
-```  
-
-### Get the shortest path
-It allows to get the shortest path between two OSPF RID, or it also accepts IP address or IP Subnet as source/destination and returns the following: 
-* path's cost
-* the shortest path 
-* unbackuped parts of the shortest path (if these links go down, we will lose a connectivity between the source and destination).
-
-`src_node` and `dst_node` accepts OSPF RID as a value.
-
-**REST API:**
-```
-r_post = requests.post('https://topolograph.com/api/path', auth=('', ''), 
-json={'graph_time': '27Dec2022_22h46m01s_7_hosts_ospfwatcher', 'src_node': '192.168.100.100', 'dst_node': '10.1.123.23'})  
-```
-Reply
-```
-r_post.json()
-{'cost': 30, 
-'spt_path_nodes_name_as_ll_in_ll': [['192.168.100.100', '10.1.1.4', '10.1.1.2', '10.1.123.23']], 
-'unbackup_paths_nodes_name_as_ll_in_ll': [['192.168.100.100', '10.1.1.4']]}
-```
-A `'192.168.100.100' - '10.1.1.4'` link is shown as nonbackuped  
-The visual path  
-![](https://github.com/Vadims06/topolograph/blob/aaabbef7bcbf5666024702aa1419599e9b9cd617/docs/release-notes/v2.28/shortest_path_graph.png)
-
-**SDK:**
-```python
-from topolograph import Topolograph
-
-topo = Topolograph(url="topolograph-url", token="your-token")
-
-# Get graph
-graph = topo.graphs.get_by_time("27Dec2022_22h46m01s_7_hosts_ospfwatcher")
-
-# Get shortest path
-path = graph.paths.shortest("192.168.100.100", "10.1.123.23")
-
-print(f"Path cost: {path.cost}")
-for path_nodes in path.paths:
-    print(f"Path: {' -> '.join(path_nodes)}")
-
-# Unbackuped parts
-for unbackup_path in path.unbackup_paths:
-    print(f"Unbackuped segment: {' -> '.join(unbackup_path)}")
-```  
-
-### Get backup path
-`removedEdgesAsNodePairsFromSptPath_ll_in_ll` accepts a list of edges which will be treated as down links
-
-**REST API:**
-```
-r_post = requests.post('https://topolograph.com/api/path', auth=('', ''), 
-json={'graph_time': '27Dec2022_22h46m01s_7_hosts_ospfwatcher', 'src_node': '192.168.100.100', 'dst_node': '10.1.123.23', 
-'removedEdgesAsNodePairsFromSptPath_ll_in_ll': [['10.1.1.4', '10.1.1.2']]})    
-```
-```
-r_post.json()
-{'cost': 40, 
-'spt_path_nodes_name_as_ll_in_ll': [['192.168.100.100', '10.1.1.4', '10.1.1.3', '10.1.1.2', '10.1.123.23']], 
-'unbackup_paths_nodes_name_as_ll_in_ll': [['192.168.100.100', '10.1.1.4']]}
-```
-The visual path  
-![](https://github.com/Vadims06/topolograph/blob/aaabbef7bcbf5666024702aa1419599e9b9cd617/docs/release-notes/v2.28/backup_path_graph.png)
-
-**SDK:**
-```python
-from topolograph import Topolograph
-
-topo = Topolograph(url="topolograph-url", token="your-token")
-graph = topo.graphs.get_by_time("27Dec2022_22h46m01s_7_hosts_ospfwatcher")
-
-# Get backup path (simulating link failure)
-path = graph.paths.shortest(
-    "192.168.100.100",
-    "10.1.123.23",
-    removed_edges=[("10.1.1.4", "10.1.1.2")]
-)
-
-print(f"Backup path cost: {path.cost}")
-for path_nodes in path.paths:
-    print(f"Backup path: {' -> '.join(path_nodes)}")
-```   
-
-### get the shortest path for networks
-There is a separate method for getting the shortest path, which accepts IP addresses/IP network as an input.  
-Let's build a path between `192.1.113.99` IP and `192.1.213.0/24` network.
-
-**REST API:**
-```
-r_post = requests.post('https://topolograph.com/api/path/network', auth=('', ''), 
-json={'graph_time': '27Dec2022_22h46m01s_7_hosts_ospfwatcher', 'src_ip_or_network': '192.1.113.99', 'dst_ip_or_network': '192.1.213.0/24'})    
-``` 
-Reply
-``` 
-r_post.json()
-{'cost': 20, 
-'spt_path_nodes_name_as_ll_in_ll': [['10.1.1.1', '10.1.1.4', '10.1.1.2'], ['10.1.1.1', '10.1.1.3', '10.1.1.2']], 
-'unbackup_paths_nodes_name_as_ll_in_ll': []}
-``` 
-The visual path  
-![](https://github.com/Vadims06/topolograph/blob/921fcf316f63f3ff6fafc1f6c899031952ad0bc4/docs/release-notes/v2.28/shortest_path_between_networks.png)
-
-**SDK:**
-```python
-from topolograph import Topolograph
-
-topo = Topolograph(url="topolograph-url", token="your-token")
-graph = topo.graphs.get_by_time("27Dec2022_22h46m01s_7_hosts_ospfwatcher")
-
-# Get shortest path between networks/IPs
-path = graph.paths.shortest_network("192.1.113.99", "192.1.213.0/24")
-
-print(f"Path cost: {path.cost}")
-for path_nodes in path.paths:
-    print(f"Path: {' -> '.join(path_nodes)}")
-```  
-
-### Network reaction on a failure
-We have the following topology  
-![image](https://user-images.githubusercontent.com/20796986/144145217-454c1442-ba6c-4337-a6f2-8dde5d337f1e.png)  
-#### Test case
-Emulate powering off nodes 10.1.1.2 and 10.1.1.4.
-#### What we would like to test
-* Link over utilisation will occurs?
-* Network reachability will be broken? Some nodes will be isolated?
-
-**REST API:**
-```
-import requests
-from pprint import pprint as pp
-r_post = requests.post('http://<topolograph-host>/api/network_reaction/node_failure/', auth=('   ', '    '), 
-                          json={"graph_time": "25Nov2021_08h20m45s_7_hosts", "failed_nodes_list": ["10.1.1.2", "10.1.1.4"]})
-pp(r_post.json())
-```
-Reply
-```
-{'affectedLinks': {'sptPathsDecreasedInPercent': {},
-                   'sptPathsIncreasedInPercent': {'from': '10.1.1.1',
-                                                  'to': '10.1.1.3',
-                                                  'value': 60}},
- 'disjointedNodes': [['10.1.123.23', '10.1.123.24'],
-                     ['192.168.100.100'],
-                     ['10.1.1.1', '10.1.1.3']],
- 'isGraphStillConnected': False}
- ```
-
-**SDK:**
-```python
-from topolograph import Topolograph
-
-topo = Topolograph(url="topolograph-url", token="your-token")
-graph = topo.graphs.get_by_time("25Nov2021_08h20m45s_7_hosts")
-
-# Simulate node failures
-reaction = graph.events.get_network_reaction_on_node_failure(
-    failed_nodes=["10.1.1.2", "10.1.1.4"]
-)
-
-print(f"Graph still connected: {reaction['isGraphStillConnected']}")
-print(f"Disjointed node groups: {reaction['disjointedNodes']}")
-print(f"Affected links: {reaction['affectedLinks']}")
-```
-# Yaml based topology
-Topolograph visualizes topologies based on OSPF/IS-IS LSDB files, but starting from v2.32 it accepts YAML to build a graph. It can be used for building arbitrary topologies (not exactly IGP domains), but moreover it can keep the topology updated via Rest API. It's the first version of Network Diagram as a Service (NDAS)!  
-OSPF/IS-IS LSDB <-> YAML is interchangeable now in both ways, so it allows to make a design of IGP domain from the scratch or based on uploaded a LSDB, add new links/edges between nodes or change igp's cost and then check network reaction based on our changes.
-
-### Basic YAML based topology.
-Build a graph with defined `nodes` and `edges`. 
-![https://user-images.githubusercontent.com/20796986/144145217-454c1442-ba6c-4337-a6f2-8dde5d337f1e.png](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/basic_yaml_diagram.PNG)  
-
-**REST API:**
-```
-import requests
-yaml_diagram = """
-nodes:
-  10.10.10.1:
-    label: Router1
-  10.10.10.2:
-    label: Router2
-edges:
-  - src: 10.10.10.1
-    dst: 10.10.10.2
-    cost: 10
-"""
-r_post = requests.post('http://<topolograph-host>/api/diagram', 
-                       auth=('', ''), 
-                       json={'yaml_diagram_str': yaml_diagram})
-```
-
-**SDK:**
-```python
-from topolograph import Topolograph
-
-topo = Topolograph(url="topolograph-url", token="your-token")
-
-yaml_diagram = """
-nodes:
-  10.10.10.1:
-    label: Router1
-  10.10.10.2:
-    label: Router2
-edges:
-  - src: 10.10.10.1
-    dst: 10.10.10.2
-    cost: 10
-"""
-
-# Upload YAML diagram
-graph = topo.graphs.upload_diagram(yaml_diagram)
-print(f"Diagram uploaded: {graph.graph_time}")
-```
-
-### Node attributes
-* `node's name` is mandatory. Should be in IP-address format. To change it to any other value - use `label`
-* Tags of node are optional. Any key (type string): value (str, int, float, dictionary, list) pairs.
-![image](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/node_attributes_yaml_file_and_api_request.png)   
-There is a graph with 6 nodes. Select all primary nodes (`ha_role`: `primary`) in the first DC (`dc1`)
-
-**REST API:**
-```
-import requests
-from pprint import pprint as pp
-query_params = {'location': 'dc1', 'ha_role': 'primary'}                                  
-r_get = requests.get(f'http://{TOPOLOGRAPH_HOST}:{TOPOLOGRAPH_PORT}/api/diagram/{graph_time}/nodes', auth=('   ', '    '), params=query_params, timeout=(5, 30))
-```
-Reply
-```
-pp(r_get.json())
-[{'ha_role': 'primary',
-  'id': 1,
-  'label': '10.10.10.2',
-  'location': 'dc1',
-  'name': '10.10.10.2',
-  'size': 15}]
-```
-
-**SDK:**
-```python
-from topolograph import Topolograph
-
-topo = Topolograph(url="topolograph-url", token="your-token")
-graph = topo.graphs.get_by_time("18Jan2026_15h53m13s_3_hosts_yaml")
-
-# Query nodes by attributes
-nodes = graph.nodes.get(location='dc1', ha_role='primary')
-for node in nodes:
-    print(f"Node: {node.name}, Location: {node.attributes.get('location')}")
-
-# Update node attributes
-node = graph.nodes.get_by_id(0)
-updated_node = graph.nodes.patch(node.id, {'name': 'renamed_router', 'location': 'dc2'})
-print(f"Updated node: {updated_node.name}")
-
-# Or use instance method
-node = graph.nodes.get_by_id(0)
-updated_node = node.patch(name='new_name', location='dc2')
-```
-
-### Edge attributes
-* `src`, `dst` is mandatory. 
-* `cost` is optional. Default is 1. Equal to OSPF/IS-IS cost.
-* `directed` is optional. Default is false.
-* Tags of edge are optional. Any key (type string): value (str, int, float, dictionary, list) pairs.
-![image](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/edge_attributes_yaml_file_and_api_request.PNG)   
-Select all edges over verizon ISP between `10.10.10.2` and `10.10.10.4`
-
-**REST API:**
-```
-query_params = {'src_node': '10.10.10.2', 'dst_node': '10.10.10.4', 'isp': 'verizon'}
-r_get = requests.get(f'http://{TOPOLOGRAPH_HOST}:{TOPOLOGRAPH_PORT}/api/diagram/{graph_time}/edges', auth=('   ', '    '), params=query_params, timeout=(5, 30))
-```
-Reply
-```
-pp(r_get.json())                                                                          
-[{'bw': 1000,
-  'cost': 1,
-  'dst': '10.10.10.4',
-  'id': 3,
-  'isp': 'verizon',
-  'media': 'fiber',
-```
-### Network reaction on adding new link between devices.
-Let's add a new link with `cost` 1 between R3 (10.10.10.3) and R4 (10.10.10.4) device and see how network will react on it.
-![image](https://github.com/Vadims06/topolograph/blob/6f042dd08cba67c7c5191e16c87ff8679fb179eb/docs/release-notes/v2.32/yaml_diagram_network_reaction_on_adding_r3_r4.PNG)
-Obviously, we see traffic increase on direct link R3<->R4 and traffic decrease to R2 (10.10.10.2) and R5 (10.10.10.5).
-
-# Online Resources. Contacts
-* Telegram group: [https://t.me/topolograph](https://t.me/topolograph)
-* Main site: https://topolograph.com
-* Topolograph MCP: https://github.com/Vadims06/topolograph-mcp-server – MCP interface for Topolograph
-* Topolograph SDK: https://github.com/Vadims06/topolograph-sdk – Python SDK with nornir driver for automated LSDB collection
-* Docker version of site: https://github.com/Vadims06/topolograph-docker
-* Online doc: https://topolograph.com/how-to
-
-## Known issues
-If you just upload LSDB and press Delete -> topology will be deleted and added again. Just press Upload LSDB Tab again and then deleting of topology works fine.
-
-# Contribution.  
-## Adding new feature into core of Topolograph  
-Email me admin at topolograph.com and can open the access to the repository.  
-## adding new vendor
-In order to project supports different vendors you can help us by creating five separate textfsm files for different LSA types for one vendor. Check [Wiki](https://github.com/Vadims06/topolograph/wiki/How-to-add-new-vendor-support) for this.
-
-## Adding new vendor support via SDK
-The [Topolograph SDK](https://github.com/Vadims06/topolograph-sdk) uses a nornir driver to collect LSDB data from network devices. To add support for a new vendor, add the vendor's commands to the command registry in `topolograph/collector/commands.py`:
-
-```python
-COMMAND_REGISTRY = {
-    "ospf": {
-        "your_vendor": [
-            "show ip ospf database router",      # LSA1 command
-            "show ip ospf database network",     # LSA2 command
-            "show ip ospf database external"     # LSA5 command (optional)
-        ]
-    },
-    "isis": {
-        "your_vendor": [
-            "show isis database detail"          # IS-IS LSDB command
-        ]
-    }
-}
-```
-
-After adding the vendor, submit a pull request to the [topolograph-sdk repository](https://github.com/Vadims06/topolograph-sdk). The SDK will automatically use these commands when collecting LSDB data from devices with the specified vendor in the inventory file.
-
-## Used RFC
-| Protocol | RFC | What Topolograph reads |
+| Question | How it is answered | Edition |
 |---|---|---|
-| OSPFv2 | RFC 2328 | Router (1), Network (2) and AS-External (5) LSAs |
-| OSPFv2 | RFC 3630 | TE link attributes from opaque-area LSAs (type 10) |
-| OSPFv2 | RFC 4203 | Shared risk link group (SRLG), when the values arrive from a Watcher |
-| OSPFv2 | RFC 6987 | Stub router (max-metric) flag on nodes |
-| OSPFv3 | RFC 5340 | Router, Network, AS-External and Intra-Area-Prefix LSAs |
-| IS-IS | ISO/IEC 10589 | IS Reachability (TLV 2), Level 1 / Level 2 databases, overload and attached bits |
-| IS-IS | RFC 1195 | IPv4 Internal Reachability (TLV 128) |
-| IS-IS | RFC 5305 | Extended IS and IPv4 Reachability (TLVs 22, 135) and TE sub-TLVs |
-| IS-IS | RFC 5307 | Shared risk link group (TLV 138) and link local / remote identifiers |
-| IS-IS | RFC 5308 | IPv6 Reachability (TLV 236) |
-| MPLS TE | RFC 3209 | Setup and holding priorities in CSPF placement of LSP tunnels |
-| BGP | RFC 4271, RFC 4456, RFC 4364 | Best-path selection, route reflection and VPN routes |
-| BGP | RFC 7854, RFC 8671, RFC 9069 | BMP: Adj-RIB-In / Adj-RIB-Out and Loc-RIB |
+| Why did a prefix disappear? | Comparing the graph at different moments shows when the prefix left the network. | Community |
+| Can a link or a device be taken out of service? | Simulating the failure on the graph shows where the traffic goes and which segments are left without a backup, before the work starts. | Community |
+| Where will a new MPLS TE LSP with the required bandwidth go? | CSPF over the TE attributes from the LSDB shows the LSP path for the requested bandwidth and how it behaves when a link fails. | Community |
+| What changed before the incident? | The collector event history and the graph at the time of the incident show what changed and in which order. | Enterprise |
+| Where is the virtual machine with this MAC address now? | An EVPN MAC lookup shows which VTEP or PE advertises it and which path the traffic takes to it. | Enterprise (BMP collector) |
+| The interface is up, so why is the adjacency not Full? | The protocol shows that there is no adjacency, and Agent 2.0 checks the cause, for example MTU, with read-only commands from an approved runbook. | Agent |
 
-The same list, with the TE attributes per vendor, is in the [documentation](https://docs.topolograph.com/reference/supported-vendors/#supported-rfcs).
+## Quick start
+
+* **Try it:** open the [interactive demo](https://topolograph.com/graphs?demo=1), or paste an LSDB on [topolograph.com](https://topolograph.com).
+* **Self-hosted, Community:** run [topolograph-docker](https://github.com/Vadims06/topolograph-docker) in your infrastructure; the routing data stays under your control.
+* **Enterprise:** watchers, event history, SSO and teams. [Contact us](https://topolograph.com/#editions).
+
+### Community and Enterprise
+
+| | Community | Enterprise |
+|---|---|---|
+| LSDB upload, graph, path calculation, failure scenarios | Yes | Yes |
+| API, SDK, MCP server | Yes | Yes |
+| BGP and EVPN over BMP: peers, sessions, routes | Yes, current state from bmpwatcher in Topology only mode; no events | Yes, with change events |
+| Watchers (OSPF / IS-IS) | No, static topology from the LSDB only; demo graph | Yes, many watchers, unified monitoring |
+| Network event monitoring | No, demo graph only | Yes, fast queries over a long period |
+| Users | One or shared | Teams, RBAC |
+| Sign-in | Login / password | SSO (OIDC / SAML / LDAP) |
+| Action audit log | No | Yes |
+| Alerts (webhook, Zabbix, e-mail) | Event export: Logstash to ELK, Zabbix, webhook; Fluent Bit to webhook | Alert rules and routing |
+| NetFlow: traffic graph | No | Yes |
+| Hardware watcher | No | Yes, a physical device with the watchers installed: plugs into the LAN, SSH access |
+| Stack | Flask, MongoDB | Reworked for heavy load |
+| Support | GitHub issues | Priority support |
+
+## Complements your monitoring
+
+Zabbix, Prometheus, Cacti, etc. watch devices and interfaces. Topolograph shows how the network routes traffic and works alongside them.
+
+| Capability | Classic monitoring (SNMP/NMS) | Topolograph |
+|---|---|---|
+| Interface and device state | The main task | Outside the scope: the data stays in the existing monitoring |
+| OSPF / BGP neighbor status | Through SNMP or exporters, device by device | From the protocol, for the whole network at once (Enterprise, collector) |
+| Topology from the routing protocol | Needs integration or extra development | From the LSDB or the collector (Community / Enterprise) |
+| SPF and ECMP paths | Needs separate development | Built in (Community) |
+| What-if failures and links with no backup | Usually not available | Built in, on the model (Community) |
+| Routing changes over time | Logs and traps of single devices | Events and the topology at the time of the event (Enterprise) |
+
+## Integrations
+
+* **REST API:** the schema is at [topolograph.com/api/ui](https://topolograph.com/api/ui/); examples are in the [docs](https://docs.topolograph.com/automation/).
+* **Python SDK:** [topolograph-sdk](https://github.com/Vadims06/topolograph-sdk) ([docs](https://docs.topolograph.com/automation/python-sdk/)).
+* **MCP server:** [topolograph-mcp-server](https://github.com/Vadims06/topolograph-mcp-server) exposes the API to LLM agents ([docs](https://docs.topolograph.com/automation/mcp-server/)).
+* **AI agent:** [ospf-isis-ai-agent](https://github.com/Vadims06/ospf-isis-ai-agent) ([docs](https://docs.topolograph.com/automation/ai-agent/)).
+
+```python
+from topolograph import Topolograph
+
+topo = Topolograph(url="topolograph-url", token="your-api-token")
+
+with open('cisco_lsdb_output.txt') as f:
+    graph = topo.graphs.upload(lsdb_data=f.read(), vendor="Cisco", protocol="ospf")
+
+path = graph.paths.shortest("192.168.100.100", "10.1.123.23")
+print(path.cost, path.paths)
+```
+
+## Documentation and community
+
+* Documentation: [docs.topolograph.com](https://docs.topolograph.com), including analysis reports (heatmap, asymmetric paths, ECMP backup paths), YAML topologies, BMP/EVPN and contribution guides.
+* Telegram: [t.me/topolograph](https://t.me/topolograph)
+* Issues: [GitHub issues](https://github.com/Vadims06/topolograph/issues)
+* Site: [topolograph.com](https://topolograph.com)

@@ -24,6 +24,7 @@ luego [súbala](../ingestion/text-file.md).
 | Ericsson | `show ospf database router detail` | `show ospf database network detail` | `show ospf database external detail` | | ✅ |
 | Fortinet | `get router info ospf database router lsa` | `get router info ospf database network lsa` | `get router info ospf database external lsa` | | ✅ |
 | FRRouting | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` | ✅ | ✅ |
+| Arista | `show ip ospf database detail` | `show ip ospf database detail` | `show ip ospf database detail` | | |
 
 [^ubnt]: Aplica a la línea EdgeRouter y a las puertas de enlace UniFi USG
     más antiguas. Las puertas de enlace UniFi más nuevas usan el proyecto
@@ -70,6 +71,7 @@ luego [súbala](../ingestion/text-file.md).
 | IP Infusion OcNOS | `show isis database verbose` | ✅ | ✅ | ✅ |
 | Fortinet FortiOS | `get router info isis database detail` | ✅ | ✅ | ✅ (necesita un ejemplo de LSDB para confirmar) |
 | MikroTik RouterOS | `/routing/isis/lsp/print detail without-paging` | ✅ | ✅ | |
+| Arista | `show isis database traffic-engineering` | ✅ | Aún no (necesita un ejemplo de LSDB) | |
 
 !!! info "Flags de nodo (overload / attached)"
     Overload (OL) y attached (ATT) se leen de la columna `ATT/P/OL` de cada
@@ -106,16 +108,16 @@ Qué convierte en atributos de enlace el parser de cada proveedor. Una celda vac
 
 ### IS-IS { #te-is-is }
 
-| Atributo de TE | Nombre en la API/SDK | Definido en | FRR | Nokia | ZTE | OcNOS |
-| --- | --- | --- | :-: | :-: | :-: | :-: |
-| Métrica TE por defecto | `temetric` | RFC 5305 §3.7, sub-TLV 18 | ✅ | ✅ |  | ✅ |
-| Grupo administrativo | `admin_group` | RFC 5305 §3.1, sub-TLV 3 | ✅ | ✅ | ✅ |  |
-| Ancho de banda máximo del enlace | `max_link_bw` | RFC 5305 §3.4, sub-TLV 9 | ✅ | ✅ | ✅ |  |
-| Ancho de banda máximo reservable | `max_rsrv_link_bw` | RFC 5305 §3.5, sub-TLV 10 | ✅ | ✅ | ✅ |  |
-| Ancho de banda no reservado (por prioridad) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 5305 §3.6, sub-TLV 11 | ✅ | ✅ | ✅ |  |
-| Shared risk link group | `srlg` | RFC 5307 §1.2, TLV 138 | ✅ |  |  |  |
-| Dirección de la interfaz / del vecino | `local_ip_address`, `remote_ip_address` | RFC 5305 §3.2, §3.3, sub-TLVs 6 / 8 | ✅ | ✅ | ✅ |  |
-| ID local / remoto del enlace | `link_local_id`, `link_remote_id` | RFC 5307 §1.1, sub-TLV 4 |  |  | ✅ |  |
+| Atributo de TE | Nombre en la API/SDK | Definido en | FRR | Arista | Nokia | ZTE | OcNOS |
+| --- | --- | --- | :-: | :-: | :-: | :-: | :-: |
+| Métrica TE por defecto | `temetric` | RFC 5305 §3.7, sub-TLV 18 | ✅ | ✅ | ✅ |  | ✅ |
+| Grupo administrativo | `admin_group` | RFC 5305 §3.1, sub-TLV 3 | ✅ | ✅ | ✅ | ✅ |  |
+| Ancho de banda máximo del enlace | `max_link_bw` | RFC 5305 §3.4, sub-TLV 9 | ✅ | ✅ | ✅ | ✅ |  |
+| Ancho de banda máximo reservable | `max_rsrv_link_bw` | RFC 5305 §3.5, sub-TLV 10 | ✅ | ✅ | ✅ | ✅ |  |
+| Ancho de banda no reservado (por prioridad) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 5305 §3.6, sub-TLV 11 | ✅ | ✅ | ✅ | ✅ |  |
+| Shared risk link group | `srlg` | RFC 5307 §1.2, TLV 138 | ✅ |   |  |  |  |
+| Dirección de la interfaz / del vecino | `local_ip_address`, `remote_ip_address` | RFC 5305 §3.2, §3.3, sub-TLVs 6 / 8 | ✅ | ✅ | ✅ | ✅ |  |
+| ID local / remoto del enlace | `link_local_id`, `link_remote_id` | RFC 5307 §1.1, sub-TLV 4 |  |   |  | ✅ |  |
 
 Comandos que muestran los sub-TLV: `show isis database detail` (FRR), `show router isis database detail` (Nokia SR OS), `show isis database verbose` (ZTE, IP Infusion OcNOS). OcNOS muestra los sub-TLV de TE solo con `verbose`, no con `detail`.
 
@@ -124,15 +126,15 @@ Comandos que muestran los sub-TLV: `show isis database detail` (FRR), `show rout
 
 ### OSPF { #te-ospf }
 
-| Atributo de TE | Nombre en la API/SDK | Definido en | FRR | OcNOS |
-| --- | --- | --- | :-: | :-: |
-| Métrica TE por defecto | `temetric` | RFC 3630 §2.5.5, sub-TLV 5 | ✅ | ✅ |
-| Grupo administrativo | `admin_group` | RFC 3630 §2.5.9, sub-TLV 9 | ✅ |  |
-| Ancho de banda máximo del enlace | `max_link_bw` | RFC 3630 §2.5.6, sub-TLV 6 | ✅ |  |
-| Ancho de banda máximo reservable | `max_rsrv_link_bw` | RFC 3630 §2.5.7, sub-TLV 7 | ✅ |  |
-| Ancho de banda no reservado (por prioridad) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 3630 §2.5.8, sub-TLV 8 | ✅ |  |
-| Shared risk link group | `srlg` | RFC 4203 §1.3, sub-TLV 16 |  |  |
-| Dirección de la interfaz local / remota | `local_ip_address`, `remote_ip_address` | RFC 3630 §2.5.3, §2.5.4, sub-TLVs 3 / 4 | ✅ | ✅ |
+| Atributo de TE | Nombre en la API/SDK | Definido en | FRR | Arista | OcNOS |
+| --- | --- | --- | :-: | :-: | :-: |
+| Métrica TE por defecto | `temetric` | RFC 3630 §2.5.5, sub-TLV 5 | ✅ | ✅ | ✅ |
+| Grupo administrativo | `admin_group` | RFC 3630 §2.5.9, sub-TLV 9 | ✅ | ✅ |  |
+| Ancho de banda máximo del enlace | `max_link_bw` | RFC 3630 §2.5.6, sub-TLV 6 | ✅ | ✅ |  |
+| Ancho de banda máximo reservable | `max_rsrv_link_bw` | RFC 3630 §2.5.7, sub-TLV 7 | ✅ | ✅ |  |
+| Ancho de banda no reservado (por prioridad) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 3630 §2.5.8, sub-TLV 8 | ✅ | ✅ |  |
+| Shared risk link group | `srlg` | RFC 4203 §1.3, sub-TLV 16 |  | ✅ |  |
+| Dirección de la interfaz local / remota | `local_ip_address`, `remote_ip_address` | RFC 3630 §2.5.3, §2.5.4, sub-TLVs 3 / 4 | ✅ | ✅ | ✅ |
 
 Añada `show ip ospf database opaque-area` al mismo archivo de carga. OcNOS muestra la métrica TE como `Admin Metric`.
 

@@ -107,6 +107,54 @@ graph.paths.shortest("1.1.1.1", "2.2.2.2",
                      removed_edges=[("1.1.1.1", "3.3.3.3")])
 ```
 
+## Network reaction on a failure
+
+Test case: power off nodes `10.1.1.2` and `10.1.1.4` on a 7-router topology.
+
+![Test topology of 7 routers](../static/ui/seven-routers-two-failed.png)
+
+What the test answers:
+
+* Will a link become over-utilised?
+* Will network reachability break, and will some nodes be isolated?
+
+**REST API:**
+
+```python
+import requests
+from pprint import pprint as pp
+r_post = requests.post('http://<topolograph-host>/api/network_reaction/node_failure/', auth=('   ', '    '),
+                       json={"graph_time": "25Nov2021_08h20m45s_7_hosts", "failed_nodes_list": ["10.1.1.2", "10.1.1.4"]})
+pp(r_post.json())
+```
+
+Reply:
+
+```python
+{'affectedLinks': {'sptPathsDecreasedInPercent': {},
+                   'sptPathsIncreasedInPercent': {'from': '10.1.1.1',
+                                                  'to': '10.1.1.3',
+                                                  'value': 60}},
+ 'disjointedNodes': [['10.1.123.23', '10.1.123.24'],
+                     ['192.168.100.100'],
+                     ['10.1.1.1', '10.1.1.3']],
+ 'isGraphStillConnected': False}
+```
+
+**SDK:**
+
+```python
+graph = topo.graphs.get_by_time("25Nov2021_08h20m45s_7_hosts")
+
+reaction = graph.events.get_network_reaction_on_node_failure(
+    failed_nodes=["10.1.1.2", "10.1.1.4"]
+)
+
+print(f"Graph still connected: {reaction['isGraphStillConnected']}")
+print(f"Disjointed node groups: {reaction['disjointedNodes']}")
+print(f"Affected links: {reaction['affectedLinks']}")
+```
+
 ## Read events
 
 ```python

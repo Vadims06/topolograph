@@ -8,7 +8,7 @@ de nível superior `lsps:`. O Topolograph executa o posicionamento CSPF
 largura de banda/affinity/SRLG de um roteador real, sem nenhuma
 sinalização — e visualiza o resultado.
 
-![MPLS TE tunnels: LSP table and placed paths on the graph](../static/mpls-lsp-graph-and-table.png)
+![MPLS TE tunnels: LSP table and placed paths on the graph](../static/ui/lsp-tunnels.png)
 
 A aba **LSP tunnels** lista cada caminho com seu status de posicionamento,
 motivo de falha, largura de banda e prioridades; selecionar um nó mostra os

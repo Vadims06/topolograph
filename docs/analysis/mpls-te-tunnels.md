@@ -7,7 +7,7 @@ Topolograph runs CSPF (Constrained Shortest Path First) placement over them —
 same bandwidth/affinity/SRLG constraints as a real router, without any
 signaling — and visualizes the result.
 
-![MPLS TE tunnels: LSP table and placed paths on the graph](../static/mpls-lsp-graph-and-table.png)
+![MPLS TE tunnels: LSP table and placed paths on the graph](../static/ui/lsp-tunnels.png)
 
 The **LSP tunnels** tab lists every path with its placement status, the reason
 it could not be placed, bandwidth and priorities; selecting a node shows the

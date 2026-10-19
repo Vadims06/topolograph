@@ -7,7 +7,7 @@ production.
 
 C'est la méthode d'import **manuelle**.
 
-![Import d'un fichier texte LSDB et construction de chemins courts](../assets/text_file_and_short_paths.gif)
+![Import d'un fichier texte LSDB et construction de chemins courts](../static/ui/upload-lsdb.png)
 
 ## Pourquoi un seul routeur suffit
 
@@ -87,7 +87,7 @@ Topolograph les analyse ensemble.
    (OSPF / IS-IS).
 4. Validez. Topolograph analyse la base de données et affiche le graphe.
 
-![Import d'un fichier texte LSDB et construction de chemins courts](../assets/text_file_and_short_paths.gif)
+![Import d'un fichier texte LSDB et construction de chemins courts](../static/ui/upload-lsdb.png)
 
 Le résultat est un **instantané** — une image figée du réseau au moment de
 la capture. Chaque analyse s'exécute sur cet instantané, donc rien de ce que

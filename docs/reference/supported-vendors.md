@@ -25,6 +25,7 @@ the commands below to capture the LSDB, then
 | Ericsson | `show ospf database router detail` | `show ospf database network detail` | `show ospf database external detail` | | ✅ |
 | Fortinet | `get router info ospf database router lsa` | `get router info ospf database network lsa` | `get router info ospf database external lsa` | | ✅ |
 | FRRouting | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` | ✅ | ✅ |
+| Arista | `show ip ospf database detail` | `show ip ospf database detail` | `show ip ospf database detail` | | |
 
 [^ubnt]: Applies to the EdgeRouter line and older UniFi USG gateways. Newer UniFi
     gateways use the [FRRouting](https://frrouting.org) project.
@@ -71,6 +72,9 @@ the commands below to capture the LSDB, then
 | IP Infusion OcNOS | `show isis database verbose` | ✅ | ✅ | ✅ |
 | Fortinet FortiOS | `get router info isis database detail` | ✅ | ✅ | ✅ (needs an LSDB sample to confirm) |
 | MikroTik RouterOS | `/routing/isis/lsp/print detail without-paging` | ✅ | ✅ | |
+| Arista | `show isis database traffic-engineering`[^arista-isis] | ✅ | Not yet (needs an LSDB sample) | |
+
+[^arista-isis]: `show isis database detail` prints the same LSPs without the TE sub-TLVs.
 
 !!! info "Node flags (overload / attached)"
     Overload (OL) and attached (ATT) are read from each LSP's `ATT/P/OL` column on
@@ -105,16 +109,16 @@ What each vendor's parser turns into link attributes. A blank cell means the att
 
 ### IS-IS { #te-is-is }
 
-| TE attribute | API/SDK name | Defined in | FRR | Nokia | ZTE | OcNOS |
-| --- | --- | --- | :-: | :-: | :-: | :-: |
-| TE default metric | `temetric` | RFC 5305 §3.7, sub-TLV 18 | ✅ | ✅ |  | ✅ |
-| Administrative group | `admin_group` | RFC 5305 §3.1, sub-TLV 3 | ✅ | ✅ | ✅ |  |
-| Maximum link bandwidth | `max_link_bw` | RFC 5305 §3.4, sub-TLV 9 | ✅ | ✅ | ✅ |  |
-| Maximum reservable bandwidth | `max_rsrv_link_bw` | RFC 5305 §3.5, sub-TLV 10 | ✅ | ✅ | ✅ |  |
-| Unreserved bandwidth (per priority) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 5305 §3.6, sub-TLV 11 | ✅ | ✅ | ✅ |  |
-| Shared risk link group | `srlg` | RFC 5307 §1.2, TLV 138 | ✅ |  |  |  |
-| Interface / neighbor address | `local_ip_address`, `remote_ip_address` | RFC 5305 §3.2, §3.3, sub-TLVs 6 / 8 | ✅ | ✅ | ✅ |  |
-| Link local / remote ID | `link_local_id`, `link_remote_id` | RFC 5307 §1.1, sub-TLV 4 |  |  | ✅ |  |
+| TE attribute | API/SDK name | Defined in | FRR | Arista | Nokia | ZTE | OcNOS |
+| --- | --- | --- | :-: | :-: | :-: | :-: | :-: |
+| TE default metric | `temetric` | RFC 5305 §3.7, sub-TLV 18 | ✅ | ✅ | ✅ |  | ✅ |
+| Administrative group | `admin_group` | RFC 5305 §3.1, sub-TLV 3 | ✅ | ✅ | ✅ | ✅ |  |
+| Maximum link bandwidth | `max_link_bw` | RFC 5305 §3.4, sub-TLV 9 | ✅ | ✅ | ✅ | ✅ |  |
+| Maximum reservable bandwidth | `max_rsrv_link_bw` | RFC 5305 §3.5, sub-TLV 10 | ✅ | ✅ | ✅ | ✅ |  |
+| Unreserved bandwidth (per priority) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 5305 §3.6, sub-TLV 11 | ✅ | ✅ | ✅ | ✅ |  |
+| Shared risk link group | `srlg` | RFC 5307 §1.2, TLV 138 | ✅ |  |  |  |  |
+| Interface / neighbor address | `local_ip_address`, `remote_ip_address` | RFC 5305 §3.2, §3.3, sub-TLVs 6 / 8 | ✅ | ✅ | ✅ | ✅ |  |
+| Link local / remote ID | `link_local_id`, `link_remote_id` | RFC 5307 §1.1, sub-TLV 4 |  |  |  | ✅ |  |
 
 Commands that print the sub-TLVs: `show isis database detail` (FRR), `show router isis database detail` (Nokia SR OS), `show isis database verbose` (ZTE, IP Infusion OcNOS). OcNOS prints the TE sub-TLVs only with `verbose`, not with `detail`.
 
@@ -123,15 +127,15 @@ Commands that print the sub-TLVs: `show isis database detail` (FRR), `show route
 
 ### OSPF { #te-ospf }
 
-| TE attribute | API/SDK name | Defined in | FRR | OcNOS |
-| --- | --- | --- | :-: | :-: |
-| TE default metric | `temetric` | RFC 3630 §2.5.5, sub-TLV 5 | ✅ | ✅ |
-| Administrative group | `admin_group` | RFC 3630 §2.5.9, sub-TLV 9 | ✅ |  |
-| Maximum link bandwidth | `max_link_bw` | RFC 3630 §2.5.6, sub-TLV 6 | ✅ |  |
-| Maximum reservable bandwidth | `max_rsrv_link_bw` | RFC 3630 §2.5.7, sub-TLV 7 | ✅ |  |
-| Unreserved bandwidth (per priority) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 3630 §2.5.8, sub-TLV 8 | ✅ |  |
-| Shared risk link group | `srlg` | RFC 4203 §1.3, sub-TLV 16 |  |  |
-| Local / remote interface address | `local_ip_address`, `remote_ip_address` | RFC 3630 §2.5.3, §2.5.4, sub-TLVs 3 / 4 | ✅ | ✅ |
+| TE attribute | API/SDK name | Defined in | FRR | Arista | OcNOS |
+| --- | --- | --- | :-: | :-: | :-: |
+| TE default metric | `temetric` | RFC 3630 §2.5.5, sub-TLV 5 | ✅ | ✅ | ✅ |
+| Administrative group | `admin_group` | RFC 3630 §2.5.9, sub-TLV 9 | ✅ | ✅ |  |
+| Maximum link bandwidth | `max_link_bw` | RFC 3630 §2.5.6, sub-TLV 6 | ✅ | ✅ |  |
+| Maximum reservable bandwidth | `max_rsrv_link_bw` | RFC 3630 §2.5.7, sub-TLV 7 | ✅ | ✅ |  |
+| Unreserved bandwidth (per priority) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 3630 §2.5.8, sub-TLV 8 | ✅ | ✅ |  |
+| Shared risk link group | `srlg` | RFC 4203 §1.3, sub-TLV 16 |  | ✅ |  |
+| Local / remote interface address | `local_ip_address`, `remote_ip_address` | RFC 3630 §2.5.3, §2.5.4, sub-TLVs 3 / 4 | ✅ | ✅ | ✅ |
 
 Append `show ip ospf database opaque-area` to the same upload file. OcNOS prints the TE metric as `Admin Metric`.
 

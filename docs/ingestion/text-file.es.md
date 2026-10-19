@@ -4,7 +4,7 @@ La forma más simple de introducir una topología en Topolograph: copie la
 Base de Datos de Estado de Enlace de **un** router y péguela (o súbala). Sin
 agentes, sin túneles, nada que toque la red en vivo.
 
-![Suba un archivo de texto LSDB y construya rutas cortas](../assets/text_file_and_short_paths.gif)
+![Suba un archivo de texto LSDB y construya rutas cortas](../static/ui/upload-lsdb.png)
 
 ## Por qué basta con un router
 
@@ -83,7 +83,7 @@ Topolograph las analiza en conjunto.
    correspondientes.
 4. Envíe. Topolograph analiza la base de datos y renderiza el grafo.
 
-![Subir un archivo de texto LSDB y construir rutas cortas](../assets/text_file_and_short_paths.gif)
+![Subir un archivo de texto LSDB y construir rutas cortas](../static/ui/upload-lsdb.png)
 
 El resultado es una **instantánea** — una imagen congelada de la red en el
 momento de la captura. Todo análisis se ejecuta contra la instantánea, así

@@ -9,12 +9,16 @@ uploaded **snapshot**, so experiments never affect the production network.
 Pick a source and a destination node and Topolograph builds the **shortest path
 tree** between them, highlighting the path(s) and showing the total IGP cost.
 
-![Shortest path tree between two nodes](../static/SPT.png)
+![Shortest path tree between two nodes](../static/ui/paths.png)
 
 When multiple equal-cost paths exist, **ECMP** is shown explicitly so you can see
 where traffic load-balances.
 
-![Topology with ECMP paths](../static/topology_with_ecmp.png)
+![Topology with ECMP paths](../static/ui/graph-overview.png)
+
+To find the node that terminates a network, start typing the network in the
+**Find on graph** field: a dropdown lists all nodes with this network, and
+choosing one focuses the graph on that node.
 
 ## Backup paths
 
@@ -23,7 +27,7 @@ the network would actually use if the primary failed, including **secondary**
 backups. This answers the question every change-window raises: *"if this link
 goes, where does the traffic go?"*
 
-![Backup shortest path tree](../static/backup_SPT.png)
+![Backup shortest path tree](../static/ui/seven-routers-backup.png)
 
 When you reason about capacity during a failure, all links are counted, whether
 or not they belong to an ECMP set.
@@ -34,26 +38,25 @@ Test "what if" scenarios without changing anything on the live network.
 
 ### Shut a link
 
-First make sure you are in failure-reaction mode: switch from the general view to
-the **Network reaction to failure** tab. On that tab a left-click on a link
+First switch to the **Failure** mode. There a left-click on a link
 changes behaviour — each click simulates an adjacency going down / the link being
 removed from the graph. Topolograph recomputes paths instantly and shows how
 traffic re-routes around it.
 
-![Network reaction to removing a link](../static/network_reaction_rem_edge1.png)
+![Network reaction to removing a link](../static/ui/failure.png)
 
 You can see the result together with statistics on the recalculated paths:
 
-![Network reaction to a removed edge, with stats](../static/network_reaction_rem_edge_with_stat.png)
+![Network reaction to a removed edge, with stats](../static/ui/failure-impact-table.png)
 
 ### Shut a node
 
 Simulate an entire router failing and watch traffic flow around the failed node.
-Right-click a node and choose **Shutdown this node**.
+Right-click a node and choose **Fail the router**.
 
-![Network reaction to shutting a node](../static/network_reaction_shut_node.png)
+![Network reaction to shutting a node](../static/ui/failure-node-menu.png)
 
-![Result after shutting a node](../static/network_reaction_result_on_shut_node.png)
+![Result after shutting a node](../static/ui/failure-node-result.png)
 
 ## Planning link costs
 
@@ -61,37 +64,36 @@ Change an IGP metric on the fly and immediately see the effect on path
 selection — ideal for planning network work, draining traffic off a link, or
 checking a metric before applying it on the real network.
 
-Make sure you are still on the **Network reaction to failure** tab. Right-click a
-link: a form listing the links appears. Set a new metric value next to the link
-you need — the re-routing result shows on the graph immediately.
+Make sure you are still in the **Failure** mode. Right-click a link and choose **Change the cost…**: a form opens. Enter the new cost and press **Apply** — the re-routing result shows on the graph immediately.
 
-![Network reaction to an OSPF cost change](../static/network_reaction_ospf_cost_change.png)
+![Network reaction to an OSPF cost change](../static/ui/link-cost-change.png)
 
 ## Network Heatmap { #network-heatmap }
 
-The **Network Heatmap** (under Analytics) reveals structural properties of the
+The **Network Heatmap** (under **Analysis**) reveals structural properties of the
 topology at a glance — which links and nodes carry the most paths, where your
 single points of failure are, and which networks have **no backup path**.
 
-![Network heatmap with networks](../static/network_heatmap_with_networks.png)
+![Network heatmap with networks](../static/ui/network-heatmap.png)
 
 Nodes marked red carry the most networks with no backup path.
 
-Choose **None backuped** networks to see networks with a single termination
-point: they attach to only one device, so if that device fails they become
-unreachable.
-
-![Heatmap highlighting non-backed-up networks](../static/network_heatmap_with_not_backuped_networks.png)
+The **Not backed up** columns of the report count, per router, the networks with a single termination point: they attach to only one device, so if that device fails they become unreachable.
 
 ## Detecting asymmetric paths
 
 Routing that takes one path forward and a different path back can complicate
-firewalls, QoS and troubleshooting. Topolograph's **Analytics → Asymmetric
-paths** report finds these pairs for you.
+firewalls, QoS and troubleshooting. Topolograph's **Analysis → Asymmetric paths** report finds these pairs for you.
 
-![Analytics menu — asymmetric paths](../static/analytics_menu_asym_paths.png)
+![Analysis menu — asymmetric paths](../static/ui/analysis-menu.png)
 
-![A real asymmetric path example](../static/asymmetric_path_real_example.png)
+![A real asymmetric path example](../static/ui/asymmetric-paths.png)
+
+## ECMP backup paths
+
+If several links are bundled into an ECMP set and the main link of the set goes down, the backup path is expected to go through the second link of the same set. **Analysis → Backup in ECMP** lists the router pairs where this holds.
+
+![Backup in ECMP report](../static/ui/backup-in-ecmp.png)
 
 ## Where to go next
 

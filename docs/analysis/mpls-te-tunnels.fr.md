@@ -8,7 +8,7 @@ CSPF (Constrained Shortest Path First) — avec les mêmes contraintes de
 bande passante/affinité/SRLG qu'un routeur réel, sans aucune signalisation
 — et visualise le résultat.
 
-![Tunnels MPLS TE : table des LSP et chemins placés sur le graphe](../static/mpls-lsp-graph-and-table.png)
+![Tunnels MPLS TE : table des LSP et chemins placés sur le graphe](../static/ui/lsp-tunnels.png)
 
 L'onglet **LSP tunnels** liste chaque chemin avec son statut de placement,
 sa raison d'échec, sa bande passante et ses priorités ; sélectionner un

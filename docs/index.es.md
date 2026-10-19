@@ -26,7 +26,7 @@ contraseñas.
 
 </div>
 <div class="tg-hero__media" markdown>
-![Topolograph — suba una LSDB y construya rutas más cortas](assets/text_file_and_short_paths.gif)
+![Topolograph — suba una LSDB y construya rutas más cortas](static/ui/paths.png)
 </div>
 </div>
 

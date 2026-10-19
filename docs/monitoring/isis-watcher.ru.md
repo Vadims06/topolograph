@@ -24,7 +24,7 @@
 
 Всё группируется по **уровню IS-IS (L1/L2)** на временной шкале:
 
-![Дашборд Topolograph с событиями IS-IS L1/L2](../assets/dashboard_l1_l2_events.png)
+![Страница Monitoring с событиями watcher](../static/ui/monitoring-histogram.png)
 
 !!! example "Как выглядят уровни"
     Типичный захват может показывать: изменение метрики линка,

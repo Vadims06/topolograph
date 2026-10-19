@@ -64,7 +64,7 @@ sections LSA 1 / 2 / 5 dans un seul fichier.
    capture.
 4. Validez — Topolograph analyse la LSDB et affiche le graphe.
 
-![Import d'une LSDB et obtention d'un graphe](../assets/text_file_and_short_paths.gif)
+![Import d'une LSDB et obtention d'un graphe](../static/ui/upload-file-step.png)
 
 Le résultat est un **instantané** : une image figée de l'état du réseau au
 moment où vous avez capturé la base de données. Toutes les analyses que vous
@@ -77,7 +77,7 @@ Une fois le graphe affiché, choisissez un nœud source et un nœud destination
 et construisez le chemin le plus court entre eux. Topolograph met le chemin en
 surbrillance et affiche son coût total.
 
-![Construction d'un arbre des chemins les plus courts](../assets/build-spt.gif)
+![Construction d'un arbre des chemins les plus courts](../static/ui/paths.png)
 
 À partir de là, vous pouvez immédiatement :
 

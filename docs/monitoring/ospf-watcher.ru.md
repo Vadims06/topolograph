@@ -25,11 +25,11 @@
   входит/выходит из режима **max-metric** (stub-маршрутизатор по RFC 3137 - все транзитные линки анонсируются с максимальной метрикой, чтобы увести
   от них транзитный трафик; аналог бита overload в IS-IS для OSPF)
 
-![Мониторинг OSPF - событие новой подсети](../assets/ospf_monitoring_new_subnet.png)
+![События на графе и на шкале времени](../static/ui/events-timeline.png)
 
-![Мониторинг OSPF - изменение метрики, старая и новая стоимость](../assets/ospf_monitoring_change_metric.png)
+![Изменение стоимости линка, подсвеченное на графе](../static/ui/cost-change-on-graph.png)
 
-![Мониторинг OSPF - события подъёма/разрыва линка на временной шкале](../assets/ospf_monitoring_down_link.png)
+![События по роутерам на шкале времени](../static/ui/events-by-router.png)
 
 ## Подключение
 

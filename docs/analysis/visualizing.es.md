@@ -11,12 +11,12 @@ Elija un nodo de origen y uno de destino y Topolograph construye el **árbol
 de ruta más corta** entre ellos, resaltando la(s) ruta(s) y mostrando el
 costo total del IGP.
 
-![Árbol de ruta más corta entre dos nodos](../static/SPT.png)
+![Árbol de ruta más corta entre dos nodos](../static/ui/paths.png)
 
 Cuando existen varias rutas de igual costo, **ECMP** se muestra
 explícitamente para que pueda ver dónde se balancea la carga del tráfico.
 
-![Topología con rutas ECMP](../static/topology_with_ecmp.png)
+![Topología con rutas ECMP](../static/ui/graph-overview.png)
 
 ## Rutas de respaldo
 
@@ -25,7 +25,7 @@ respaldo** que la red usaría realmente si la primaria fallara, incluidos los
 respaldos **secundarios**. Esto responde la pregunta que surge en toda
 ventana de cambios: *"si este enlace cae, ¿a dónde va el tráfico?"*
 
-![Árbol de ruta más corta de respaldo](../static/backup_SPT.png)
+![Árbol de ruta más corta de respaldo](../static/ui/seven-routers-backup.png)
 
 También distingue las rutas de respaldo que se apoyan en ECMP de las que no,
 lo cual importa al razonar sobre la capacidad durante un fallo.
@@ -39,21 +39,20 @@ Pruebe escenarios hipotéticos sin tocar nada en producción.
 Elimine un enlace y Topolograph recalcula las rutas al instante, mostrando
 cómo se redirige el tráfico a su alrededor.
 
-![Reacción de la red al eliminar un enlace](../static/network_reaction_rem_edge1.png)
+![Reacción de la red al eliminar un enlace](../static/ui/failure.png)
 
 Puede ver el resultado junto con las estadísticas afectadas:
 
-![Reacción de la red a un enlace eliminado, con estadísticas](../static/network_reaction_rem_edge_with_stat.png)
+![Reacción de la red a un enlace eliminado, con estadísticas](../static/ui/failure-impact-table.png)
 
 ### Apagar un nodo
 
 Simule la caída de un router completo y observe cómo fluye el tráfico
-alrededor del nodo fallido. Haga clic derecho en un nodo y elija
-**Shutdown this node**.
+alrededor del nodo fallido. Haga clic derecho en un nodo y elija **Fail the router**.
 
-![Reacción de la red al apagar un nodo](../static/network_reaction_shut_node.png)
+![Reacción de la red al apagar un nodo](../static/ui/failure-node-menu.png)
 
-![Resultado después de apagar un nodo](../static/network_reaction_result_on_shut_node.png)
+![Resultado después de apagar un nodo](../static/ui/failure-node-result.png)
 
 ## Planificación de costos de enlace
 
@@ -61,40 +60,34 @@ Cambie una métrica de IGP al instante y vea de inmediato el efecto en la
 selección de rutas — ideal para planificar un mantenimiento, desviar tráfico
 de un enlace o validar un diseño de costos antes de aplicarlo.
 
-Asegúrese de seguir en la pestaña **Reacción de la red a fallos**. Haga clic
-derecho en un enlace: aparece un formulario con la lista de enlaces. Defina
-un nuevo valor de métrica junto al enlace que necesite; el resultado del
-recálculo de rutas se muestra en el grafo de inmediato.
+Asegúrese de seguir en el modo **Failure**. Haga clic derecho en un enlace y elija **Change the cost…**: se abre un formulario. Introduzca el nuevo costo y pulse **Apply**; el resultado del recálculo de rutas se muestra en el grafo de inmediato.
 
-![Reacción de la red a un cambio de costo OSPF](../static/network_reaction_ospf_cost_change.png)
+![Reacción de la red a un cambio de costo OSPF](../static/ui/link-cost-change.png)
 
 ## Mapa de Calor de Red { #network-heatmap }
 
-El **Mapa de Calor de Red** (en Analytics) revela de un vistazo las
+El **Mapa de Calor de Red** (en **Analysis**) revela de un vistazo las
 propiedades estructurales de la topología — qué enlaces y nodos transportan
 más rutas, dónde están sus puntos únicos de fallo y qué redes **no tienen
 ruta de respaldo**.
 
-![Mapa de calor de red con redes](../static/network_heatmap_with_networks.png)
+![Mapa de calor de red con redes](../static/ui/network-heatmap.png)
 
 Los nodos marcados en rojo concentran la mayor cantidad de redes sin ruta de
 respaldo.
 
-Filtre por las redes que **no tienen respaldo** para encontrar exactamente
-dónde un único fallo causaría una pérdida de alcanzabilidad:
-
-![Mapa de calor resaltando redes sin respaldo](../static/network_heatmap_with_not_backuped_networks.png)
+Las columnas **Not backed up** del informe cuentan, por router, las redes sin respaldo y muestran exactamente dónde un único fallo causaría una pérdida de alcanzabilidad.
 
 ## Detección de rutas asimétricas
 
 El enrutamiento que toma una ruta de ida y otra distinta de vuelta puede
 complicar los firewalls, el QoS y la resolución de problemas. El informe
-**Analytics → Asymmetric paths** de Topolograph encuentra estos pares por
+**Analysis → Asymmetric paths** de Topolograph encuentra estos pares por
 usted.
 
-![Menú de Analytics — rutas asimétricas](../static/analytics_menu_asym_paths.png)
+![Menú Analysis — rutas asimétricas](../static/ui/analysis-menu.png)
 
-![Un ejemplo real de ruta asimétrica](../static/asymmetric_path_real_example.png)
+![Un ejemplo real de ruta asimétrica](../static/ui/asymmetric-paths.png)
 
 ## Hacia dónde ir después
 

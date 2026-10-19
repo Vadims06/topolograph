@@ -38,6 +38,21 @@ architecture :
 
 </div>
 
+
+## Ce que l'on voit dans Topolograph
+
+Les événements d'un watcher apparaissent sur le graphe et sur sa chronologie, dans la page Monitoring et dans l'onglet Events d'un graphe.
+
+![Événements sur le graphe et sur la chronologie](../static/ui/events-timeline.png)
+
+![Monitoring : événements par catégorie sur la période](../static/ui/monitoring-histogram.png)
+
+![Recherche d'événements : le tableau filtré par routeur, type d'événement et période](../static/ui/event-search.png)
+
+![Le graphe au moment d'un événement](../static/ui/graph-at-event.png)
+
+![Un changement de coût de lien mis en évidence sur le graphe](../static/ui/cost-change-on-graph.png)
+
 ## Ce que fait un Watcher
 
 Un Watcher écoute passivement le plan de contrôle de l'IGP — via une
@@ -58,11 +73,9 @@ flowchart LR
     L --> H[WebHook / Slack<br/>notifications instantanées]
 ```
 
-![Watcher et Topolograph : historique vs présent/futur](../assets/functional-watcher-role.png)
+![Le Watcher collecte les changements ; Topolograph montre le passé, le présent et le futur](../assets/functional-watcher-role.png)
 
-Le Watcher stocke l'**historique** des événements (ce qui s'est passé et
-quand) ; Topolograph montre l'état **présent** et vous permet d'explorer
-les résultats **futurs potentiels**.
+Le Watcher collecte chaque changement du plan de contrôle. Topolograph les conserve comme historique : il montre la topologie à tout moment passé, son état actuel et l'effet d'une panne ou d'un changement de coût avant qu'il ne se produise.
 
 ## Événements détectés
 

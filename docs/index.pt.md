@@ -25,7 +25,7 @@ no IGP em tempo real. Auto-hospedado, offline, sem logins ou senhas.
 
 </div>
 <div class="tg-hero__media" markdown>
-![Topolograph — envie uma LSDB e construa caminhos mais curtos](assets/text_file_and_short_paths.gif)
+![Topolograph — envie uma LSDB e construa caminhos mais curtos](static/ui/paths.png)
 </div>
 </div>
 
