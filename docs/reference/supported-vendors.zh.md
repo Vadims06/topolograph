@@ -23,6 +23,7 @@ Topolograph 从单台设备的链路状态数据库构建图。使用下面的�
 | Ericsson | `show ospf database router detail` | `show ospf database network detail` | `show ospf database external detail` | | ✅ |
 | Fortinet | `get router info ospf database router lsa` | `get router info ospf database network lsa` | `get router info ospf database external lsa` | | ✅ |
 | FRRouting | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` | ✅ | ✅ |
+| Arista | `show ip ospf database detail` | `show ip ospf database detail` | `show ip ospf database detail` | | |
 
 [^ubnt]: 适用于 EdgeRouter 系列以及较旧的 UniFi USG 网关。较新的 UniFi
     网关使用 [FRRouting](https://frrouting.org) 项目。
@@ -65,6 +66,7 @@ Topolograph 从单台设备的链路状态数据库构建图。使用下面的�
 | IP Infusion OcNOS | `show isis database verbose` | ✅ | ✅ | ✅ |
 | Fortinet FortiOS | `get router info isis database detail` | ✅ | ✅ | ✅（需要 LSDB 示例 以确认） |
 | MikroTik RouterOS | `/routing/isis/lsp/print detail without-paging` | ✅ | ✅ | |
+| Arista | `show isis database traffic-engineering` | ✅ | 尚不支持（需要 LSDB 示例） | |
 
 !!! info "节点标志（overload / attached）"
     Overload（OL）和 attached（ATT）是在文本文件上传时从每条 LSP 的
@@ -99,16 +101,16 @@ IS-IS 解析器（被 Topolograph 和 [IS-IS Watcher](../monitoring/isis-watcher
 
 ### IS-IS { #te-is-is }
 
-| TE 属性 | API/SDK 名称 | 定义于 | FRR | Nokia | ZTE | OcNOS |
-| --- | --- | --- | :-: | :-: | :-: | :-: |
-| TE 默认度量 | `temetric` | RFC 5305 §3.7, sub-TLV 18 | ✅ | ✅ |  | ✅ |
-| 管理组 | `admin_group` | RFC 5305 §3.1, sub-TLV 3 | ✅ | ✅ | ✅ |  |
-| 最大链路带宽 | `max_link_bw` | RFC 5305 §3.4, sub-TLV 9 | ✅ | ✅ | ✅ |  |
-| 最大可预留带宽 | `max_rsrv_link_bw` | RFC 5305 §3.5, sub-TLV 10 | ✅ | ✅ | ✅ |  |
-| 未预留带宽（按优先级） | `unreserved_bw_0` … `unreserved_bw_7` | RFC 5305 §3.6, sub-TLV 11 | ✅ | ✅ | ✅ |  |
-| 共享风险链路组 | `srlg` | RFC 5307 §1.2, TLV 138 | ✅ |  |  |  |
-| 接口 / 邻居地址 | `local_ip_address`, `remote_ip_address` | RFC 5305 §3.2, §3.3, sub-TLVs 6 / 8 | ✅ | ✅ | ✅ |  |
-| 链路本地 / 远端 ID | `link_local_id`, `link_remote_id` | RFC 5307 §1.1, sub-TLV 4 |  |  | ✅ |  |
+| TE 属性 | API/SDK 名称 | 定义于 | FRR | Arista | Nokia | ZTE | OcNOS |
+| --- | --- | --- | :-: | :-: | :-: | :-: | :-: |
+| TE 默认度量 | `temetric` | RFC 5305 §3.7, sub-TLV 18 | ✅ | ✅ | ✅ |  | ✅ |
+| 管理组 | `admin_group` | RFC 5305 §3.1, sub-TLV 3 | ✅ | ✅ | ✅ | ✅ |  |
+| 最大链路带宽 | `max_link_bw` | RFC 5305 §3.4, sub-TLV 9 | ✅ | ✅ | ✅ | ✅ |  |
+| 最大可预留带宽 | `max_rsrv_link_bw` | RFC 5305 §3.5, sub-TLV 10 | ✅ | ✅ | ✅ | ✅ |  |
+| 未预留带宽（按优先级） | `unreserved_bw_0` … `unreserved_bw_7` | RFC 5305 §3.6, sub-TLV 11 | ✅ | ✅ | ✅ | ✅ |  |
+| 共享风险链路组 | `srlg` | RFC 5307 §1.2, TLV 138 | ✅ |   |  |  |  |
+| 接口 / 邻居地址 | `local_ip_address`, `remote_ip_address` | RFC 5305 §3.2, §3.3, sub-TLVs 6 / 8 | ✅ | ✅ | ✅ | ✅ |  |
+| 链路本地 / 远端 ID | `link_local_id`, `link_remote_id` | RFC 5307 §1.1, sub-TLV 4 |  |   |  | ✅ |  |
 
 输出 sub-TLV 的命令：`show isis database detail`（FRR）、`show router isis database detail`（Nokia SR OS）、`show isis database verbose`（ZTE、IP Infusion OcNOS）。OcNOS 只有使用 `verbose`（而不是 `detail`）才会输出 TE sub-TLV。
 
@@ -117,15 +119,15 @@ IS-IS 解析器（被 Topolograph 和 [IS-IS Watcher](../monitoring/isis-watcher
 
 ### OSPF { #te-ospf }
 
-| TE 属性 | API/SDK 名称 | 定义于 | FRR | OcNOS |
-| --- | --- | --- | :-: | :-: |
-| TE 默认度量 | `temetric` | RFC 3630 §2.5.5, sub-TLV 5 | ✅ | ✅ |
-| 管理组 | `admin_group` | RFC 3630 §2.5.9, sub-TLV 9 | ✅ |  |
-| 最大链路带宽 | `max_link_bw` | RFC 3630 §2.5.6, sub-TLV 6 | ✅ |  |
-| 最大可预留带宽 | `max_rsrv_link_bw` | RFC 3630 §2.5.7, sub-TLV 7 | ✅ |  |
-| 未预留带宽（按优先级） | `unreserved_bw_0` … `unreserved_bw_7` | RFC 3630 §2.5.8, sub-TLV 8 | ✅ |  |
-| 共享风险链路组 | `srlg` | RFC 4203 §1.3, sub-TLV 16 |  |  |
-| 本地 / 远端接口地址 | `local_ip_address`, `remote_ip_address` | RFC 3630 §2.5.3, §2.5.4, sub-TLVs 3 / 4 | ✅ | ✅ |
+| TE 属性 | API/SDK 名称 | 定义于 | FRR | Arista | OcNOS |
+| --- | --- | --- | :-: | :-: | :-: |
+| TE 默认度量 | `temetric` | RFC 3630 §2.5.5, sub-TLV 5 | ✅ | ✅ | ✅ |
+| 管理组 | `admin_group` | RFC 3630 §2.5.9, sub-TLV 9 | ✅ | ✅ |  |
+| 最大链路带宽 | `max_link_bw` | RFC 3630 §2.5.6, sub-TLV 6 | ✅ | ✅ |  |
+| 最大可预留带宽 | `max_rsrv_link_bw` | RFC 3630 §2.5.7, sub-TLV 7 | ✅ | ✅ |  |
+| 未预留带宽（按优先级） | `unreserved_bw_0` … `unreserved_bw_7` | RFC 3630 §2.5.8, sub-TLV 8 | ✅ | ✅ |  |
+| 共享风险链路组 | `srlg` | RFC 4203 §1.3, sub-TLV 16 |  | ✅ |  |
+| 本地 / 远端接口地址 | `local_ip_address`, `remote_ip_address` | RFC 3630 §2.5.3, §2.5.4, sub-TLVs 3 / 4 | ✅ | ✅ | ✅ |
 
 将 `show ip ospf database opaque-area` 追加到同一个上传文件中。OcNOS 将 TE 度量输出为 `Admin Metric`。
 

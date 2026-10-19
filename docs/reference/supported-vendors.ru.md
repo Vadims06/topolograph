@@ -23,6 +23,7 @@ LSDB, а затем [загрузите её](../ingestion/text-file.md).
 | Ericsson | `show ospf database router detail` | `show ospf database network detail` | `show ospf database external detail` | | ✅ |
 | Fortinet | `get router info ospf database router lsa` | `get router info ospf database network lsa` | `get router info ospf database external lsa` | | ✅ |
 | FRRouting | `show ip ospf database router` | `show ip ospf database network` | `show ip ospf database external` | ✅ | ✅ |
+| Arista | `show ip ospf database detail` | `show ip ospf database detail` | `show ip ospf database detail` | | |
 
 [^ubnt]: Применимо к линейке EdgeRouter и более старым шлюзам UniFi USG.
     Новые шлюзы UniFi используют проект [FRRouting](https://frrouting.org).
@@ -67,6 +68,7 @@ LSDB, а затем [загрузите её](../ingestion/text-file.md).
 | IP Infusion OcNOS | `show isis database verbose` | ✅ | ✅ | ✅ |
 | Fortinet FortiOS | `get router info isis database detail` | ✅ | ✅ | ✅ (нужен пример LSDB для подтверждения) |
 | MikroTik RouterOS | `/routing/isis/lsp/print detail without-paging` | ✅ | ✅ | |
+| Arista | `show isis database traffic-engineering` | ✅ | Пока нет (нужен пример LSDB) | |
 
 !!! info "Флаги узла (overload / attached)"
     Overload (OL) и attached (ATT) считываются из столбца `ATT/P/OL`
@@ -103,16 +105,16 @@ LSDB, а затем [загрузите её](../ingestion/text-file.md).
 
 ### IS-IS { #te-is-is }
 
-| Атрибут TE | Имя в API/SDK | Определён в | FRR | Nokia | ZTE | OcNOS |
-| --- | --- | --- | :-: | :-: | :-: | :-: |
-| TE-метрика по умолчанию | `temetric` | RFC 5305 §3.7, sub-TLV 18 | ✅ | ✅ |  | ✅ |
-| Административная группа | `admin_group` | RFC 5305 §3.1, sub-TLV 3 | ✅ | ✅ | ✅ |  |
-| Максимальная пропускная способность линка | `max_link_bw` | RFC 5305 §3.4, sub-TLV 9 | ✅ | ✅ | ✅ |  |
-| Максимальная резервируемая пропускная способность | `max_rsrv_link_bw` | RFC 5305 §3.5, sub-TLV 10 | ✅ | ✅ | ✅ |  |
-| Нерезервированная пропускная способность (по приоритетам) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 5305 §3.6, sub-TLV 11 | ✅ | ✅ | ✅ |  |
-| Shared risk link group | `srlg` | RFC 5307 §1.2, TLV 138 | ✅ |  |  |  |
-| Адрес интерфейса / соседа | `local_ip_address`, `remote_ip_address` | RFC 5305 §3.2, §3.3, sub-TLVs 6 / 8 | ✅ | ✅ | ✅ |  |
-| Local / remote ID линка | `link_local_id`, `link_remote_id` | RFC 5307 §1.1, sub-TLV 4 |  |  | ✅ |  |
+| Атрибут TE | Имя в API/SDK | Определён в | FRR | Arista | Nokia | ZTE | OcNOS |
+| --- | --- | --- | :-: | :-: | :-: | :-: | :-: |
+| TE-метрика по умолчанию | `temetric` | RFC 5305 §3.7, sub-TLV 18 | ✅ | ✅ | ✅ |  | ✅ |
+| Административная группа | `admin_group` | RFC 5305 §3.1, sub-TLV 3 | ✅ | ✅ | ✅ | ✅ |  |
+| Максимальная пропускная способность линка | `max_link_bw` | RFC 5305 §3.4, sub-TLV 9 | ✅ | ✅ | ✅ | ✅ |  |
+| Максимальная резервируемая пропускная способность | `max_rsrv_link_bw` | RFC 5305 §3.5, sub-TLV 10 | ✅ | ✅ | ✅ | ✅ |  |
+| Нерезервированная пропускная способность (по приоритетам) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 5305 §3.6, sub-TLV 11 | ✅ | ✅ | ✅ | ✅ |  |
+| Shared risk link group | `srlg` | RFC 5307 §1.2, TLV 138 | ✅ |   |  |  |  |
+| Адрес интерфейса / соседа | `local_ip_address`, `remote_ip_address` | RFC 5305 §3.2, §3.3, sub-TLVs 6 / 8 | ✅ | ✅ | ✅ | ✅ |  |
+| Local / remote ID линка | `link_local_id`, `link_remote_id` | RFC 5307 §1.1, sub-TLV 4 |  |   |  | ✅ |  |
 
 Команды, которые выводят sub-TLV: `show isis database detail` (FRR), `show router isis database detail` (Nokia SR OS), `show isis database verbose` (ZTE, IP Infusion OcNOS). OcNOS выводит sub-TLV TE только с `verbose`, но не с `detail`.
 
@@ -121,15 +123,15 @@ LSDB, а затем [загрузите её](../ingestion/text-file.md).
 
 ### OSPF { #te-ospf }
 
-| Атрибут TE | Имя в API/SDK | Определён в | FRR | OcNOS |
-| --- | --- | --- | :-: | :-: |
-| TE-метрика по умолчанию | `temetric` | RFC 3630 §2.5.5, sub-TLV 5 | ✅ | ✅ |
-| Административная группа | `admin_group` | RFC 3630 §2.5.9, sub-TLV 9 | ✅ |  |
-| Максимальная пропускная способность линка | `max_link_bw` | RFC 3630 §2.5.6, sub-TLV 6 | ✅ |  |
-| Максимальная резервируемая пропускная способность | `max_rsrv_link_bw` | RFC 3630 §2.5.7, sub-TLV 7 | ✅ |  |
-| Нерезервированная пропускная способность (по приоритетам) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 3630 §2.5.8, sub-TLV 8 | ✅ |  |
-| Shared risk link group | `srlg` | RFC 4203 §1.3, sub-TLV 16 |  |  |
-| Адрес локального / удалённого интерфейса | `local_ip_address`, `remote_ip_address` | RFC 3630 §2.5.3, §2.5.4, sub-TLVs 3 / 4 | ✅ | ✅ |
+| Атрибут TE | Имя в API/SDK | Определён в | FRR | Arista | OcNOS |
+| --- | --- | --- | :-: | :-: | :-: |
+| TE-метрика по умолчанию | `temetric` | RFC 3630 §2.5.5, sub-TLV 5 | ✅ | ✅ | ✅ |
+| Административная группа | `admin_group` | RFC 3630 §2.5.9, sub-TLV 9 | ✅ | ✅ |  |
+| Максимальная пропускная способность линка | `max_link_bw` | RFC 3630 §2.5.6, sub-TLV 6 | ✅ | ✅ |  |
+| Максимальная резервируемая пропускная способность | `max_rsrv_link_bw` | RFC 3630 §2.5.7, sub-TLV 7 | ✅ | ✅ |  |
+| Нерезервированная пропускная способность (по приоритетам) | `unreserved_bw_0` … `unreserved_bw_7` | RFC 3630 §2.5.8, sub-TLV 8 | ✅ | ✅ |  |
+| Shared risk link group | `srlg` | RFC 4203 §1.3, sub-TLV 16 |  | ✅ |  |
+| Адрес локального / удалённого интерфейса | `local_ip_address`, `remote_ip_address` | RFC 3630 §2.5.3, §2.5.4, sub-TLVs 3 / 4 | ✅ | ✅ | ✅ |
 
 Добавьте `show ip ospf database opaque-area` в тот же файл загрузки. OcNOS выводит TE-метрику как `Admin Metric`.
 
