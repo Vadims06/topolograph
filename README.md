@@ -17,7 +17,7 @@ Topolograph builds the graph from the LSDB of one router per area or level. Run 
 | Vendor | OSPFv2 | OSPFv3 | IS-IS |
 |---|---|---|---|
 | Allied Telesis | `show ip ospf database {router\|network\|external}` |  |  |
-| Arista | `show ip ospf database detail` | `show ospfv3 database detail` | `show isis database traffic-engineering` |
+| Arista | `show ip ospf database detail` | `show ipv6 ospf database detail` | `show isis database traffic-engineering` |
 | Bird | `show ospf state all` |  |  |
 | Cisco | `show ip ospf database {router\|network\|external}` |  | `show isis database detail` |
 | Cisco NX-OS | `show ip ospf database {router\|network\|external} detail` |  |  |

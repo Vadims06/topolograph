@@ -51,7 +51,7 @@ the commands below to capture the LSDB, then
 
 | Vendor | Command | Stub network | External (redistributed) |
 | --- | --- | :---: | :---: |
-| Arista | `show ospfv3 database detail` | ✅ | ✅ |
+| Arista | `show ipv6 ospf database detail` | ✅ | ✅ |
 | IP Infusion OcNOS | `show ipv6 ospf database router`, `network`, `external`, `intra-prefix` | ✅ | ✅ |
 | Fortinet FortiOS | `get router info6 ospf database router`, `network`, `external`, `intra-prefix` | ✅ | ✅ |
 | MikroTik RouterOS | `/routing/ospf/lsa/print detail without-paging where instance=v3` | ✅ | ✅ |
