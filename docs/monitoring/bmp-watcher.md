@@ -269,7 +269,6 @@ GET /api/bgp-graph/{bgp_graph_time}/routes/compare?t0=...&t1=...
 
 # the event feed, and the monitoring-timeline lanes
 GET /api/bgp-graph/{bgp_graph_time}/events?last_minutes=60&event_name=peer
-GET /api/bgp-graph/{bgp_graph_time}/events/timeline
 ```
 
 `state` with no `at` reads a continuously maintained current view, so it costs

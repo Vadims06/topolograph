@@ -268,7 +268,6 @@ GET /api/bgp-graph/{bgp_graph_time}/routes/compare?t0=...&t1=...
 
 # o feed de eventos e as faixas da linha do tempo de monitoramento
 GET /api/bgp-graph/{bgp_graph_time}/events?last_minutes=60&event_name=peer
-GET /api/bgp-graph/{bgp_graph_time}/events/timeline
 ```
 
 `state` sem `at` lê uma visão atual mantida continuamente, portanto custa o
