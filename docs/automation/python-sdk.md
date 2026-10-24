@@ -131,10 +131,11 @@ pp(r_post.json())
 Reply:
 
 ```python
-{'affectedLinks': {'sptPathsDecreasedInPercent': {},
-                   'sptPathsIncreasedInPercent': {'from': '10.1.1.1',
-                                                  'to': '10.1.1.3',
-                                                  'value': 60}},
+{'affectedLinks': {'sptPathsDecreasedInPercent': [],
+                   'sptPathsIncreasedInPercent': [{'edge_key': '10.1.1.1|10.1.1.3|192.168.13.1',
+                                                   'from': '10.1.1.1',
+                                                   'to': '10.1.1.3',
+                                                   'value': 60}]},
  'disjointedNodes': [['10.1.123.23', '10.1.123.24'],
                      ['192.168.100.100'],
                      ['10.1.1.1', '10.1.1.3']],
@@ -146,9 +147,7 @@ Reply:
 ```python
 graph = topo.graphs.get_by_time("25Nov2021_08h20m45s_7_hosts")
 
-reaction = graph.events.get_network_reaction_on_node_failure(
-    failed_nodes=["10.1.1.2", "10.1.1.4"]
-)
+reaction = graph.paths.node_failure_reaction(["10.1.1.2", "10.1.1.4"])
 
 print(f"Graph still connected: {reaction['isGraphStillConnected']}")
 print(f"Disjointed node groups: {reaction['disjointedNodes']}")
