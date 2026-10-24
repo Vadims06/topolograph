@@ -265,7 +265,6 @@ GET /api/bgp-graph/{bgp_graph_time}/routes/compare?t0=...&t1=...
 
 # лента событий и дорожки таймлайна мониторинга
 GET /api/bgp-graph/{bgp_graph_time}/events?last_minutes=60&event_name=peer
-GET /api/bgp-graph/{bgp_graph_time}/events/timeline
 ```
 
 `state` без `at` читает постоянно поддерживаемое текущее представление,

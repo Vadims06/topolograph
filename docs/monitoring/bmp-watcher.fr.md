@@ -269,7 +269,6 @@ GET /api/bgp-graph/{bgp_graph_time}/routes/compare?t0=...&t1=...
 
 # le flux d'événements et les couloirs de la timeline de supervision
 GET /api/bgp-graph/{bgp_graph_time}/events?last_minutes=60&event_name=peer
-GET /api/bgp-graph/{bgp_graph_time}/events/timeline
 ```
 
 `state` sans `at` lit une vue courante maintenue en continu : le coût est celui

@@ -247,7 +247,6 @@ GET /api/bgp-graph/{bgp_graph_time}/routes/compare?t0=...&t1=...
 
 # 事件流，以及监控时间线的泳道
 GET /api/bgp-graph/{bgp_graph_time}/events?last_minutes=60&event_name=peer
-GET /api/bgp-graph/{bgp_graph_time}/events/timeline
 ```
 
 不带 `at` 的 `state` 读取持续维护的当前视图，代价与返回结果规模相当，而不是重放
