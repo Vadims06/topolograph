@@ -132,7 +132,8 @@ Reply:
 
 ```python
 {'affectedLinks': {'sptPathsDecreasedInPercent': [],
-                   'sptPathsIncreasedInPercent': [{'from': '10.1.1.1',
+                   'sptPathsIncreasedInPercent': [{'edge_key': '10.1.1.1|10.1.1.3|192.168.13.1',
+                                                   'from': '10.1.1.1',
                                                    'to': '10.1.1.3',
                                                    'value': 60}]},
  'disjointedNodes': [['10.1.123.23', '10.1.123.24'],
