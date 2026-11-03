@@ -40,13 +40,17 @@ Hay tres Watchers, uno por protocolo, construidos sobre la misma arquitectura:
 
 Los eventos de un watcher aparecen en el grafo y en su línea de tiempo, en la página Monitoring y en la pestaña Events de un grafo.
 
-![Eventos en el grafo y en la línea de tiempo](../static/ui/events-timeline.png)
+En la página del grafo de una red monitorizada, la franja **Momento** está entre la barra de modos y el lienzo. Apila el histograma de eventos, marca en rojo los tramos en que había adyacencias caídas (down) y dibuja una línea discontinua en cada reinicio del watcher. Al arrastrar el cursor, el grafo se redibuja en el navegador; al soltarlo, se abre ese momento, y un enlace que estaba caído se dibuja como estaba. Los botones pasan al evento anterior o al siguiente y alejan el periodo, **Volver al estado actual** regresa al estado vigente y la flecha de la derecha contrae la franja en una pista fina. La pestaña Events conserva sus filtros, el periodo y la tabla. La franja requiere la edición Enterprise.
+
+![La franja Momento sobre el grafo: histograma de eventos con el cursor en el estado actual](../static/ui/moment-strip.png)
 
 ![Monitoring: eventos por categoría en el periodo](../static/ui/monitoring-histogram.png)
 
 ![Búsqueda de eventos: la tabla filtrada por router, tipo de evento y periodo](../static/ui/event-search.png)
 
-![El grafo en el momento de un evento](../static/ui/graph-at-event.png)
+![El grafo en un momento dentro de un intervalo down: la adyacencia caída se dibuja como una línea roja discontinua](../static/ui/moment-down.png)
+
+![La franja Momento contraída en una pista fina, con el tramo rojo del intervalo down](../static/ui/moment-collapsed.png)
 
 ![Un cambio de coste de enlace resaltado en el grafo](../static/ui/cost-change-on-graph.png)
 

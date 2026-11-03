@@ -40,13 +40,17 @@ There are three Watchers, one per protocol, built on the same architecture:
 
 A watcher's events land on the graph and on its timeline, in the Monitoring page and in the Events tab of a graph.
 
-![Events on the graph and on the timeline](../static/ui/events-timeline.png)
+On the graph page of a watched network, the **Moment** strip sits between the mode toolbar and the canvas. It stacks the events histogram, marks in red the spans where adjacencies were down, and draws a dashed line at every watcher restart. Dragging the cursor redraws the graph in the browser; releasing it opens that moment, so a link that was down is drawn as it was. The buttons step to the previous or next event and zoom the period out, **Back to live** returns to the current state, and the arrow at the right collapses the strip to a thin track. The Events tab keeps its filters, period and table. The strip needs the Enterprise edition.
+
+![The Moment strip above the graph: events histogram with the cursor at the current state](../static/ui/moment-strip.png)
 
 ![Monitoring: events by category over the period](../static/ui/monitoring-histogram.png)
 
 ![Event search: the table filtered by router, event type and period](../static/ui/event-search.png)
 
-![The graph at the moment of an event](../static/ui/graph-at-event.png)
+![The graph at a moment inside a down interval: the adjacency that was down is a dashed red line](../static/ui/moment-down.png)
+
+![The Moment strip collapsed to a thin track, with the red span of the down interval](../static/ui/moment-collapsed.png)
 
 ![A link cost change highlighted on the graph](../static/ui/cost-change-on-graph.png)
 

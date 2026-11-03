@@ -27,11 +27,9 @@ rápido.
   de tránsito se anuncian con la métrica máxima para desviar el tráfico de
   tránsito; el equivalente en OSPF del overload bit de IS-IS)
 
-![Eventos en el grafo y en la línea de tiempo](../static/ui/events-timeline.png)
+![La franja Momento sobre el grafo: histograma de eventos con el cursor en el estado actual](../static/ui/moment-strip.png)
 
 ![Un cambio de coste de enlace resaltado en el grafo](../static/ui/cost-change-on-graph.png)
-
-![Eventos agrupados por router en la línea de tiempo](../static/ui/events-by-router.png)
 
 ## Conectarlo
 

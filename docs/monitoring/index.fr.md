@@ -43,13 +43,17 @@ architecture :
 
 Les événements d'un watcher apparaissent sur le graphe et sur sa chronologie, dans la page Monitoring et dans l'onglet Events d'un graphe.
 
-![Événements sur le graphe et sur la chronologie](../static/ui/events-timeline.png)
+Sur la page du graphe d'un réseau surveillé, la bande **Instant** se trouve entre la barre des modes et le canevas. Elle empile l'histogramme des événements, marque en rouge les périodes où des adjacences étaient down et trace une ligne en pointillés à chaque redémarrage du watcher. Le glissement du curseur redessine le graphe dans le navigateur ; le relâchement ouvre cet instant, et un lien qui était down est dessiné tel qu'il était. Les boutons passent à l'événement précédent ou suivant et élargissent la période, **Retour au direct** revient à l'état courant et la flèche à droite replie la bande en une fine piste. L'onglet Events conserve ses filtres, la période et le tableau. La bande requiert l'édition Enterprise.
+
+![La bande Instant au-dessus du graphe : histogramme des événements, curseur sur l'état courant](../static/ui/moment-strip.png)
 
 ![Monitoring : événements par catégorie sur la période](../static/ui/monitoring-histogram.png)
 
 ![Recherche d'événements : le tableau filtré par routeur, type d'événement et période](../static/ui/event-search.png)
 
-![Le graphe au moment d'un événement](../static/ui/graph-at-event.png)
+![Le graphe à un instant situé dans un intervalle down : l'adjacence qui était down est une ligne rouge en pointillés](../static/ui/moment-down.png)
+
+![La bande Instant repliée en une fine piste, avec la période rouge de l'intervalle down](../static/ui/moment-collapsed.png)
 
 ![Un changement de coût de lien mis en évidence sur le graphe](../static/ui/cost-change-on-graph.png)
 

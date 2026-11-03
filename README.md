@@ -60,7 +60,7 @@ Switching off the core10 to core30 link on the model recalculates SPF: traffic m
 
 ## Continuous monitoring
 
-The collector (watcher) receives routing protocol updates and passes on events about topology changes. It joins the network through an IGP adjacency over GRE, or through BGP-LS (OSPF and IS-IS), or through BMP (BGP). Each event arrives in Topolograph with a timestamp, and the timeline replays the state of the network at any moment: the T0 snapshot and any later state can be compared.
+The collector (watcher) receives routing protocol updates and passes on events about topology changes. It joins the network through an IGP adjacency over GRE, or through BGP-LS (OSPF and IS-IS), or through BMP (BGP). Each event arrives in Topolograph with a timestamp, and the Moment strip above the graph replays the state of the network at any moment: the T0 snapshot and any later state can be compared.
 
 | Watcher | Protocols | Modes | Edition |
 |---|---|---|---|
@@ -69,7 +69,7 @@ The collector (watcher) receives routing protocol updates and passes on events a
 | [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology only | Community |
 | [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology + events | Enterprise |
 
-![Collector events on the graph and on the timeline](docs/static/ui/events.png)
+![The Moment strip above the graph: events histogram, down intervals in red, cursor at the current state](docs/static/ui/moment-strip.png)
 
 ![BGP sessions over the OSPF graph](docs/static/ui/bgp-sessions.png)
 

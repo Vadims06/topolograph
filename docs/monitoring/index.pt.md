@@ -41,13 +41,17 @@ arquitetura:
 
 Os eventos de um watcher aparecem no grafo e na sua linha do tempo, na página Monitoring e na aba Events de um grafo.
 
-![Eventos no grafo e na linha do tempo](../static/ui/events-timeline.png)
+Na página do grafo de uma rede monitorada, a faixa **Momento** fica entre a barra de modos e o canvas. Ela empilha o histograma de eventos, marca em vermelho os intervalos em que adjacências estiveram down e desenha uma linha tracejada em cada reinício do watcher. Ao arrastar o cursor, o grafo é redesenhado no navegador; ao soltá-lo, esse momento é aberto, e um link que estava down aparece como estava. Os botões passam ao evento anterior ou ao próximo e afastam o período, **Voltar ao vivo** retorna ao estado atual e a seta à direita recolhe a faixa em uma trilha fina. A aba Events mantém seus filtros, o período e a tabela. A faixa exige a edição Enterprise.
+
+![A faixa Momento acima do grafo: histograma de eventos com o cursor no estado atual](../static/ui/moment-strip.png)
 
 ![Monitoring: eventos por categoria no período](../static/ui/monitoring-histogram.png)
 
 ![Busca de eventos: a tabela filtrada por roteador, tipo de evento e período](../static/ui/event-search.png)
 
-![O grafo no momento de um evento](../static/ui/graph-at-event.png)
+![O grafo em um momento dentro de um intervalo down: a adjacência que estava down é uma linha vermelha tracejada](../static/ui/moment-down.png)
+
+![A faixa Momento recolhida em uma trilha fina, com o trecho vermelho do intervalo down](../static/ui/moment-collapsed.png)
 
 ![Uma mudança de custo de enlace destacada no grafo](../static/ui/cost-change-on-graph.png)
 

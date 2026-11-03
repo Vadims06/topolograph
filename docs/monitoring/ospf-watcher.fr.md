@@ -27,11 +27,9 @@ donc le démarrage est rapide.
   tous les liens de transit annoncés à la métrique maximale pour détourner
   le trafic de transit ; l'équivalent OSPF du bit overload d'IS-IS)
 
-![Événements sur le graphe et sur la chronologie](../static/ui/events-timeline.png)
+![La bande Instant au-dessus du graphe : histogramme des événements, curseur sur l'état courant](../static/ui/moment-strip.png)
 
 ![Un changement de coût de lien mis en évidence sur le graphe](../static/ui/cost-change-on-graph.png)
-
-![Événements regroupés par routeur sur la chronologie](../static/ui/events-by-router.png)
 
 ## Le connecter
 

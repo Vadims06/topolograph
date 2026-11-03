@@ -39,13 +39,17 @@
 
 watcher 的事件显示在图及其时间线上：Monitoring 页面和图的 Events 标签页中。
 
-![图和时间线上的事件](../static/ui/events-timeline.png)
+在有 watcher 的网络的图页面上，**时刻**条位于模式工具栏和画布之间。它显示堆叠的事件直方图，用红色标出邻接处于 down 状态的区间，并在每次 watcher 重启处画一条虚线。拖动光标时，图会在浏览器中重绘；松开后打开该时刻，因此当时断开的链路会按当时的样子绘制。按钮可跳到上一个或下一个事件并缩小时间段，**返回实时**回到当前状态，右侧的箭头把该条收起为一条细轨道。Events 标签页保留其过滤器、时间段和表格。该条需要 Enterprise 版。
+
+![图上方的时刻条：事件直方图，光标位于当前状态](../static/ui/moment-strip.png)
 
 ![Monitoring：按类别显示时间段内的事件](../static/ui/monitoring-histogram.png)
 
 ![事件搜索：按路由器、事件类型和时间段筛选的表格](../static/ui/event-search.png)
 
-![事件发生时刻的图](../static/ui/graph-at-event.png)
+![处于 down 区间内某一时刻的图：断开的邻接以红色虚线绘制](../static/ui/moment-down.png)
+
+![收起为细轨道的时刻条，带有 down 区间的红色区段](../static/ui/moment-collapsed.png)
 
 ![图上高亮显示的链路开销变化](../static/ui/cost-change-on-graph.png)
 
