@@ -31,6 +31,8 @@ donc le démarrage est rapide.
 
 ![Un changement de coût de lien mis en évidence sur le graphe](../static/ui/cost-change-on-graph.png)
 
+![Événements regroupés par routeur sur la chronologie](../static/ui/events-by-router.png)
+
 ## Le connecter
 
 La connexion elle-même est mise en place sous

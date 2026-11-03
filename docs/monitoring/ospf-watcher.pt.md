@@ -32,6 +32,8 @@ rapidamente.
 
 ![Uma mudança de custo de enlace destacada no grafo](../static/ui/cost-change-on-graph.png)
 
+![Eventos agrupados por roteador na linha do tempo](../static/ui/events-by-router.png)
+
 ## Conectando-o
 
 A conexão em si é configurada em [Obtendo a topologia](../ingestion/index.md):

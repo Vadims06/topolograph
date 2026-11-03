@@ -26,6 +26,8 @@ OSPF 控制平面——记录每一次变化，并/或（通过 Logstash 或 Flu
 
 ![图上高亮显示的链路开销变化](../static/ui/cost-change-on-graph.png)
 
+![在时间线上按路由器分组的事件](../static/ui/events-by-router.png)
+
 ## 建立连接
 
 连接本身的建立方式记录在[获取拓扑数据](../ingestion/index.md)中：

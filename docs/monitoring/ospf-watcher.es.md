@@ -31,6 +31,8 @@ rápido.
 
 ![Un cambio de coste de enlace resaltado en el grafo](../static/ui/cost-change-on-graph.png)
 
+![Eventos agrupados por router en la línea de tiempo](../static/ui/events-by-router.png)
+
 ## Conectarlo
 
 La conexión en sí se configura en

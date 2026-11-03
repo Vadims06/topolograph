@@ -29,6 +29,8 @@ starts fast.
 
 ![A link cost change highlighted on the graph](../static/ui/cost-change-on-graph.png)
 
+![Events grouped by router on the timeline](../static/ui/events-by-router.png)
+
 ## Connecting it
 
 The connection itself is set up under [Getting Topology In](../ingestion/index.md):
