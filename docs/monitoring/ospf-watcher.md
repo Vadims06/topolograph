@@ -25,7 +25,7 @@ starts fast.
   maximum metric to steer transit traffic away; the OSPF analog of the IS-IS
   overload bit)
 
-![Events on the graph and on the timeline](../static/ui/events-timeline.png)
+![The Moment strip above the graph: events histogram with the cursor at the current state](../static/ui/moment-strip.png)
 
 ![A link cost change highlighted on the graph](../static/ui/cost-change-on-graph.png)
 

@@ -22,7 +22,7 @@ OSPF 控制平面——记录每一次变化，并/或（通过 Logstash 或 Flu
   router——所有 transit 链路都以最大度量通告，以将 transit 流量引导离开该
   路由器；这是 OSPF 中与 IS-IS overload bit 相对应的机制）
 
-![图和时间线上的事件](../static/ui/events-timeline.png)
+![图上方的时刻条：事件直方图，光标位于当前状态](../static/ui/moment-strip.png)
 
 ![图上高亮显示的链路开销变化](../static/ui/cost-change-on-graph.png)
 

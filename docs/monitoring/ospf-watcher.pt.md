@@ -28,7 +28,7 @@ rapidamente.
   desviar o tráfego de trânsito; o equivalente do OSPF ao overload bit do
   IS-IS)
 
-![Eventos no grafo e na linha do tempo](../static/ui/events-timeline.png)
+![A faixa Momento acima do grafo: histograma de eventos com o cursor no estado atual](../static/ui/moment-strip.png)
 
 ![Uma mudança de custo de enlace destacada no grafo](../static/ui/cost-change-on-graph.png)
 
