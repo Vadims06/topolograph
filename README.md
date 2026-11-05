@@ -62,12 +62,12 @@ Switching off the core10 to core30 link on the model recalculates SPF: traffic m
 
 The collector (watcher) receives routing protocol updates and passes on events about topology changes. It joins the network through an IGP adjacency over GRE, or through BGP-LS (OSPF and IS-IS), or through BMP (BGP). Each event arrives in Topolograph with a timestamp, and the timeline replays the state of the network at any moment: the T0 snapshot and any later state can be compared.
 
-| Watcher | Protocols | Modes | Edition |
+| Watcher | Protocols | Modes | Available in |
 |---|---|---|---|
-| [ospfwatcher](https://github.com/Vadims06/ospfwatcher) | OSPF | GRE adjacency, BGP-LS | Enterprise |
-| [isiswatcher](https://github.com/Vadims06/isiswatcher) | IS-IS | GRE adjacency, BGP-LS | Enterprise |
-| [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology only | Community |
-| [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology + events | Enterprise |
+| [ospfwatcher](https://github.com/Vadims06/ospfwatcher) | OSPF | GRE adjacency, BGP-LS | Online |
+| [isiswatcher](https://github.com/Vadims06/isiswatcher) | IS-IS | GRE adjacency, BGP-LS | Online |
+| [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology only | Self-hosted, Online |
+| [bmpwatcher](https://github.com/Vadims06/bmpwatcher) | BGP, EVPN | BMP, Topology + events | Online |
 
 ![Collector events on the graph and on the timeline](docs/static/ui/events.png)
 
@@ -85,38 +85,30 @@ The engineer asks a question in natural language. Agent 1.0 calls the Topolograp
 
 ## Questions Topolograph answers
 
-| Question | How it is answered | Edition |
+| Question | How it is answered | Available in |
 |---|---|---|
-| Why did a prefix disappear? | Comparing the graph at different moments shows when the prefix left the network. | Community |
-| Can a link or a device be taken out of service? | Simulating the failure on the graph shows where the traffic goes and which segments are left without a backup, before the work starts. | Community |
-| Where will a new MPLS TE LSP with the required bandwidth go? | CSPF over the TE attributes from the LSDB shows the LSP path for the requested bandwidth and how it behaves when a link fails. | Community |
-| What changed before the incident? | The collector event history and the graph at the time of the incident show what changed and in which order. | Enterprise |
-| Where is the virtual machine with this MAC address now? | An EVPN MAC lookup shows which VTEP or PE advertises it and which path the traffic takes to it. | Enterprise (BMP collector) |
+| Why did a prefix disappear? | Comparing the graph at different moments shows when the prefix left the network. | Self-hosted, Online |
+| Can a link or a device be taken out of service? | Simulating the failure on the graph shows where the traffic goes and which segments are left without a backup, before the work starts. | Self-hosted, Online |
+| Where will a new MPLS TE LSP with the required bandwidth go? | CSPF over the TE attributes from the LSDB shows the LSP path for the requested bandwidth and how it behaves when a link fails. | Self-hosted, Online |
+| What changed before the incident? | The collector event history and the graph at the time of the incident show what changed and in which order. | Online |
+| Where is the virtual machine with this MAC address now? | An EVPN MAC lookup shows which VTEP or PE advertises it and which path the traffic takes to it. | Online (BMP collector) |
 | The interface is up, so why is the adjacency not Full? | The protocol shows that there is no adjacency, and Agent 2.0 checks the cause, for example MTU, with read-only commands from an approved runbook. | Agent |
 
 ## Quick start
 
 * **Try it:** open the [interactive demo](https://topolograph.com/graphs?demo=1), or paste an LSDB on [topolograph.com](https://topolograph.com).
-* **Self-hosted, Community:** run [topolograph-docker](https://github.com/Vadims06/topolograph-docker) in your infrastructure; the routing data stays under your control.
-* **Enterprise:** watchers, event history, SSO and teams. [Contact us](https://topolograph.com/#editions).
+* **Self-hosted:** run [topolograph-docker](https://github.com/Vadims06/topolograph-docker) in your infrastructure; the routing data stays under your control.
+* **Online:** watchers and event history on [topolograph.com](https://topolograph.com): sign in and add a watcher from the UI. Events are kept for a limited time.
 
-### Community and Enterprise
+### Self-hosted and Online
 
-| | Community | Enterprise |
+| | Self-hosted (topolograph-docker) | Online (topolograph.com) |
 |---|---|---|
 | LSDB upload, graph, path calculation, failure scenarios | Yes | Yes |
 | API, SDK, MCP server | Yes | Yes |
 | BGP and EVPN over BMP: peers, sessions, routes | Yes, current state from bmpwatcher in Topology only mode; no events | Yes, with change events |
-| Watchers (OSPF / IS-IS) | No, static topology from the LSDB only; demo graph | Yes, many watchers, unified monitoring |
-| Network event monitoring | No, demo graph only | Yes, fast queries over a long period |
-| Users | One or shared | Teams, RBAC |
-| Sign-in | Login / password | SSO (OIDC / SAML / LDAP) |
-| Action audit log | No | Yes |
-| Alerts (webhook, Zabbix, e-mail) | Event export: Logstash to ELK, Zabbix, webhook; Fluent Bit to webhook | Alert rules and routing |
-| NetFlow: traffic graph | No | Yes |
-| Hardware watcher | No | Yes, a physical device with the watchers installed: plugs into the LAN, SSH access |
-| Stack | Flask, MongoDB | Reworked for heavy load |
-| Support | GitHub issues | Priority support |
+| Watchers (OSPF / IS-IS) | No, static topology from the LSDB only; demo graph | Yes, added from the UI and installed with one command |
+| Network event history | No, demo graph only | Yes, kept for a limited time |
 
 ## Complements your monitoring
 
@@ -125,11 +117,11 @@ Zabbix, Prometheus, Cacti, etc. watch devices and interfaces. Topolograph shows 
 | Capability | Classic monitoring (SNMP/NMS) | Topolograph |
 |---|---|---|
 | Interface and device state | The main task | Outside the scope: the data stays in the existing monitoring |
-| OSPF / BGP neighbor status | Through SNMP or exporters, device by device | From the protocol, for the whole network at once (Enterprise, collector) |
-| Topology from the routing protocol | Needs integration or extra development | From the LSDB or the collector (Community / Enterprise) |
-| SPF and ECMP paths | Needs separate development | Built in (Community) |
-| What-if failures and links with no backup | Usually not available | Built in, on the model (Community) |
-| Routing changes over time | Logs and traps of single devices | Events and the topology at the time of the event (Enterprise) |
+| OSPF / BGP neighbor status | Through SNMP or exporters, device by device | From the protocol, for the whole network at once (Online, collector) |
+| Topology from the routing protocol | Needs integration or extra development | From the LSDB or the collector (Self-hosted / Online) |
+| SPF and ECMP paths | Needs separate development | Built in (Self-hosted, Online) |
+| What-if failures and links with no backup | Usually not available | Built in, on the model (Self-hosted, Online) |
+| Routing changes over time | Logs and traps of single devices | Events and the topology at the time of the event (Online) |
 
 ## Integrations
 
