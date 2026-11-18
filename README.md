@@ -98,7 +98,7 @@ The engineer asks a question in natural language. Agent 1.0 calls the Topolograp
 
 * **Try it:** open the [interactive demo](https://topolograph.com/graphs?demo=1), or paste an LSDB on [topolograph.com](https://topolograph.com).
 * **Self-hosted:** run [topolograph-docker](https://github.com/Vadims06/topolograph-docker) in your infrastructure; the routing data stays under your control.
-* **Online:** watchers and event history on [topolograph.com](https://topolograph.com): sign in and add a watcher from the UI. Events are kept for a limited time.
+* **Online:** watchers and event history on [topolograph.com](https://topolograph.com): sign in and add a watcher from the UI. Events are kept while your account is active.
 
 ### Self-hosted and Online
 
@@ -108,7 +108,7 @@ The engineer asks a question in natural language. Agent 1.0 calls the Topolograp
 | API, SDK, MCP server | Yes | Yes |
 | BGP and EVPN over BMP: peers, sessions, routes | Yes, current state from bmpwatcher in Topology only mode; no events | Yes, with change events |
 | Watchers (OSPF / IS-IS) | No, static topology from the LSDB only; demo graph | Yes, added from the UI and installed with one command |
-| Network event history | No, demo graph only | Yes, kept for a limited time |
+| Network event history | No, demo graph only | Yes, while the account is active |
 
 ## Complements your monitoring
 
